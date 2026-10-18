@@ -1,4 +1,3 @@
-{{-- Thẻ sản phẩm dùng chung cho trang chủ, cửa hàng, sản phẩm liên quan --}}
 <div class="card h-100 shadow-sm">
     <a href="{{ route('products.show', $product) }}" class="text-decoration-none position-relative">
         @if($product->image_url)
@@ -21,6 +20,7 @@
         <h6 class="card-title">
             <a href="{{ route('products.show', $product) }}" class="text-dark text-decoration-none">{{ $product->name }}</a>
         </h6>
-        <p class="text-danger fw-bold mt-auto mb-0">{{ number_format($product->price, 0, ',', '.') }} ₫</p>
+        <p class="text-danger fw-bold mt-auto mb-2">{{ number_format($product->price, 0, ',', '.') }} ₫</p>
+        <a href="{{ route('products.show', $product) }}" class="btn btn-outline-dark btn-sm">Xem chi tiết</a>
     </div>
 </div>

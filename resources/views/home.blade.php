@@ -27,4 +27,7 @@
         <p class="text-muted">Chưa có sản phẩm nào.</p>
     @endforelse
 </div>
+<div class="text-center mt-4">
+    <a href="{{ route('products.index') }}" class="btn btn-dark">Xem thêm sản phẩm</a>
+</div>
 @endsection
