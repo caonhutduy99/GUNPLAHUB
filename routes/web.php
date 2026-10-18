@@ -5,10 +5,15 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
 // ---- Trang công khai ----
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/san-pham', [ShopController::class, 'index'])->name('products.index');
+Route::get('/san-pham/{product}', [ShopController::class, 'show'])
+    ->where('product', '[A-Za-z0-9_-]+')
+    ->name('products.show');
 
 // ---- Khách (chưa đăng nhập) ----
 Route::middleware('guest')->group(function () {

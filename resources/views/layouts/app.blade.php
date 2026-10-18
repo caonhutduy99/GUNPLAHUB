@@ -17,6 +17,7 @@
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('products.index') }}">Cửa hàng</a></li>
                 @auth
                     @if(auth()->user()->isAdmin())
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Quản trị</a></li>
@@ -25,6 +26,14 @@
                     @endif
                 @endauth
             </ul>
+
+            <form class="d-flex me-3 my-2 my-lg-0" method="GET" action="{{ route('products.index') }}">
+                <input class="form-control form-control-sm me-1" type="search" name="q"
+                       value="{{ request()->routeIs('products.index') ? request('q') : '' }}"
+                       placeholder="Tìm mô hình...">
+                <button class="btn btn-outline-light btn-sm" type="submit">Tìm</button>
+            </form>
+
             <ul class="navbar-nav">
                 @guest
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Đăng nhập</a></li>

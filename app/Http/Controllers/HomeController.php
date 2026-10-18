@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 
 class HomeController extends Controller
@@ -11,9 +12,12 @@ class HomeController extends Controller
         $products = Product::with('category')
             ->where('status', 'Còn hàng')
             ->latest()
+            ->orderBy('sku')
             ->take(8)
             ->get();
 
-        return view('home', compact('products'));
+        $categories = Category::orderBy('name')->get();
+
+        return view('home', compact('products', 'categories'));
     }
 }
