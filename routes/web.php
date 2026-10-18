@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +16,10 @@ Route::get('/san-pham', [ShopController::class, 'index'])->name('products.index'
 Route::get('/san-pham/{product}', [ShopController::class, 'show'])
     ->where('product', '[A-Za-z0-9_-]+')
     ->name('products.show');
+
+// Liên hệ (giới hạn 5 lần gửi mỗi phút để chống spam)
+Route::get('/lien-he', [ContactController::class, 'show'])->name('contact');
+Route::post('/lien-he', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
 
 // ---- Khách (chưa đăng nhập) ----
 Route::middleware('guest')->group(function () {
@@ -33,4 +39,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('products', ProductController::class)->except('show');
+    Route::get('contacts', [ContactMessageController::class, 'index'])->name('contacts.index');
 });

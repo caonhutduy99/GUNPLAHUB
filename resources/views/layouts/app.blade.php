@@ -1,3 +1,7 @@
+@php
+    $shopPhone = config('shop.phone');
+    $phoneDigits = preg_replace('/\D/', '', $shopPhone);
+@endphp
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -18,6 +22,7 @@
     </script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         /* Chỉnh các thành phần dùng màu cố định để đọc được ở chế độ tối */
         [data-bs-theme="dark"] .btn-dark {
@@ -37,25 +42,36 @@
             --bs-table-color: var(--bs-body-color);
             --bs-table-border-color: var(--bs-border-color);
         }
+
+        /* Nút nổi góc phải */
+        .float-btn {
+            width: 48px; height: 48px; border-radius: 50%; border: 0; padding: 0;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1.25rem; text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,.35); cursor: pointer;
+        }
+        .float-btn:hover { color: #fff; filter: brightness(1.1); }
     </style>
 </head>
 <body class="bg-body-tertiary">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ route('home') }}">GunplaHub</a>
+        <a class="navbar-brand fw-bold" href="{{ route('home') }}">{{ config('shop.name') }}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Trang chủ</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('products.index') }}">Cửa hàng</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('products.*') ? 'active fw-semibold' : '' }}" href="{{ route('products.index') }}">Cửa hàng</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active fw-semibold' : '' }}" href="{{ route('contact') }}">Liên hệ</a></li>
                 @auth
                     @if(auth()->user()->isAdmin())
-                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Quản trị</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.categories.index') }}">Danh mục</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active fw-semibold' : '' }}" href="{{ route('admin.dashboard') }}">Quản trị</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.categories.index') }}">Danh mục</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.contacts.index') }}">Tin nhắn</a></li>
                     @endif
                 @endauth
             </ul>
@@ -102,12 +118,28 @@
 </main>
 
 <footer class="text-center text-muted py-4 small">
-    &copy; {{ date('Y') }} GunplaHub - Đồ án môn học
+    <div class="mb-1">
+        <i class="bi bi-telephone-fill me-1"></i>Hotline: <a href="tel:{{ $phoneDigits }}" class="text-reset">{{ $shopPhone }}</a>
+    </div>
+    &copy; {{ date('Y') }} {{ config('shop.name') }} - Đồ án môn học
 </footer>
+
+{{-- Nút nổi: về đầu trang, gọi điện, Zalo --}}
+<div class="position-fixed d-flex flex-column gap-2" style="right: 16px; bottom: 16px; z-index: 1030;">
+    <button type="button" id="backToTop" class="float-btn" style="background: #e8501e; display: none;" title="Về đầu trang">
+        <i class="bi bi-chevron-up"></i>
+    </button>
+    <a href="tel:{{ $phoneDigits }}" class="float-btn" style="background: #dc3545;" title="Gọi {{ $shopPhone }}">
+        <i class="bi bi-telephone-fill"></i>
+    </a>
+    <a href="https://zalo.me/{{ $phoneDigits }}" target="_blank" rel="noopener" class="float-btn"
+       style="background: #0068ff; font-size: .8rem; font-weight: 700;" title="Chat Zalo">Zalo</a>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     (function () {
+        // Đổi giao diện sáng/tối
         var btn = document.getElementById('themeToggle');
         var root = document.documentElement;
 
@@ -122,8 +154,16 @@
             try { localStorage.setItem('theme', next); } catch (e) {}
             render();
         });
-
         render();
+
+        // Nút về đầu trang: chỉ hiện khi đã cuộn xuống
+        var top = document.getElementById('backToTop');
+        window.addEventListener('scroll', function () {
+            top.style.display = window.scrollY > 300 ? 'flex' : 'none';
+        });
+        top.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     })();
 </script>
 </body>

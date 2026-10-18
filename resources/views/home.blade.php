@@ -3,10 +3,16 @@
 @section('title', 'GunplaHub - Cửa hàng mô hình Gunpla')
 
 @section('content')
-<div class="p-5 mb-4 bg-dark text-white rounded-3">
-    <h1 class="display-6 fw-bold">GunplaHub</h1>
-    <p>Cửa hàng mô hình Gunpla chính hãng.</p>
-    <a href="{{ route('products.index') }}" class="btn btn-light">Xem tất cả sản phẩm</a>
+<div class="p-5 mb-3 bg-dark text-white rounded-3">
+    <h1 class="display-6 fw-bold">{{ config('shop.name') }}</h1>
+    <p class="mb-0">Cửa hàng mô hình Gunpla chính hãng.</p>
+</div>
+
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <a href="{{ route('products.index') }}" class="btn btn-dark">Xem tất cả sản phẩm</a>
+    <a href="tel:{{ preg_replace('/\D/', '', config('shop.phone')) }}" class="btn btn-danger">
+        <i class="bi bi-telephone-fill me-2"></i>Hỗ trợ khách hàng: {{ config('shop.phone') }}
+    </a>
 </div>
 
 <div class="mb-4">
@@ -27,6 +33,7 @@
         <p class="text-muted">Chưa có sản phẩm nào.</p>
     @endforelse
 </div>
+
 <div class="text-center mt-4">
     <a href="{{ route('products.index') }}" class="btn btn-dark">Xem thêm sản phẩm</a>
 </div>
