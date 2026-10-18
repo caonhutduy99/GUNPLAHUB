@@ -9,8 +9,10 @@ class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (['Gunpla HG', 'Gunpla RG', 'Gunpla MG', 'Gunpla PG', 'Gunpla EG', 'Phụ kiện'] as $name) {
-            Category::create(['name' => $name]);
+        $names = ['Gunpla EG', 'Gunpla HG', 'Gunpla RG', 'Gunpla MG', 'Gunpla PG', 'Phụ kiện'];
+
+        foreach ($names as $index => $name) {
+            Category::create(['name' => $name, 'sort_order' => $index + 1]);
         }
     }
 }

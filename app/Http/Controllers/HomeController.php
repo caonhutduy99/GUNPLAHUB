@@ -16,7 +16,7 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::ordered()->get();
 
         return view('home', compact('products', 'categories'));
     }

@@ -34,14 +34,14 @@ class ProductController extends Controller
 
         return view('admin.products.index', [
             'products' => $query->orderBy('sku')->paginate(10)->withQueryString(),
-            'categories' => Category::orderBy('name')->get(),
+            'categories' => Category::ordered()->get(),
         ]);
     }
 
     public function create()
     {
         return view('admin.products.create', [
-            'categories' => Category::orderBy('name')->get(),
+            'categories' => Category::ordered()->get(),
         ]);
     }
 
@@ -65,7 +65,7 @@ class ProductController extends Controller
     {
         return view('admin.products.edit', [
             'product' => $product,
-            'categories' => Category::orderBy('name')->get(),
+            'categories' => Category::ordered()->get(),
         ]);
     }
 

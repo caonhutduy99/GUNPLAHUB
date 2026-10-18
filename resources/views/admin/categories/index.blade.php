@@ -9,14 +9,22 @@
     <div class="card-body">
         <form method="POST" action="{{ route('admin.categories.store') }}" class="row g-2">
             @csrf
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <input type="text" name="name" value="{{ old('name') }}" placeholder="Tên danh mục mới (ví dụ: Gunpla SD)"
                        class="form-control @error('name') is-invalid @enderror" required>
                 @error('name')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <input type="number" name="sort_order" value="{{ old('sort_order') }}" min="0" max="999"
+                       placeholder="Thứ tự (nhỏ xếp trước)"
+                       class="form-control @error('sort_order') is-invalid @enderror">
+                @error('sort_order')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-3">
                 <button type="submit" class="btn btn-dark w-100">Thêm danh mục</button>
             </div>
         </form>
@@ -28,6 +36,7 @@
         <thead class="table-light">
             <tr>
                 <th style="width: 80px;">ID</th>
+                <th style="width: 100px;" class="text-center">Thứ tự</th>
                 <th>Tên danh mục</th>
                 <th style="width: 140px;" class="text-center">Số sản phẩm</th>
                 <th style="width: 180px;"></th>
@@ -37,6 +46,7 @@
             @forelse($categories as $category)
                 <tr>
                     <td>{{ $category->id }}</td>
+                    <td class="text-center">{{ $category->sort_order }}</td>
                     <td>{{ $category->name }}</td>
                     <td class="text-center">{{ $category->products_count }}</td>
                     <td class="text-end">
@@ -51,7 +61,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="4" class="text-center text-muted py-3">Chưa có danh mục.</td></tr>
+                <tr><td colspan="5" class="text-center text-muted py-3">Chưa có danh mục.</td></tr>
             @endforelse
         </tbody>
     </table>

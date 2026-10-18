@@ -13,7 +13,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount('products')->orderBy('name')->get();
+        $categories = Category::withCount('products')->ordered()->get();
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -21,10 +21,14 @@ class CategoryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate(
-            ['name' => ['required', 'string', 'max:50', 'unique:categories,name']],
+            [
+                'name' => ['required', 'string', 'max:50', 'unique:categories,name'],
+                'sort_order' => ['nullable', 'integer', 'min:0', 'max:999'],
+            ],
             ValidationMessages::common(),
-            ['name' => 'Tên danh mục']
+            ['name' => 'Tên danh mục', 'sort_order' => 'Thứ tự hiển thị']
         );
+        $data['sort_order'] = $data['sort_order'] ?? 100;
 
         $category = Category::create($data);
         AuditLog::record("Thêm danh mục #{$category->id}: {$category->name}");
@@ -40,10 +44,14 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category): RedirectResponse
     {
         $data = $request->validate(
-            ['name' => ['required', 'string', 'max:50', 'unique:categories,name,' . $category->id]],
+            [
+                'name' => ['required', 'string', 'max:50', 'unique:categories,name,' . $category->id],
+                'sort_order' => ['nullable', 'integer', 'min:0', 'max:999'],
+            ],
             ValidationMessages::common(),
-            ['name' => 'Tên danh mục']
+            ['name' => 'Tên danh mục', 'sort_order' => 'Thứ tự hiển thị']
         );
+        $data['sort_order'] = $data['sort_order'] ?? 100;
 
         $oldName = $category->name;
         $category->update($data);

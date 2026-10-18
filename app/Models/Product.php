@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
-    public const GRADES = ['HG', 'RG', 'MG', 'PG', 'EG'];
+    public const GRADES = ['EG', 'HG', 'RG', 'MG', 'PG'];
     public const SCALES = ['1/144', '1/100', '1/60'];
     public const STATUSES = ['Còn hàng', 'Hết hàng', 'Ngừng kinh doanh'];
 

@@ -59,7 +59,7 @@ class ShopController extends Controller
 
         return view('shop.index', [
             'products' => $query->paginate(12)->withQueryString(),
-            'categories' => Category::orderBy('name')->get(),
+            'categories' => Category::ordered()->get(),
             'seriesList' => Product::where('status', '!=', 'Ngừng kinh doanh')
                 ->distinct()->orderBy('series')->pluck('series'),
             'sorts' => self::SORTS,
