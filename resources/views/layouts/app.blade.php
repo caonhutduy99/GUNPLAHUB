@@ -20,6 +20,8 @@
                 @auth
                     @if(auth()->user()->isAdmin())
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Quản trị</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.categories.index') }}">Danh mục</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
                     @endif
                 @endauth
             </ul>

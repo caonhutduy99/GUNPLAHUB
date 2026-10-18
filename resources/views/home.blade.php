@@ -14,9 +14,14 @@
     @forelse($products as $product)
         <div class="col-6 col-md-3">
             <div class="card h-100 shadow-sm">
-                <div class="bg-secondary-subtle d-flex align-items-center justify-content-center" style="height: 140px;">
-                    <span class="text-muted small">{{ $product->grade }} {{ $product->scale }}</span>
-                </div>
+                @if($product->image_url)
+                    <img src="{{ $product->image_url }}" class="card-img-top" alt="{{ $product->name }}"
+                         style="height: 160px; object-fit: contain; background: #fff;">
+                @else
+                    <div class="bg-secondary-subtle d-flex align-items-center justify-content-center" style="height: 160px;">
+                        <span class="text-muted small">{{ $product->grade }} {{ $product->scale }}</span>
+                    </div>
+                @endif
                 <div class="card-body">
                     <span class="badge text-bg-secondary mb-2">{{ $product->category->name }}</span>
                     <h6 class="card-title">{{ $product->name }}</h6>

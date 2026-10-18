@@ -5,7 +5,7 @@
 @section('content')
 <h3 class="mb-4">Trang quản trị</h3>
 
-<div class="row g-3">
+<div class="row g-3 mb-4">
     <div class="col-md-4">
         <div class="card text-center shadow-sm">
             <div class="card-body">
@@ -31,4 +31,7 @@
         </div>
     </div>
 </div>
+
+<a href="{{ route('admin.categories.index') }}" class="btn btn-dark">Quản lý danh mục</a>
+<a href="{{ route('admin.products.index') }}" class="btn btn-dark">Quản lý sản phẩm</a>
 @endsection

@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
+    public const GRADES = ['HG', 'RG', 'MG', 'PG', 'EG'];
+    public const SCALES = ['1/144', '1/100', '1/60'];
+    public const STATUSES = ['Còn hàng', 'Hết hàng', 'Ngừng kinh doanh'];
+
     // Khóa chính là chuỗi SKU, không tự tăng
     protected $primaryKey = 'sku';
     public $incrementing = false;
@@ -32,6 +36,18 @@ class Product extends Model
             'price' => 'decimal:2',
             'stock_quantity' => 'integer',
         ];
+    }
+
+    // Dùng SKU trên đường dẫn: /admin/products/HG-UC-001/edit
+    public function getRouteKeyName(): string
+    {
+        return 'sku';
+    }
+
+    // Địa chỉ ảnh để hiển thị, null nếu chưa có ảnh
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image ? asset($this->image) : null;
     }
 
     public function category(): BelongsTo
