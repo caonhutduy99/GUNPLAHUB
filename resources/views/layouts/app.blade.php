@@ -4,9 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'GunplaHub')</title>
+
+    {{-- Đặt theme ngay từ đầu để trang không bị chớp sáng/tối --}}
+    <script>
+        (function () {
+            var theme = null;
+            try { theme = localStorage.getItem('theme'); } catch (e) {}
+            if (!theme) {
+                theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-bs-theme', theme);
+        })();
+    </script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Chỉnh các thành phần dùng màu cố định để đọc được ở chế độ tối */
+        [data-bs-theme="dark"] .btn-dark {
+            --bs-btn-color: #212529; --bs-btn-bg: #dee2e6; --bs-btn-border-color: #dee2e6;
+            --bs-btn-hover-color: #212529; --bs-btn-hover-bg: #fff; --bs-btn-hover-border-color: #fff;
+            --bs-btn-active-color: #212529; --bs-btn-active-bg: #fff; --bs-btn-active-border-color: #fff;
+            --bs-btn-disabled-color: #212529; --bs-btn-disabled-bg: #dee2e6; --bs-btn-disabled-border-color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .btn-outline-dark {
+            --bs-btn-color: #dee2e6; --bs-btn-border-color: #dee2e6;
+            --bs-btn-hover-color: #212529; --bs-btn-hover-bg: #dee2e6; --bs-btn-hover-border-color: #dee2e6;
+            --bs-btn-active-color: #212529; --bs-btn-active-bg: #dee2e6; --bs-btn-active-border-color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .text-bg-dark { background-color: #495057 !important; color: #fff !important; }
+        [data-bs-theme="dark"] .table-light {
+            --bs-table-bg: var(--bs-tertiary-bg);
+            --bs-table-color: var(--bs-body-color);
+            --bs-table-border-color: var(--bs-border-color);
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body class="bg-body-tertiary">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
@@ -33,6 +66,9 @@
                        placeholder="Tìm mô hình...">
                 <button class="btn btn-outline-light btn-sm" type="submit">Tìm</button>
             </form>
+
+            <button type="button" id="themeToggle" class="btn btn-outline-light btn-sm me-3 my-2 my-lg-0"
+                    title="Đổi giao diện sáng/tối"></button>
 
             <ul class="navbar-nav">
                 @guest
@@ -70,5 +106,25 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (function () {
+        var btn = document.getElementById('themeToggle');
+        var root = document.documentElement;
+
+        function render() {
+            var dark = root.getAttribute('data-bs-theme') === 'dark';
+            btn.textContent = dark ? '☀️ Sáng' : '🌙 Tối';
+        }
+
+        btn.addEventListener('click', function () {
+            var next = root.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            root.setAttribute('data-bs-theme', next);
+            try { localStorage.setItem('theme', next); } catch (e) {}
+            render();
+        });
+
+        render();
+    })();
+</script>
 </body>
 </html>

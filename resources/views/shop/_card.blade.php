@@ -18,7 +18,7 @@
             <span class="badge text-bg-secondary">{{ $product->series }}</span>
         </div>
         <h6 class="card-title">
-            <a href="{{ route('products.show', $product) }}" class="text-dark text-decoration-none">{{ $product->name }}</a>
+            <a href="{{ route('products.show', $product) }}" class="text-body text-decoration-none">{{ $product->name }}</a>
         </h6>
         <p class="text-danger fw-bold mt-auto mb-2">{{ number_format($product->price, 0, ',', '.') }} ₫</p>
         <a href="{{ route('products.show', $product) }}" class="btn btn-outline-dark btn-sm">Xem chi tiết</a>
