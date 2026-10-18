@@ -57,6 +57,21 @@
                     <tr><th class="pe-4">Tỷ lệ</th><td>{{ $product->scale }}</td></tr>
                     <tr><th class="pe-4">Series</th><td>{{ $product->series }}</td></tr>
                 </table>
+
+                @if($product->status === 'Còn hàng' && ! (auth()->check() && auth()->user()->isAdmin()))
+                    <form method="POST" action="{{ route('cart.add') }}" class="d-flex align-items-center gap-2 mt-3">
+                        @csrf
+                        <input type="hidden" name="sku" value="{{ $product->sku }}">
+                        <input type="number" name="quantity" value="1" min="1" max="{{ $product->stock_quantity }}"
+                               class="form-control" style="width: 90px;">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-cart-plus me-1"></i>Thêm vào giỏ hàng
+                        </button>
+                    </form>
+                    @guest
+                        <div class="form-text">Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.</div>
+                    @endguest
+                @endif
             </div>
         </div>
     </div>

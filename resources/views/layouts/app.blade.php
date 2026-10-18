@@ -1,6 +1,9 @@
 @php
     $shopPhone = config('shop.phone');
     $phoneDigits = preg_replace('/\D/', '', $shopPhone);
+    $cartCount = (auth()->check() && ! auth()->user()->isAdmin())
+        ? (int) auth()->user()->cartItems()->sum('quantity')
+        : 0;
 @endphp
 <!DOCTYPE html>
 <html lang="vi">
@@ -87,6 +90,18 @@
                     title="Đổi giao diện sáng/tối"></button>
 
             <ul class="navbar-nav">
+                @auth
+                    @unless(auth()->user()->isAdmin())
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('cart.*') ? 'active fw-semibold' : '' }}" href="{{ route('cart.index') }}">
+                                <i class="bi bi-cart3"></i> Giỏ hàng
+                                @if($cartCount > 0)
+                                    <span class="badge rounded-pill text-bg-danger">{{ $cartCount }}</span>
+                                @endif
+                            </a>
+                        </li>
+                    @endunless
+                @endauth
                 @guest
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Đăng nhập</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Đăng ký</a></li>
@@ -112,6 +127,9 @@
     @endif
     @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+    @if(session('warning'))
+        <div class="alert alert-warning">{{ session('warning') }}</div>
     @endif
 
     @yield('content')

@@ -9,6 +9,10 @@
             <div class="card-body p-4">
                 <h4 class="mb-4 text-center">Đăng nhập</h4>
 
+                @if(session('url.intended'))
+                    <div class="alert alert-info py-2">Vui lòng đăng nhập để tiếp tục.</div>
+                @endif
+
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
 

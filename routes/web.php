@@ -5,9 +5,11 @@ use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
+use App\Http\Middleware\EnsureUserIsCustomer;
 use Illuminate\Support\Facades\Route;
 
 // ---- Trang công khai ----
@@ -33,6 +35,16 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/dang-xuat', [AuthController::class, 'logout'])->name('logout');
 });
+
+// ---- Giỏ hàng (chỉ khách hàng đã đăng nhập) ----
+Route::middleware(['auth', EnsureUserIsCustomer::class])
+    ->prefix('gio-hang')->name('cart.')->group(function () {
+        Route::get('/', [CartController::class, 'index'])->name('index');
+        Route::post('/', [CartController::class, 'add'])->name('add');
+        Route::delete('/', [CartController::class, 'clear'])->name('clear');
+        Route::patch('/{sku}', [CartController::class, 'update'])->where('sku', '[A-Za-z0-9_-]+')->name('update');
+        Route::delete('/{sku}', [CartController::class, 'remove'])->where('sku', '[A-Za-z0-9_-]+')->name('remove');
+    });
 
 // ---- Khu vực quản trị (chỉ admin) ----
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
