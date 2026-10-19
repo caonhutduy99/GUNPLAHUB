@@ -20,6 +20,7 @@ class Product extends Model
     protected $fillable = [
         'sku',
         'category_id',
+        'brand_id',
         'name',
         'price',
         'stock_quantity',
@@ -38,13 +39,12 @@ class Product extends Model
         ];
     }
 
-    // Dùng SKU trên đường dẫn: /admin/products/HG-UC-001/edit
+    // Dùng SKU trên đường dẫn: /admin/products/BAN-HG-UC-001/edit
     public function getRouteKeyName(): string
     {
         return 'sku';
     }
 
-    // Địa chỉ ảnh để hiển thị, null nếu chưa có ảnh
     public function getImageUrlAttribute(): ?string
     {
         return $this->image ? asset($this->image) : null;
@@ -53,6 +53,11 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     public function orderDetails(): HasMany

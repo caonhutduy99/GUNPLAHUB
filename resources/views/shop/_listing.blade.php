@@ -1,4 +1,11 @@
 {{-- Bộ lọc + sắp xếp + danh sách sản phẩm. Dùng cho Trang chủ và Cửa hàng. Cần biến $action. --}}
+@php
+    $selectedBrands = (array) request('brand_id', []);
+    $brandVisible = 6;
+    $hiddenBrands = $brands->slice($brandVisible);
+    $expandBrands = $hiddenBrands->contains(fn ($b) => in_array($b->id, $selectedBrands));
+@endphp
+
 <div class="row">
     {{-- Bộ lọc --}}
     <div class="col-lg-3 mb-4">
@@ -9,60 +16,57 @@
                     <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Tên hoặc SKU">
                 </div>
 
+                {{-- Thương hiệu --}}
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Danh mục</label>
+                    <label class="form-label fw-semibold">Thương hiệu</label>
 
-                    <div class="small text-muted mb-1">Mô hình Gunpla</div>
-                    @foreach($gunplaCategories as $category)
+                    @foreach($brands->take($brandVisible) as $brand)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="category_id[]" value="{{ $category->id }}"
-                                   id="cat{{ $category->id }}" @checked(in_array($category->id, (array) request('category_id', [])))>
-                            <label class="form-check-label" for="cat{{ $category->id }}">{{ $category->name }}</label>
+                            <input class="form-check-input" type="checkbox" name="brand_id[]" value="{{ $brand->id }}"
+                                   id="brand{{ $brand->id }}" @checked(in_array($brand->id, $selectedBrands))>
+                            <label class="form-check-label" for="brand{{ $brand->id }}">{{ $brand->name }}</label>
                         </div>
                     @endforeach
 
-                    @if($accessoryCategories->isNotEmpty())
-                        <div class="small text-muted mt-2 mb-1">Phụ kiện</div>
-                        @foreach($accessoryCategories as $category)
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="category_id[]" value="{{ $category->id }}"
-                                       id="cat{{ $category->id }}" @checked(in_array($category->id, (array) request('category_id', [])))>
-                                <label class="form-check-label" for="cat{{ $category->id }}">{{ $category->name }}</label>
-                            </div>
-                        @endforeach
+                    @if($hiddenBrands->isNotEmpty())
+                        <div class="collapse {{ $expandBrands ? 'show' : '' }}" id="moreBrands">
+                            @foreach($hiddenBrands as $brand)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="brand_id[]" value="{{ $brand->id }}"
+                                           id="brand{{ $brand->id }}" @checked(in_array($brand->id, $selectedBrands))>
+                                    <label class="form-check-label" for="brand{{ $brand->id }}">{{ $brand->name }}</label>
+                                </div>
+                            @endforeach
+                        </div>
+                        <a href="#moreBrands" id="brandToggle" class="small d-inline-block mt-1" role="button"
+                           data-bs-toggle="collapse" aria-controls="moreBrands"
+                           aria-expanded="{{ $expandBrands ? 'true' : 'false' }}">{{ $expandBrands ? 'Thu gọn' : 'Xem thêm (' . $hiddenBrands->count() . ')' }}</a>
+                        <script>
+                            (function () {
+                                var panel = document.getElementById('moreBrands');
+                                var toggle = document.getElementById('brandToggle');
+                                if (!panel || !toggle) { return; }
+                                var more = 'Xem thêm ({{ $hiddenBrands->count() }})';
+                                panel.addEventListener('shown.bs.collapse', function () { toggle.textContent = 'Thu gọn'; });
+                                panel.addEventListener('hidden.bs.collapse', function () { toggle.textContent = more; });
+                            })();
+                        </script>
                     @endif
                 </div>
 
+                {{-- Cấp độ (Grade): EG, HG, RG, MG, PG và các loại phụ kiện --}}
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Cấp độ (Grade)</label>
-                    <select name="grade" class="form-select">
-                        <option value="">Tất cả</option>
-                        @foreach(\App\Models\Product::GRADES as $grade)
-                            <option value="{{ $grade }}" @selected(request('grade') === $grade)>{{ $grade }}</option>
-                        @endforeach
-                    </select>
+                    @foreach($categories as $category)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="category_id[]" value="{{ $category->id }}"
+                                   id="cat{{ $category->id }}" @checked(in_array($category->id, (array) request('category_id', [])))>
+                            <label class="form-check-label" for="cat{{ $category->id }}">{{ $category->short_name }}</label>
+                        </div>
+                    @endforeach
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Tỷ lệ</label>
-                    <select name="scale" class="form-select">
-                        <option value="">Tất cả</option>
-                        @foreach(\App\Models\Product::SCALES as $scale)
-                            <option value="{{ $scale }}" @selected(request('scale') === $scale)>{{ $scale }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Series</label>
-                    <select name="series" class="form-select">
-                        <option value="">Tất cả</option>
-                        @foreach($seriesList as $series)
-                            <option value="{{ $series }}" @selected(request('series') === $series)>{{ $series }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
+                {{-- Mức giá --}}
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Mức giá</label>
                     @foreach($priceRanges as $key => $range)
@@ -78,6 +82,17 @@
                         <input type="number" name="price_min" min="0" value="{{ request('price_min') }}" class="form-control form-control-sm" placeholder="Từ">
                         <input type="number" name="price_max" min="0" value="{{ request('price_max') }}" class="form-control form-control-sm" placeholder="Đến">
                     </div>
+                </div>
+
+                {{-- Series: dạng sổ xuống --}}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Series</label>
+                    <select name="series" class="form-select">
+                        <option value="">Tất cả</option>
+                        @foreach($seriesList as $series)
+                            <option value="{{ $series }}" @selected(request('series') === $series)>{{ $series }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-check mb-3">

@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,31 +26,33 @@ class ProductQuery
         'name_desc' => 'Tên Z → A',
     ];
 
-    /** Các mức giá có sẵn dạng checkbox (chọn nhiều mức = hoặc) */
+    /**
+     * Các mức giá có sẵn dạng checkbox (chọn nhiều mức = hoặc).
+     * Mỗi khoảng là (min, max], riêng khoảng đầu là [min, max] để không bị trùng biên.
+     */
     public const PRICE_RANGES = [
         'under_100' => ['label' => 'Dưới 100.000đ', 'min' => null, 'max' => 100000, 'max_op' => '<'],
-        'r_100_300' => ['label' => '100.000đ – 300.000đ', 'min' => 100000, 'max' => 300000, 'max_op' => '<='],
-        'r_300_500' => ['label' => '300.000đ – 500.000đ', 'min' => 300000, 'max' => 500000, 'max_op' => '<='],
-        'r_500_1000' => ['label' => '500.000đ – 1.000.000đ', 'min' => 500000, 'max' => 1000000, 'max_op' => '<='],
-        'over_1000' => ['label' => 'Trên 1.000.000đ', 'min' => 1000000, 'min_op' => '>', 'max' => null],
+        'r_100_300' => ['label' => '100.000đ – 300.000đ', 'min' => 100000, 'min_op' => '>=', 'max' => 300000, 'max_op' => '<='],
+        'r_300_500' => ['label' => '300.000đ – 500.000đ', 'min' => 300000, 'min_op' => '>', 'max' => 500000, 'max_op' => '<='],
+        'r_500_1000' => ['label' => '500.000đ – 1.000.000đ', 'min' => 500000, 'min_op' => '>', 'max' => 1000000, 'max_op' => '<='],
+        'r_1000_2000' => ['label' => '1.000.000đ – 2.000.000đ', 'min' => 1000000, 'min_op' => '>', 'max' => 2000000, 'max_op' => '<='],
+        'r_2000_3000' => ['label' => '2.000.000đ – 3.000.000đ', 'min' => 2000000, 'min_op' => '>', 'max' => 3000000, 'max_op' => '<='],
+        'over_3000' => ['label' => 'Trên 3.000.000đ', 'min' => 3000000, 'min_op' => '>', 'max' => null],
     ];
 
     /** Dữ liệu dùng chung cho view danh sách sản phẩm */
     public static function listing(Request $request): array
     {
-        $query = Product::with('category');
+        $query = Product::with(['category', 'brand']);
         self::applyFilters($query, $request);
         $sort = self::applySort($query, (string) $request->input('sort', 'newest'));
 
-        $categories = Category::ordered()->get();
-        $isGunpla = fn ($category) => str_starts_with($category->name, 'Gunpla');
-
         return [
             'products' => $query->paginate(self::PER_PAGE)->withQueryString(),
-            'gunplaCategories' => $categories->filter($isGunpla)->values(),
-            'accessoryCategories' => $categories->reject($isGunpla)->values(),
+            'brands' => Brand::ordered()->get(),
+            'categories' => Category::ordered()->get(),
             'seriesList' => Product::where('status', '!=', 'Ngừng kinh doanh')
-                ->distinct()->orderBy('series')->pluck('series'),
+                ->whereNotNull('series')->distinct()->orderBy('series')->pluck('series'),
             'sorts' => self::SORTS,
             'sort' => $sort,
             'priceRanges' => self::PRICE_RANGES,
@@ -68,7 +71,7 @@ class ProductQuery
             });
         }
 
-        // Danh mục: chọn nhiều
+        // Cấp độ / loại sản phẩm (chính là danh mục): chọn nhiều
         $categoryIds = collect(Arr::wrap($request->input('category_id')))
             ->filter(fn ($v) => is_numeric($v))
             ->map(fn ($v) => (int) $v)
@@ -77,10 +80,17 @@ class ProductQuery
             $query->whereIn('category_id', $categoryIds);
         }
 
-        foreach (['grade', 'scale', 'series'] as $field) {
-            if ($request->filled($field) && is_string($request->input($field))) {
-                $query->where($field, $request->input($field));
-            }
+        // Thương hiệu: chọn nhiều
+        $brandIds = collect(Arr::wrap($request->input('brand_id')))
+            ->filter(fn ($v) => is_numeric($v))
+            ->map(fn ($v) => (int) $v)
+            ->all();
+        if ($brandIds) {
+            $query->whereIn('brand_id', $brandIds);
+        }
+
+        if ($request->filled('series') && is_string($request->input('series'))) {
+            $query->where('series', $request->input('series'));
         }
 
         // Mức giá có sẵn (checkbox): hợp của các mức đã chọn

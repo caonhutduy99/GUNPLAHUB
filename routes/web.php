@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -51,5 +52,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('products', ProductController::class)->except('show');
+    Route::resource('brands', BrandController::class)->except('show');
     Route::get('contacts', [ContactMessageController::class, 'index'])->name('contacts.index');
 });

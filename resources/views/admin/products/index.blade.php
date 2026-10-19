@@ -9,20 +9,28 @@
 </div>
 
 <form method="GET" action="{{ route('admin.products.index') }}" class="row g-2 mb-3">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Tìm theo tên hoặc SKU">
+    </div>
+    <div class="col-md-2">
+        <select name="brand_id" class="form-select">
+            <option value="">-- Hãng --</option>
+            @foreach($brands as $brand)
+                <option value="{{ $brand->id }}" @selected(request('brand_id') == $brand->id)>{{ $brand->name }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="col-md-3">
         <select name="category_id" class="form-select">
-            <option value="">-- Tất cả danh mục --</option>
+            <option value="">-- Cấp độ / Loại --</option>
             @foreach($categories as $category)
                 <option value="{{ $category->id }}" @selected(request('category_id') == $category->id)>{{ $category->name }}</option>
             @endforeach
         </select>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <select name="status" class="form-select">
-            <option value="">-- Tất cả trạng thái --</option>
+            <option value="">-- Trạng thái --</option>
             @foreach(\App\Models\Product::STATUSES as $status)
                 <option value="{{ $status }}" @selected(request('status') === $status)>{{ $status }}</option>
             @endforeach
@@ -42,7 +50,8 @@
                     <th style="width: 70px;">Ảnh</th>
                     <th>SKU</th>
                     <th>Tên sản phẩm</th>
-                    <th>Danh mục</th>
+                    <th>Hãng</th>
+                    <th>Cấp độ / Loại</th>
                     <th class="text-end">Giá</th>
                     <th class="text-center">Tồn</th>
                     <th>Trạng thái</th>
@@ -61,7 +70,8 @@
                         </td>
                         <td><code>{{ $product->sku }}</code></td>
                         <td>{{ $product->name }}</td>
-                        <td>{{ $product->category->name }}</td>
+                        <td>{{ $product->brand?->name ?? '—' }}</td>
+                        <td>{{ $product->category->short_name }}</td>
                         <td class="text-end">{{ \App\Support\Money::format($product->price) }}</td>
                         <td class="text-center">{{ $product->stock_quantity }}</td>
                         <td>
@@ -87,7 +97,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="8" class="text-center text-muted py-3">Không có sản phẩm nào.</td></tr>
+                    <tr><td colspan="9" class="text-center text-muted py-3">Không có sản phẩm nào.</td></tr>
                 @endforelse
             </tbody>
         </table>

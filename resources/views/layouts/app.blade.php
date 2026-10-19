@@ -55,6 +55,7 @@
         }
         .float-btn:hover { color: #fff; filter: brightness(1.1); }
     </style>
+    @stack('styles')
 </head>
 <body class="bg-body-tertiary">
 
@@ -74,6 +75,7 @@
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active fw-semibold' : '' }}" href="{{ route('admin.dashboard') }}">Quản trị</a></li>
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.categories.index') }}">Danh mục</a></li>
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.brands.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.brands.index') }}">Hãng</a></li>
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.contacts.index') }}">Tin nhắn</a></li>
                     @endif
                 @endauth
@@ -183,5 +185,6 @@
         });
     })();
 </script>
+@stack('scripts')
 </body>
 </html>

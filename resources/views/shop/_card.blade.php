@@ -1,4 +1,7 @@
 {{-- Thẻ sản phẩm dùng chung cho trang chủ, cửa hàng, sản phẩm liên quan --}}
+@php
+    $typeLabel = $product->grade ?: \Illuminate\Support\Str::before($product->category->name, ' – ');
+@endphp
 <div class="card h-100 shadow-sm">
     <a href="{{ route('products.show', $product) }}" class="text-decoration-none position-relative">
         @if($product->image_url)
@@ -6,7 +9,7 @@
                  style="height: 170px; object-fit: contain; background: #fff;">
         @else
             <div class="bg-secondary-subtle d-flex align-items-center justify-content-center" style="height: 170px;">
-                <span class="text-muted small">{{ $product->grade }} {{ $product->scale }}</span>
+                <span class="text-muted small">{{ $product->grade ? $product->grade . ' ' . $product->scale : $product->category->name }}</span>
             </div>
         @endif
         @if($product->status === 'Hết hàng')
@@ -15,8 +18,10 @@
     </a>
     <div class="card-body d-flex flex-column">
         <div class="mb-2">
-            <span class="badge text-bg-dark">{{ $product->grade }}</span>
-            <span class="badge text-bg-secondary">{{ $product->series }}</span>
+            <span class="badge text-bg-dark">{{ $typeLabel }}</span>
+            @if($product->brand)
+                <span class="badge text-bg-secondary">{{ $product->brand->name }}</span>
+            @endif
         </div>
         <h6 class="card-title">
             <a href="{{ route('products.show', $product) }}" class="text-body text-decoration-none">{{ $product->name }}</a>

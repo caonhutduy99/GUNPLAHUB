@@ -2,22 +2,25 @@
 
 <div class="row g-3">
     <div class="col-md-6">
-        <label for="sku" class="form-label">Mã SKU</label>
-        <input type="text" id="sku" name="sku" value="{{ old('sku', $editing ? $product->sku : '') }}"
-               class="form-control @error('sku') is-invalid @enderror"
-               placeholder="Ví dụ: HG-UC-005" @if($editing) readonly @endif required>
-        @if($editing)
-            <div class="form-text">SKU là mã định danh, không thể sửa.</div>
-        @endif
-        @error('sku')
+        <label for="brand_id" class="form-label">Hãng</label>
+        <select id="brand_id" name="brand_id" class="form-select @error('brand_id') is-invalid @enderror" required>
+            <option value="">-- Chọn hãng --</option>
+            @foreach($brands as $brand)
+                <option value="{{ $brand->id }}" data-code="{{ $brand->code }}"
+                    @selected(old('brand_id', $editing ? $product->brand_id : '') == $brand->id)>
+                    {{ $brand->name }} ({{ $brand->code }})
+                </option>
+            @endforeach
+        </select>
+        @error('brand_id')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
     <div class="col-md-6">
-        <label for="category_id" class="form-label">Danh mục</label>
+        <label for="category_id" class="form-label">Cấp độ / Loại sản phẩm</label>
         <select id="category_id" name="category_id" class="form-select @error('category_id') is-invalid @enderror" required>
-            <option value="">-- Chọn danh mục --</option>
+            <option value="">-- Chọn --</option>
             @foreach($categories as $category)
                 <option value="{{ $category->id }}"
                     @selected(old('category_id', $editing ? $product->category_id : '') == $category->id)>
@@ -30,7 +33,22 @@
         @enderror
     </div>
 
-    <div class="col-12">
+    <div class="col-md-6">
+        <label for="sku" class="form-label">Mã SKU</label>
+        <input type="text" id="sku" name="sku" value="{{ old('sku', $editing ? $product->sku : '') }}"
+               class="form-control text-uppercase @error('sku') is-invalid @enderror"
+               placeholder="Ví dụ: BAN-HG-UC-005" @if($editing) readonly @endif required>
+        @if($editing)
+            <div class="form-text">SKU là mã định danh, không thể sửa.</div>
+        @else
+            <div class="form-text">Bắt đầu bằng mã của hãng đã chọn (chọn hãng xong, hệ thống tự điền sẵn phần đầu).</div>
+        @endif
+        @error('sku')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="col-md-6">
         <label for="name" class="form-label">Tên sản phẩm</label>
         <input type="text" id="name" name="name" value="{{ old('name', $editing ? $product->name : '') }}"
                class="form-control @error('name') is-invalid @enderror" required>
@@ -59,34 +77,25 @@
         @enderror
     </div>
 
-    <div class="col-md-4">
-        <label for="grade" class="form-label">Cấp độ (Grade)</label>
-        <select id="grade" name="grade" class="form-select @error('grade') is-invalid @enderror" required>
-            @foreach(\App\Models\Product::GRADES as $grade)
-                <option value="{{ $grade }}" @selected(old('grade', $editing ? $product->grade : 'HG') === $grade)>{{ $grade }}</option>
-            @endforeach
-        </select>
-        @error('grade')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
-
-    <div class="col-md-4">
+    <div class="col-md-6">
         <label for="scale" class="form-label">Tỷ lệ</label>
-        <select id="scale" name="scale" class="form-select @error('scale') is-invalid @enderror" required>
+        <select id="scale" name="scale" class="form-select @error('scale') is-invalid @enderror">
+            <option value="">-- Không có --</option>
             @foreach(\App\Models\Product::SCALES as $scale)
-                <option value="{{ $scale }}" @selected(old('scale', $editing ? $product->scale : '1/144') === $scale)>{{ $scale }}</option>
+                <option value="{{ $scale }}" @selected(old('scale', $editing ? $product->scale : '') === $scale)>{{ $scale }}</option>
             @endforeach
         </select>
+        <div class="form-text">Bắt buộc với mô hình Gunpla, bỏ trống với phụ kiện.</div>
         @error('scale')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
         <label for="series" class="form-label">Series</label>
         <input type="text" id="series" name="series" value="{{ old('series', $editing ? $product->series : '') }}"
-               class="form-control @error('series') is-invalid @enderror" placeholder="UC, SEED, 00..." required>
+               class="form-control @error('series') is-invalid @enderror" placeholder="UC, SEED, 00...">
+        <div class="form-text">Bắt buộc với mô hình Gunpla, bỏ trống với phụ kiện.</div>
         @error('series')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -120,3 +129,34 @@
         @endif
     </div>
 </div>
+
+@unless($editing)
+    @push('scripts')
+    <script>
+        // Chọn hãng xong thì tự điền tiền tố mã hãng vào ô SKU
+        (function () {
+            var brand = document.getElementById('brand_id');
+            var sku = document.getElementById('sku');
+            if (!brand || !sku) { return; }
+
+            var codes = Array.prototype.map.call(brand.options, function (o) { return o.getAttribute('data-code'); })
+                .filter(function (c) { return c; });
+
+            brand.addEventListener('change', function () {
+                var option = brand.options[brand.selectedIndex];
+                var code = option ? option.getAttribute('data-code') : null;
+                if (!code) { return; }
+
+                var rest = sku.value;
+                for (var i = 0; i < codes.length; i++) {
+                    if (rest.toUpperCase().indexOf(codes[i] + '-') === 0) {
+                        rest = rest.substring(codes[i].length + 1);
+                        break;
+                    }
+                }
+                sku.value = code + '-' + rest;
+            });
+        })();
+    </script>
+    @endpush
+@endunless

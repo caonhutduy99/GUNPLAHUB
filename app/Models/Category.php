@@ -10,10 +10,20 @@ class Category extends Model
 {
     protected $fillable = ['name', 'sort_order'];
 
-    /** Sắp xếp theo thứ tự hiển thị, trùng thì theo tên */
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('sort_order')->orderBy('name');
+    }
+
+    /** Tên rút gọn để hiển thị ở bộ lọc: "Gunpla HG" -> "HG" */
+    public function getShortNameAttribute(): string
+    {
+        return preg_replace('/^Gunpla\s+/', '', $this->name);
+    }
+
+    public function isGunpla(): bool
+    {
+        return str_starts_with($this->name, 'Gunpla');
     }
 
     public function products(): HasMany

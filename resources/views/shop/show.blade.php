@@ -31,9 +31,13 @@
             <div class="col-md-7">
                 <h3 class="mb-2">{{ $product->name }}</h3>
                 <div class="mb-3">
-                    <span class="badge text-bg-dark">{{ $product->grade }}</span>
-                    <span class="badge text-bg-secondary">{{ $product->scale }}</span>
-                    <span class="badge text-bg-secondary">{{ $product->series }}</span>
+                    <span class="badge text-bg-dark">{{ $product->grade ?: $product->category->short_name }}</span>
+                    @if($product->scale)
+                        <span class="badge text-bg-secondary">{{ $product->scale }}</span>
+                    @endif
+                    @if($product->series)
+                        <span class="badge text-bg-secondary">{{ $product->series }}</span>
+                    @endif
                 </div>
 
                 <h2 class="text-danger mb-3">{{ \App\Support\Money::format($product->price) }}</h2>
@@ -52,10 +56,16 @@
 
                 <table class="table table-sm w-auto mt-3">
                     <tr><th class="pe-4">Mã SKU</th><td><code>{{ $product->sku }}</code></td></tr>
-                    <tr><th class="pe-4">Danh mục</th><td>{{ $product->category->name }}</td></tr>
-                    <tr><th class="pe-4">Cấp độ</th><td>{{ $product->grade }}</td></tr>
-                    <tr><th class="pe-4">Tỷ lệ</th><td>{{ $product->scale }}</td></tr>
-                    <tr><th class="pe-4">Series</th><td>{{ $product->series }}</td></tr>
+                    @if($product->brand)
+                        <tr><th class="pe-4">Thương hiệu</th><td>{{ $product->brand->name }}</td></tr>
+                    @endif
+                    <tr><th class="pe-4">Cấp độ / Loại</th><td>{{ $product->category->short_name }}</td></tr>
+                    @if($product->scale)
+                        <tr><th class="pe-4">Tỷ lệ</th><td>{{ $product->scale }}</td></tr>
+                    @endif
+                    @if($product->series)
+                        <tr><th class="pe-4">Series</th><td>{{ $product->series }}</td></tr>
+                    @endif
                 </table>
 
                 @if($product->status === 'Còn hàng' && ! (auth()->check() && auth()->user()->isAdmin()))

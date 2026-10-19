@@ -17,9 +17,9 @@ class ShopController extends Controller
     {
         abort_if($product->status === 'Ngừng kinh doanh', 404);
 
-        $product->load('category');
+        $product->load(['category', 'brand']);
 
-        $related = Product::with('category')
+        $related = Product::with(['category', 'brand'])
             ->where('category_id', $product->category_id)
             ->where('sku', '!=', $product->sku)
             ->where('status', '!=', 'Ngừng kinh doanh')
