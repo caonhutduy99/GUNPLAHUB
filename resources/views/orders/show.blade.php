@@ -24,7 +24,7 @@
                     </thead>
                     <tbody>
                         @foreach($order->details as $detail)
-                            @php($product = $detail->product)
+                            @php $product = $detail->product; @endphp
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
