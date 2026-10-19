@@ -54,7 +54,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-end">{{ number_format($product->price, 0, ',', '.') }} ₫</td>
+                                    <td class="text-end">{{ \App\Support\Money::format($product->price) }}</td>
                                     <td class="text-center">
                                         <form method="POST" action="{{ route('cart.update', $product->sku) }}" class="d-flex gap-1 justify-content-center">
                                             @csrf
@@ -64,7 +64,7 @@
                                             <button type="submit" class="btn btn-outline-secondary btn-sm">Cập nhật</button>
                                         </form>
                                     </td>
-                                    <td class="text-end fw-semibold">{{ number_format($product->price * $line->quantity, 0, ',', '.') }} ₫</td>
+                                    <td class="text-end fw-semibold">{{ \App\Support\Money::format($product->price * $line->quantity) }}</td>
                                     <td class="text-end">
                                         <form method="POST" action="{{ route('cart.remove', $product->sku) }}"
                                               onsubmit="return confirm('Xóa sản phẩm này khỏi giỏ hàng?');">
@@ -96,12 +96,12 @@
 
                     <div class="d-flex justify-content-between mb-2">
                         <span>Tạm tính</span>
-                        <span>{{ number_format($subtotal, 0, ',', '.') }} ₫</span>
+                        <span>{{ \App\Support\Money::format($subtotal) }}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Phí vận chuyển</span>
                         @if($shippingFee > 0)
-                            <span>{{ number_format($shippingFee, 0, ',', '.') }} ₫</span>
+                            <span>{{ \App\Support\Money::format($shippingFee) }}</span>
                         @else
                             <span class="text-success">Miễn phí</span>
                         @endif
@@ -109,14 +109,14 @@
 
                     @if($shippingFee > 0)
                         <div class="small text-muted mb-2">
-                            Mua thêm {{ number_format($freeShippingFrom - $subtotal, 0, ',', '.') }} ₫ để được miễn phí vận chuyển.
+                            Mua thêm {{ \App\Support\Money::format($freeShippingFrom - $subtotal) }} để được miễn phí vận chuyển.
                         </div>
                     @endif
 
                     <hr>
                     <div class="d-flex justify-content-between fw-bold fs-5 mb-3">
                         <span>Tổng cộng</span>
-                        <span class="text-danger">{{ number_format($total, 0, ',', '.') }} ₫</span>
+                        <span class="text-danger">{{ \App\Support\Money::format($total) }}</span>
                     </div>
 
                     @if($blacklisted)

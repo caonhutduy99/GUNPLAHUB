@@ -36,7 +36,7 @@
                     <span class="badge text-bg-secondary">{{ $product->series }}</span>
                 </div>
 
-                <h2 class="text-danger mb-3">{{ number_format($product->price, 0, ',', '.') }} ₫</h2>
+                <h2 class="text-danger mb-3">{{ \App\Support\Money::format($product->price) }}</h2>
 
                 <p class="mb-1">
                     <strong>Tình trạng:</strong>

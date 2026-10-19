@@ -62,7 +62,7 @@
                         <td><code>{{ $product->sku }}</code></td>
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->category->name }}</td>
-                        <td class="text-end">{{ number_format($product->price, 0, ',', '.') }} ₫</td>
+                        <td class="text-end">{{ \App\Support\Money::format($product->price) }}</td>
                         <td class="text-center">{{ $product->stock_quantity }}</td>
                         <td>
                             @php

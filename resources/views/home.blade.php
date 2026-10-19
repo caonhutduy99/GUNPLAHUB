@@ -15,26 +15,7 @@
     </a>
 </div>
 
-<div class="mb-4">
-    @foreach($categories as $category)
-        <a href="{{ route('products.index', ['category_id' => $category->id]) }}"
-           class="btn btn-outline-dark btn-sm mb-1">{{ $category->name }}</a>
-    @endforeach
-</div>
+<h4 class="mb-3">Sản phẩm</h4>
 
-<h4 class="mb-3">Sản phẩm mới</h4>
-
-<div class="row g-3">
-    @forelse($products as $product)
-        <div class="col-6 col-md-3">
-            @include('shop._card', ['product' => $product])
-        </div>
-    @empty
-        <p class="text-muted">Chưa có sản phẩm nào.</p>
-    @endforelse
-</div>
-
-<div class="text-center mt-4">
-    <a href="{{ route('products.index') }}" class="btn btn-dark">Xem thêm sản phẩm</a>
-</div>
+@include('shop._listing', ['action' => route('home')])
 @endsection

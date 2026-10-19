@@ -2,22 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Product;
+use App\Support\ProductQuery;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')
-            ->where('status', 'Còn hàng')
-            ->latest()
-            ->orderBy('sku')
-            ->take(8)
-            ->get();
-
-        $categories = Category::ordered()->get();
-
-        return view('home', compact('products', 'categories'));
+        return view('home', ProductQuery::listing($request));
     }
 }

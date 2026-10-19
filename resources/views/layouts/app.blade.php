@@ -89,32 +89,31 @@
             <button type="button" id="themeToggle" class="btn btn-outline-light btn-sm me-3 my-2 my-lg-0"
                     title="Đổi giao diện sáng/tối"></button>
 
-            <ul class="navbar-nav">
-                @auth
+            <ul class="navbar-nav align-items-lg-center">
+                @guest
+                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Đăng nhập</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Đăng ký</a></li>
+                @else
+                    {{-- Thông tin khách hàng, nút đăng xuất nằm bên dưới --}}
+                    <li class="nav-item me-lg-4 py-2 py-lg-0">
+                        <div class="text-white small lh-sm">Xin chào, <strong>{{ auth()->user()->full_name }}</strong></div>
+                        <form method="POST" action="{{ route('logout') }}" class="mt-1">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-light btn-sm py-0 px-2">Đăng xuất</button>
+                        </form>
+                    </li>
+
+                    {{-- Giỏ hàng nằm bên phải thông tin khách hàng --}}
                     @unless(auth()->user()->isAdmin())
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('cart.*') ? 'active fw-semibold' : '' }}" href="{{ route('cart.index') }}">
-                                <i class="bi bi-cart3"></i> Giỏ hàng
+                                <i class="bi bi-cart3 fs-5"></i> Giỏ hàng
                                 @if($cartCount > 0)
                                     <span class="badge rounded-pill text-bg-danger">{{ $cartCount }}</span>
                                 @endif
                             </a>
                         </li>
                     @endunless
-                @endauth
-                @guest
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Đăng nhập</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Đăng ký</a></li>
-                @else
-                    <li class="nav-item d-flex align-items-center text-white me-3">
-                        Xin chào, {{ auth()->user()->full_name }}
-                    </li>
-                    <li class="nav-item">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-light btn-sm mt-1">Đăng xuất</button>
-                        </form>
-                    </li>
                 @endguest
             </ul>
         </div>
