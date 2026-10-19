@@ -60,10 +60,10 @@ class ProductController extends Controller
         $brand = Brand::findOrFail($data['brand_id']);
         $data['sku'] = strtoupper($data['sku']);
 
-        // SKU phải bắt đầu bằng mã hãng, ví dụ BAN-HG-UC-005
+        // SKU phải bắt đầu bằng mã thương hiệu, ví dụ BAN-HG-UC-005
         if (! str_starts_with($data['sku'], $brand->code . '-')) {
             throw ValidationException::withMessages([
-                'sku' => "Mã SKU phải bắt đầu bằng \"{$brand->code}-\" (mã của hãng {$brand->name}).",
+                'sku' => "Mã SKU phải bắt đầu bằng \"{$brand->code}-\" (mã của thương hiệu {$brand->name}).",
             ]);
         }
         if (Product::whereKey($data['sku'])->exists()) {
@@ -177,7 +177,7 @@ class ProductController extends Controller
     {
         return [
             'sku' => 'Mã SKU',
-            'brand_id' => 'Hãng',
+            'brand_id' => 'Thương hiệu',
             'category_id' => 'Cấp độ / Loại sản phẩm',
             'name' => 'Tên sản phẩm',
             'price' => 'Giá bán',

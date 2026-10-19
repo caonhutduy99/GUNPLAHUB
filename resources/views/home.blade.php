@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'GunplaHub - Cửa hàng mô hình Gunpla')
+@section('no_navbar', '1')
 
 @push('styles')
 <style>
@@ -36,9 +37,16 @@
 @endpush
 
 @section('content')
-<div class="p-5 mb-3 bg-dark text-white rounded-3">
-    <h1 class="display-6 fw-bold">{{ config('shop.name') }}</h1>
-    <p class="mb-0">Cửa hàng mô hình Gunpla chính hãng.</p>
+<div class="p-4 p-md-5 mb-3 bg-dark text-white rounded-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+        <div>
+            <h1 class="display-6 fw-bold">{{ config('shop.name') }}</h1>
+            <p class="mb-0">Cửa hàng mô hình Gunpla chính hãng.</p>
+        </div>
+
+        {{-- Tìm kiếm, sáng/tối, đăng nhập... nằm cùng hàng với chữ banner --}}
+        @include('layouts._tools', ['showAdminLink' => true])
+    </div>
 </div>
 
 <div class="d-flex flex-wrap align-items-center gap-3 mb-4">

@@ -1,9 +1,7 @@
 @php
     $shopPhone = config('shop.phone');
     $phoneDigits = preg_replace('/\D/', '', $shopPhone);
-    $cartCount = (auth()->check() && ! auth()->user()->isAdmin())
-        ? (int) auth()->user()->cartItems()->sum('quantity')
-        : 0;
+    $isAdmin = auth()->check() && auth()->user()->isAdmin();
 @endphp
 <!DOCTYPE html>
 <html lang="vi">
@@ -59,6 +57,8 @@
 </head>
 <body class="bg-body-tertiary">
 
+{{-- Trang chủ có bảng "Danh sách sản phẩm" thay cho thanh menu nên ẩn thanh menu ở đó --}}
+@sectionMissing('no_navbar')
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand fw-bold" href="{{ route('home') }}">{{ config('shop.name') }}</a>
@@ -69,58 +69,23 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Trang chủ</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('products.*') ? 'active fw-semibold' : '' }}" href="{{ route('products.index') }}">Cửa hàng</a></li>
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active fw-semibold' : '' }}" href="{{ route('contact') }}">Liên hệ</a></li>
-                @auth
-                    @if(auth()->user()->isAdmin())
-                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active fw-semibold' : '' }}" href="{{ route('admin.dashboard') }}">Quản trị</a></li>
-                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.categories.index') }}">Danh mục</a></li>
-                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
-                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.brands.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.brands.index') }}">Hãng</a></li>
-                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.contacts.index') }}">Tin nhắn</a></li>
-                    @endif
-                @endauth
+                @unless($isAdmin)
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active fw-semibold' : '' }}" href="{{ route('contact') }}">Liên hệ</a></li>
+                @endunless
+                @if($isAdmin)
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active fw-semibold' : '' }}" href="{{ route('admin.dashboard') }}">Quản trị</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.categories.index') }}">Danh mục</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.brands.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.brands.index') }}">Thương hiệu</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.contacts.index') }}">Tin nhắn</a></li>
+                @endif
             </ul>
 
-            <form class="d-flex me-3 my-2 my-lg-0" method="GET" action="{{ route('products.index') }}">
-                <input class="form-control form-control-sm me-1" type="search" name="q"
-                       value="{{ request()->routeIs('products.index') ? request('q') : '' }}"
-                       placeholder="Tìm mô hình...">
-                <button class="btn btn-outline-light btn-sm" type="submit">Tìm</button>
-            </form>
-
-            <button type="button" id="themeToggle" class="btn btn-outline-light btn-sm me-3 my-2 my-lg-0"
-                    title="Đổi giao diện sáng/tối"></button>
-
-            <ul class="navbar-nav align-items-lg-center">
-                @guest
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Đăng nhập</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Đăng ký</a></li>
-                @else
-                    {{-- Thông tin khách hàng, nút đăng xuất nằm bên dưới --}}
-                    <li class="nav-item me-lg-4 py-2 py-lg-0">
-                        <div class="text-white small lh-sm">Xin chào, <strong>{{ auth()->user()->full_name }}</strong></div>
-                        <form method="POST" action="{{ route('logout') }}" class="mt-1">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-light btn-sm py-0 px-2">Đăng xuất</button>
-                        </form>
-                    </li>
-
-                    {{-- Giỏ hàng nằm bên phải thông tin khách hàng --}}
-                    @unless(auth()->user()->isAdmin())
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cart.*') ? 'active fw-semibold' : '' }}" href="{{ route('cart.index') }}">
-                                <i class="bi bi-cart3 fs-5"></i> Giỏ hàng
-                                @if($cartCount > 0)
-                                    <span class="badge rounded-pill text-bg-danger">{{ $cartCount }}</span>
-                                @endif
-                            </a>
-                        </li>
-                    @endunless
-                @endguest
-            </ul>
+            @include('layouts._tools')
         </div>
     </div>
 </nav>
+@endif
 
 <main class="container py-4">
     @if(session('success'))
@@ -137,9 +102,11 @@
 </main>
 
 <footer class="text-center text-muted py-4 small">
+    @unless($isAdmin)
     <div class="mb-1">
         <i class="bi bi-telephone-fill me-1"></i>Hotline: <a href="tel:{{ $phoneDigits }}" class="text-reset">{{ $shopPhone }}</a>
     </div>
+    @endunless
     &copy; {{ date('Y') }} {{ config('shop.name') }} - Đồ án môn học
 </footer>
 
@@ -148,11 +115,13 @@
     <button type="button" id="backToTop" class="float-btn" style="background: #e8501e; display: none;" title="Về đầu trang">
         <i class="bi bi-chevron-up"></i>
     </button>
+    @unless($isAdmin)
     <a href="tel:{{ $phoneDigits }}" class="float-btn" style="background: #dc3545;" title="Gọi {{ $shopPhone }}">
         <i class="bi bi-telephone-fill"></i>
     </a>
     <a href="https://zalo.me/{{ $phoneDigits }}" target="_blank" rel="noopener" class="float-btn"
        style="background: #0068ff; font-size: .8rem; font-weight: 700;" title="Chat Zalo">Zalo</a>
+    @endunless
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -163,11 +132,12 @@
         var root = document.documentElement;
 
         function render() {
+            if (!btn) { return; }
             var dark = root.getAttribute('data-bs-theme') === 'dark';
             btn.textContent = dark ? '☀️ Sáng' : '🌙 Tối';
         }
 
-        btn.addEventListener('click', function () {
+        if (btn) btn.addEventListener('click', function () {
             var next = root.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
             root.setAttribute('data-bs-theme', next);
             try { localStorage.setItem('theme', next); } catch (e) {}

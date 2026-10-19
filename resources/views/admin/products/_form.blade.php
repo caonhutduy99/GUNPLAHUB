@@ -2,9 +2,9 @@
 
 <div class="row g-3">
     <div class="col-md-6">
-        <label for="brand_id" class="form-label">Hãng</label>
+        <label for="brand_id" class="form-label">Thương hiệu</label>
         <select id="brand_id" name="brand_id" class="form-select @error('brand_id') is-invalid @enderror" required>
-            <option value="">-- Chọn hãng --</option>
+            <option value="">-- Chọn thương hiệu --</option>
             @foreach($brands as $brand)
                 <option value="{{ $brand->id }}" data-code="{{ $brand->code }}"
                     @selected(old('brand_id', $editing ? $product->brand_id : '') == $brand->id)>
@@ -41,7 +41,7 @@
         @if($editing)
             <div class="form-text">SKU là mã định danh, không thể sửa.</div>
         @else
-            <div class="form-text">Bắt đầu bằng mã của hãng đã chọn (chọn hãng xong, hệ thống tự điền sẵn phần đầu).</div>
+            <div class="form-text">Bắt đầu bằng mã của thương hiệu đã chọn (chọn thương hiệu xong, hệ thống tự điền sẵn phần đầu).</div>
         @endif
         @error('sku')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -133,7 +133,7 @@
 @unless($editing)
     @push('scripts')
     <script>
-        // Chọn hãng xong thì tự điền tiền tố mã hãng vào ô SKU
+        // Chọn thương hiệu xong thì tự điền tiền tố mã thương hiệu vào ô SKU
         (function () {
             var brand = document.getElementById('brand_id');
             var sku = document.getElementById('sku');

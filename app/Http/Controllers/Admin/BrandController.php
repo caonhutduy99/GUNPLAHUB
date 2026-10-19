@@ -14,13 +14,13 @@ class BrandController extends Controller
     private function messages(): array
     {
         return array_merge(ValidationMessages::common(), [
-            'code.regex' => 'Mã hãng gồm 2-10 chữ hoặc số, viết liền, không dấu (ví dụ: BAN).',
+            'code.regex' => 'Mã thương hiệu gồm 2-10 chữ hoặc số, viết liền, không dấu (ví dụ: BAN).',
         ]);
     }
 
     private function attributes(): array
     {
-        return ['name' => 'Tên hãng', 'code' => 'Mã hãng', 'sort_order' => 'Thứ tự hiển thị'];
+        return ['name' => 'Tên thương hiệu', 'code' => 'Mã thương hiệu', 'sort_order' => 'Thứ tự hiển thị'];
     }
 
     public function index()
@@ -42,9 +42,9 @@ class BrandController extends Controller
         $data['sort_order'] = $data['sort_order'] ?? 100;
 
         $brand = Brand::create($data);
-        AuditLog::record("Thêm hãng #{$brand->id}: {$brand->name} ({$brand->code})");
+        AuditLog::record("Thêm thương hiệu #{$brand->id}: {$brand->name} ({$brand->code})");
 
-        return redirect()->route('admin.brands.index')->with('success', 'Đã thêm hãng.');
+        return redirect()->route('admin.brands.index')->with('success', 'Đã thêm thương hiệu.');
     }
 
     public function edit(Brand $brand)
@@ -57,7 +57,7 @@ class BrandController extends Controller
 
     public function update(Request $request, Brand $brand): RedirectResponse
     {
-        // Hãng đã có sản phẩm thì giữ nguyên mã để SKU không bị lệch
+        // Thương hiệu đã có sản phẩm thì giữ nguyên mã để SKU không bị lệch
         $codeLocked = $brand->products()->exists();
         $request->merge([
             'code' => $codeLocked ? $brand->code : strtoupper(trim((string) $request->input('code'))),
@@ -72,21 +72,21 @@ class BrandController extends Controller
 
         $oldName = $brand->name;
         $brand->update($data);
-        AuditLog::record("Sửa hãng #{$brand->id}: {$oldName} -> {$brand->name} ({$brand->code})");
+        AuditLog::record("Sửa thương hiệu #{$brand->id}: {$oldName} -> {$brand->name} ({$brand->code})");
 
-        return redirect()->route('admin.brands.index')->with('success', 'Đã cập nhật hãng.');
+        return redirect()->route('admin.brands.index')->with('success', 'Đã cập nhật thương hiệu.');
     }
 
     public function destroy(Brand $brand): RedirectResponse
     {
         if ($brand->products()->exists()) {
-            return back()->with('error', 'Không thể xóa hãng đang có sản phẩm.');
+            return back()->with('error', 'Không thể xóa thương hiệu đang có sản phẩm.');
         }
 
         $name = $brand->name;
         $brand->delete();
-        AuditLog::record("Xóa hãng: {$name}");
+        AuditLog::record("Xóa thương hiệu: {$name}");
 
-        return redirect()->route('admin.brands.index')->with('success', 'Đã xóa hãng.');
+        return redirect()->route('admin.brands.index')->with('success', 'Đã xóa thương hiệu.');
     }
 }

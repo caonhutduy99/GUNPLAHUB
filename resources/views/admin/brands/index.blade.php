@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Hãng - GunplaHub')
+@section('title', 'Thương hiệu - GunplaHub')
 
 @section('content')
-<h3 class="mb-3">Quản lý hãng</h3>
+<h3 class="mb-3">Quản lý thương hiệu</h3>
 
 <div class="card shadow-sm mb-4">
     <div class="card-body">
         <form method="POST" action="{{ route('admin.brands.store') }}" class="row g-2">
             @csrf
             <div class="col-md-5">
-                <input type="text" name="name" value="{{ old('name') }}" placeholder="Tên hãng (ví dụ: Bandai)"
+                <input type="text" name="name" value="{{ old('name') }}" placeholder="Tên thương hiệu (ví dụ: Bandai)"
                        class="form-control @error('name') is-invalid @enderror" required>
                 @error('name')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -31,11 +31,11 @@
                 @enderror
             </div>
             <div class="col-md-3">
-                <button type="submit" class="btn btn-dark w-100">Thêm hãng</button>
+                <button type="submit" class="btn btn-dark w-100">Thêm thương hiệu</button>
             </div>
         </form>
         <div class="form-text mt-2">
-            Mã hãng là tiền tố của SKU. Ví dụ hãng Bandai có mã <code>BAN</code> thì SKU là <code>BAN-HG-UC-001</code>.
+            Mã thương hiệu là tiền tố của SKU. Ví dụ thương hiệu Bandai có mã <code>BAN</code> thì SKU là <code>BAN-HG-UC-001</code>.
         </div>
     </div>
 </div>
@@ -46,7 +46,7 @@
             <tr>
                 <th style="width: 70px;">ID</th>
                 <th style="width: 90px;" class="text-center">Thứ tự</th>
-                <th>Tên hãng</th>
+                <th>Tên thương hiệu</th>
                 <th style="width: 110px;">Mã</th>
                 <th style="width: 130px;" class="text-center">Số sản phẩm</th>
                 <th style="width: 180px;"></th>
@@ -63,7 +63,7 @@
                     <td class="text-end">
                         <a href="{{ route('admin.brands.edit', $brand) }}" class="btn btn-sm btn-outline-primary">Sửa</a>
                         <form method="POST" action="{{ route('admin.brands.destroy', $brand) }}" class="d-inline"
-                              onsubmit="return confirm('Xóa hãng này?');">
+                              onsubmit="return confirm('Xóa thương hiệu này?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-outline-danger"
@@ -72,7 +72,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="6" class="text-center text-muted py-3">Chưa có hãng nào.</td></tr>
+                <tr><td colspan="6" class="text-center text-muted py-3">Chưa có thương hiệu nào.</td></tr>
             @endforelse
         </tbody>
     </table>

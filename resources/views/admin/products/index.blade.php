@@ -14,7 +14,7 @@
     </div>
     <div class="col-md-2">
         <select name="brand_id" class="form-select">
-            <option value="">-- Hãng --</option>
+            <option value="">-- Thương hiệu --</option>
             @foreach($brands as $brand)
                 <option value="{{ $brand->id }}" @selected(request('brand_id') == $brand->id)>{{ $brand->name }}</option>
             @endforeach
@@ -50,7 +50,7 @@
                     <th style="width: 70px;">Ảnh</th>
                     <th>SKU</th>
                     <th>Tên sản phẩm</th>
-                    <th>Hãng</th>
+                    <th>Thương hiệu</th>
                     <th>Cấp độ / Loại</th>
                     <th class="text-end">Giá</th>
                     <th class="text-center">Tồn</th>
