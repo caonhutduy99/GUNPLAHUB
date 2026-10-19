@@ -9,6 +9,22 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
+    // Các trạng thái đơn hàng theo báo cáo (mục 1.2.3.c)
+    public const PENDING = 'Chờ xác nhận';
+    public const CONFIRMED = 'Xác nhận và Tạo mã vận đơn';
+    public const AWAITING_PICKUP = 'Chờ lấy hàng';
+    public const PICKED_UP = 'Đã lấy';
+    public const SHIPPING = 'Đang giao';
+    public const DELIVERED = 'Đã giao';
+    public const CANCEL_PENDING = 'Chờ duyệt hủy';
+    public const CANCELLED = 'Đã hủy';
+    public const DELIVERY_FAILED = 'Giao thất bại';
+    public const RETURNING = 'Đang chuyển hoàn';
+    public const RETURNED_TO_SHOP = 'Đã hoàn hàng';
+    public const RETURN_PENDING = 'Chờ duyệt trả hàng';
+    public const RETURN_IN_PROGRESS = 'Đang trả hàng';
+    public const REFUNDED = 'Đã trả hàng/Hoàn tiền';
+
     protected $fillable = [
         'user_id',
         'voucher_code',
@@ -16,6 +32,8 @@ class Order extends Model
         'total_amount',
         'shipping_fee',
         'status',
+        'cancel_reason',
+        'status_before_cancel',
         'receiver_name',
         'receiver_phone',
         'shipping_address',
@@ -28,6 +46,47 @@ class Order extends Model
             'total_amount' => 'decimal:2',
             'shipping_fee' => 'decimal:2',
         ];
+    }
+
+    /** Khách được tự hủy ngay (hoàn tồn kho tức thì) */
+    public function canCancelFreely(): bool
+    {
+        return $this->status === self::PENDING;
+    }
+
+    /** Khách chỉ được gửi yêu cầu hủy, Admin duyệt */
+    public function needsCancelApproval(): bool
+    {
+        return in_array($this->status, [self::CONFIRMED, self::AWAITING_PICKUP], true);
+    }
+
+    /** Không được hủy nữa */
+    public function cancelLocked(): bool
+    {
+        return in_array($this->status, [self::PICKED_UP, self::SHIPPING, self::DELIVERED], true);
+    }
+
+    public function statusBadge(): string
+    {
+        return match ($this->status) {
+            self::PENDING, self::CANCEL_PENDING, self::RETURN_PENDING => 'warning',
+            self::CONFIRMED, self::AWAITING_PICKUP, self::PICKED_UP, self::SHIPPING => 'info',
+            self::DELIVERED => 'success',
+            self::DELIVERY_FAILED => 'danger',
+            default => 'secondary',
+        };
+    }
+
+    /** Tiền hàng (chưa gồm phí vận chuyển, chưa trừ giảm giá) */
+    public function getSubtotalAttribute(): float
+    {
+        return (float) $this->details->sum(fn ($d) => (float) $d->unit_price * $d->quantity);
+    }
+
+    /** Số tiền đã được giảm */
+    public function getDiscountAttribute(): float
+    {
+        return max(0, $this->subtotal + (float) $this->shipping_fee - (float) $this->total_amount);
     }
 
     public function user(): BelongsTo

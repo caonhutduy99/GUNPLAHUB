@@ -7,8 +7,10 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ShopController;
 use App\Http\Middleware\EnsureUserIsCustomer;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +48,18 @@ Route::middleware(['auth', EnsureUserIsCustomer::class])
         Route::patch('/{sku}', [CartController::class, 'update'])->where('sku', '[A-Za-z0-9_-]+')->name('update');
         Route::delete('/{sku}', [CartController::class, 'remove'])->where('sku', '[A-Za-z0-9_-]+')->name('remove');
     });
+
+// ---- Đặt hàng và đơn hàng của tôi (chỉ khách hàng đã đăng nhập) ----
+Route::middleware(['auth', EnsureUserIsCustomer::class])->group(function () {
+    Route::get('/thanh-toan', [CheckoutController::class, 'create'])->name('checkout.create');
+    Route::post('/thanh-toan', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::post('/thanh-toan/ma-giam-gia', [CheckoutController::class, 'applyVoucher'])->name('checkout.voucher.apply');
+    Route::post('/thanh-toan/ma-giam-gia/xoa', [CheckoutController::class, 'removeVoucher'])->name('checkout.voucher.remove');
+
+    Route::get('/don-hang', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/don-hang/{order}', [OrderController::class, 'show'])->whereNumber('order')->name('orders.show');
+    Route::post('/don-hang/{order}/huy', [OrderController::class, 'cancel'])->whereNumber('order')->name('orders.cancel');
+});
 
 // ---- Khu vực quản trị (chỉ admin) ----
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

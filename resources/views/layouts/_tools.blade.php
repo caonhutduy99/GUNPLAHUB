@@ -36,6 +36,10 @@
                 </a>
             @endif
         @else
+            <a href="{{ route('orders.index') }}" class="link-light text-decoration-none">
+                <i class="bi bi-receipt"></i> Đơn hàng
+            </a>
+
             {{-- Giỏ hàng nằm bên phải thông tin khách hàng --}}
             <a href="{{ route('cart.index') }}" class="link-light text-decoration-none">
                 <i class="bi bi-cart3 fs-5"></i> Giỏ hàng

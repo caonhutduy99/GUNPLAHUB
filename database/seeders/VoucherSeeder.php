@@ -13,6 +13,7 @@ class VoucherSeeder extends Seeder
             'code' => 'GUNPLA20K',
             'discount_amount' => 20000,
             'min_order_value' => 300000,
+            'usage_limit' => 100,
             'expiry_date' => now()->addMonths(6),
         ]);
 
@@ -20,6 +21,7 @@ class VoucherSeeder extends Seeder
             'code' => 'WELCOME50K',
             'discount_amount' => 50000,
             'min_order_value' => 700000,
+            'usage_limit' => 50,
             'expiry_date' => now()->addMonths(3),
         ]);
 
@@ -28,6 +30,7 @@ class VoucherSeeder extends Seeder
             'code' => 'HETHAN',
             'discount_amount' => 10000,
             'min_order_value' => 100000,
+            'usage_limit' => 10,
             'expiry_date' => now()->subDay(),
         ]);
     }
