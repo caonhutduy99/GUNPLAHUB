@@ -46,4 +46,5 @@
 <a href="{{ route('admin.categories.index') }}" class="btn btn-dark">Quản lý danh mục</a>
 <a href="{{ route('admin.products.index') }}" class="btn btn-dark">Quản lý sản phẩm</a>
 <a href="{{ route('admin.brands.index') }}" class="btn btn-dark">Quản lý thương hiệu</a>
+<a href="{{ route('admin.customers.index') }}" class="btn btn-dark">Quản lý khách hàng</a>
 @endsection

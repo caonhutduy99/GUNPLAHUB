@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
@@ -73,4 +74,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('products', ProductController::class)->except('show');
     Route::resource('brands', BrandController::class)->except('show');
     Route::get('contacts', [ContactMessageController::class, 'index'])->name('contacts.index');
+
+    Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::get('customers/{customer}', [CustomerController::class, 'show'])->whereNumber('customer')->name('customers.show');
+    Route::post('customers/{customer}/blacklist', [CustomerController::class, 'blacklist'])->whereNumber('customer')->name('customers.blacklist');
+    Route::post('customers/{customer}/unblacklist', [CustomerController::class, 'unblacklist'])->whereNumber('customer')->name('customers.unblacklist');
 });

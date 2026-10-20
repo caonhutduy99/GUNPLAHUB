@@ -45,7 +45,11 @@
                 <div class="card shadow-sm h-100">
                     <div class="card-body">
                         <h6 class="mb-3">Khách hàng</h6>
-                        <p class="mb-1">{{ $order->user?->full_name }}</p>
+                        <p class="mb-1">
+                            @if($order->user)
+                                <a href="{{ route('admin.customers.show', $order->user) }}" class="text-body fw-semibold">{{ $order->user->full_name }}</a>
+                            @endif
+                        </p>
                         <p class="mb-1 small text-muted">{{ $order->user?->email }}</p>
                         <p class="mb-0 small text-muted">{{ $order->user?->phone }}</p>
                         @if($order->user?->is_blacklisted)

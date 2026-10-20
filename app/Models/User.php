@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,6 +11,9 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
+    /** Các lý do đưa vào danh sách đen (theo báo cáo UC-03) */
+    public const BLACKLIST_REASONS = ['Bom hàng', 'Nợ xấu', 'Gian lận thanh toán', 'Khác'];
 
     protected $fillable = [
         'full_name',
@@ -31,12 +35,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_blacklisted' => 'boolean',
+            'blacklisted_at' => 'datetime',
         ];
     }
 
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    /** Admin đã đưa khách này vào Blacklist */
+    public function blacklistedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'blacklisted_by');
     }
 
     public function cartItems(): HasMany
