@@ -8,6 +8,7 @@ use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Shipment;
 use App\Models\User;
 use App\Models\Voucher;
 use App\Support\Pricing;
@@ -20,6 +21,33 @@ use Illuminate\Support\Facades\DB;
  */
 class OrderService
 {
+    /**
+     * Các thao tác Admin được phép làm, theo luồng trạng thái trong báo cáo.
+     * from: các trạng thái hiện tại cho phép; to: trạng thái mới (null = tính khi chạy).
+     */
+    public const ACTIONS = [
+        'confirm' => ['from' => [Order::PENDING], 'to' => Order::CONFIRMED, 'label' => 'Xác nhận đơn', 'style' => 'success'],
+        'cancel' => ['from' => [Order::PENDING], 'to' => Order::CANCELLED, 'label' => 'Hủy đơn', 'style' => 'danger'],
+        'to_pickup' => ['from' => [Order::CONFIRMED], 'to' => Order::AWAITING_PICKUP, 'label' => 'Chuyển sang Chờ lấy hàng', 'style' => 'primary'],
+        'picked_up' => ['from' => [Order::AWAITING_PICKUP], 'to' => Order::PICKED_UP, 'label' => 'Đã lấy hàng', 'style' => 'primary'],
+        'start_shipping' => ['from' => [Order::PICKED_UP], 'to' => Order::SHIPPING, 'label' => 'Bắt đầu giao hàng', 'style' => 'primary'],
+        'delivered' => ['from' => [Order::SHIPPING], 'to' => Order::DELIVERED, 'label' => 'Giao thành công', 'style' => 'success'],
+        'delivery_failed' => ['from' => [Order::SHIPPING], 'to' => Order::DELIVERY_FAILED, 'label' => 'Giao thất bại', 'style' => 'danger'],
+        'start_return' => ['from' => [Order::DELIVERY_FAILED], 'to' => Order::RETURNING, 'label' => 'Chuyển hoàn', 'style' => 'primary'],
+        'returned' => ['from' => [Order::RETURNING], 'to' => Order::RETURNED_TO_SHOP, 'label' => 'Đã hoàn hàng về kho', 'style' => 'success'],
+        'approve_cancel' => ['from' => [Order::CANCEL_PENDING], 'to' => Order::CANCELLED, 'label' => 'Đồng ý hủy đơn', 'style' => 'danger'],
+        'reject_cancel' => ['from' => [Order::CANCEL_PENDING], 'to' => null, 'label' => 'Từ chối hủy (đơn tiếp tục)', 'style' => 'secondary'],
+        'approve_return' => ['from' => [Order::RETURN_PENDING], 'to' => Order::RETURN_IN_PROGRESS, 'label' => 'Đồng ý trả hàng', 'style' => 'success'],
+        'reject_return' => ['from' => [Order::RETURN_PENDING], 'to' => Order::DELIVERED, 'label' => 'Từ chối trả hàng', 'style' => 'secondary'],
+        'refund' => ['from' => [Order::RETURN_IN_PROGRESS], 'to' => Order::REFUNDED, 'label' => 'Đã nhận hàng trả, hoàn tiền', 'style' => 'success'],
+    ];
+
+    /** Những trạng thái được ghi sang bảng vận đơn (shipments) */
+    private const SHIPMENT_STATUSES = [
+        Order::CONFIRMED, Order::AWAITING_PICKUP, Order::PICKED_UP, Order::SHIPPING, Order::DELIVERED,
+        Order::DELIVERY_FAILED, Order::RETURNING, Order::RETURNED_TO_SHOP, Order::CANCELLED,
+    ];
+
     /**
      * Tính trước các khoản tiền cho trang đặt hàng (chưa ghi gì vào CSDL).
      *
@@ -181,6 +209,7 @@ class OrderService
 
             if ($order->canCancelFreely()) {
                 $this->restock($order);
+                $this->failPayment($order);
                 $order->update(['status' => Order::CANCELLED, 'cancel_reason' => $reason]);
                 AuditLog::record("Khách hủy đơn #{$order->id} (Chờ xác nhận -> Đã hủy)");
 
@@ -208,7 +237,7 @@ class OrderService
     }
 
     /** Hoàn tồn kho cho các sản phẩm của đơn và trả lại lượt dùng mã giảm giá. Gọi trong transaction. */
-    public function restock(Order $order): void
+    public function restock(Order $order, bool $returnVoucher = true): void
     {
         $order->loadMissing('details');
 
@@ -225,8 +254,121 @@ class OrderService
             ]);
         }
 
-        if ($order->voucher_code) {
+        if ($returnVoucher && $order->voucher_code) {
             Voucher::whereKey($order->voucher_code)->where('used_count', '>', 0)->decrement('used_count');
         }
+    }
+
+    /** Khách gửi yêu cầu trả hàng/hoàn tiền cho đơn đã giao (chỉ khi hàng lỗi/hư hỏng). */
+    public function requestReturn(Order $order, string $reason): void
+    {
+        DB::transaction(function () use ($order, $reason) {
+            $order = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
+
+            if ($order->status !== Order::DELIVERED) {
+                throw new OrderException('Chỉ đơn hàng đã giao mới có thể yêu cầu trả hàng.');
+            }
+
+            $order->update(['status' => Order::RETURN_PENDING, 'return_reason' => $reason]);
+            AuditLog::record("Khách yêu cầu trả hàng đơn #{$order->id} (Đã giao -> Chờ duyệt trả hàng)");
+        });
+    }
+
+    /** Các thao tác Admin có thể làm với đơn ở trạng thái hiện tại. */
+    public function availableActions(Order $order): array
+    {
+        $result = [];
+        foreach (self::ACTIONS as $key => $definition) {
+            if (in_array($order->status, $definition['from'], true)) {
+                $result[$key] = $definition + ['needs_note' => $key === 'cancel'];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Admin chuyển trạng thái đơn hàng theo đúng luồng, kèm các tác động đi theo:
+     * hoàn tồn kho, cập nhật thanh toán, cập nhật vận đơn, ghi Audit.
+     */
+    public function transition(Order $order, string $action, ?string $note = null): Order
+    {
+        $definition = self::ACTIONS[$action] ?? throw new OrderException('Thao tác không hợp lệ.');
+
+        return DB::transaction(function () use ($order, $action, $note, $definition) {
+            $order = Order::with('details')->whereKey($order->id)->lockForUpdate()->firstOrFail();
+
+            if (! in_array($order->status, $definition['from'], true)) {
+                throw new OrderException("Không thể “{$definition['label']}” khi đơn đang ở trạng thái “{$order->status}”.");
+            }
+
+            $from = $order->status;
+            // Từ chối hủy: đơn quay lại trạng thái trước khi khách gửi yêu cầu
+            $to = $definition['to'] ?? ($order->status_before_cancel ?: Order::AWAITING_PICKUP);
+            $updates = ['status' => $to];
+
+            switch ($action) {
+                case 'confirm':
+                    // TODO (tích hợp GHN): gọi API tạo vận đơn tại đây và lưu ghn_order_code
+                    Shipment::firstOrCreate(['order_id' => $order->id], ['status' => $to]);
+                    break;
+
+                case 'cancel':
+                    $this->restock($order);
+                    $this->failPayment($order);
+                    $updates['cancel_reason'] = $note;
+                    break;
+
+                case 'approve_cancel':
+                    // TODO (tích hợp GHN): gọi API Hủy đơn sang GHN trước khi hủy
+                    $this->restock($order);
+                    $this->failPayment($order);
+                    $updates['status_before_cancel'] = null;
+                    break;
+
+                case 'reject_cancel':
+                    $updates['status_before_cancel'] = null;
+                    $updates['cancel_reason'] = null;
+                    break;
+
+                case 'delivered':
+                    // COD: đã thu tiền khi giao hàng
+                    Payment::where('order_id', $order->id)
+                        ->where('payment_method', 'COD')
+                        ->where('status', 'Chờ xử lý')
+                        ->update(['status' => 'Thành công']);
+                    break;
+
+                case 'returned':
+                    // Hàng giao thất bại đã về kho: hoàn tồn kho (lượt dùng mã giảm giá không trả lại)
+                    $this->restock($order, false);
+                    $this->failPayment($order);
+                    break;
+
+                case 'reject_return':
+                    $updates['return_reason'] = null;
+                    break;
+
+                // approve_return, refund: chỉ đổi trạng thái. Hàng trả vì lỗi/hư hỏng nên không tự cộng lại kho.
+            }
+
+            $order->update($updates);
+
+            if (in_array($to, self::SHIPMENT_STATUSES, true)) {
+                Shipment::where('order_id', $order->id)->update(['status' => $to]);
+            }
+
+            AuditLog::record("Admin đổi trạng thái đơn #{$order->id}: {$from} -> {$to}" . ($note ? " | {$note}" : ''));
+
+            return $order;
+        });
+    }
+
+    /** Đơn không thành công thì khoản thanh toán đang chờ được ghi nhận là thất bại. */
+    private function failPayment(Order $order): void
+    {
+        Payment::where('order_id', $order->id)
+            ->where('status', 'Chờ xử lý')
+            ->update(['status' => 'Thất bại']);
     }
 }

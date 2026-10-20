@@ -57,6 +57,27 @@ class OrderController extends Controller
             : 'Đã gửi yêu cầu hủy đơn. Vui lòng chờ cửa hàng duyệt.');
     }
 
+    public function requestReturn(Request $request, Order $order, OrderService $orders): RedirectResponse
+    {
+        $this->authorizeOwner($request, $order);
+
+        $data = $request->validate(
+            ['return_reason' => ['required', 'string', 'min:10', 'max:500']],
+            array_merge(ValidationMessages::common(), [
+                'return_reason.min' => 'Vui lòng mô tả rõ lỗi của sản phẩm (tối thiểu 10 ký tự).',
+            ]),
+            ['return_reason' => 'Lý do trả hàng']
+        );
+
+        try {
+            $orders->requestReturn($order, $data['return_reason']);
+        } catch (OrderException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return back()->with('success', 'Đã gửi yêu cầu trả hàng. Vui lòng chờ cửa hàng duyệt.');
+    }
+
     /** Khách chỉ được xem đơn của chính mình (trả 404 để không lộ đơn của người khác tồn tại) */
     private function authorizeOwner(Request $request, Order $order): void
     {

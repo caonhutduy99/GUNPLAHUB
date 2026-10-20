@@ -24,7 +24,7 @@
                     </thead>
                     <tbody>
                         @foreach($order->details as $detail)
-                            @php $product = $detail->product; @endphp
+                            @php $product = $detail->product @endphp
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
@@ -149,6 +149,49 @@
                 @endif
             </div>
         </div>
+
+        {{-- Trả hàng / Hoàn tiền --}}
+        @if($order->status === \App\Models\Order::DELIVERED)
+            <div class="card shadow-sm mt-3">
+                <div class="card-body">
+                    <h6 class="mb-2">Trả hàng / Hoàn tiền</h6>
+                    <p class="small text-muted">Chỉ áp dụng khi sản phẩm bị lỗi hoặc hư hỏng khi nhận hàng.</p>
+                    <form method="POST" action="{{ route('orders.return', $order) }}">
+                        @csrf
+                        <textarea name="return_reason" rows="3" placeholder="Mô tả lỗi của sản phẩm*"
+                                  class="form-control mb-2 @error('return_reason') is-invalid @enderror" required>{{ old('return_reason') }}</textarea>
+                        @error('return_reason')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <button type="submit" class="btn btn-outline-danger w-100">Gửi yêu cầu trả hàng</button>
+                    </form>
+                </div>
+            </div>
+        @elseif($order->status === \App\Models\Order::RETURN_PENDING)
+            <div class="card shadow-sm mt-3">
+                <div class="card-body">
+                    <h6 class="mb-2">Trả hàng / Hoàn tiền</h6>
+                    <p class="small mb-0">Yêu cầu trả hàng của bạn đang chờ cửa hàng duyệt.</p>
+                    @if($order->return_reason)
+                        <p class="small text-muted mb-0 mt-2">Lý do: {{ $order->return_reason }}</p>
+                    @endif
+                </div>
+            </div>
+        @elseif($order->status === \App\Models\Order::RETURN_IN_PROGRESS)
+            <div class="card shadow-sm mt-3">
+                <div class="card-body">
+                    <h6 class="mb-2">Trả hàng / Hoàn tiền</h6>
+                    <p class="small mb-0">Yêu cầu đã được duyệt. Vui lòng gửi trả sản phẩm cho cửa hàng.</p>
+                </div>
+            </div>
+        @elseif($order->status === \App\Models\Order::REFUNDED)
+            <div class="card shadow-sm mt-3">
+                <div class="card-body">
+                    <h6 class="mb-2">Trả hàng / Hoàn tiền</h6>
+                    <p class="small mb-0">Cửa hàng đã nhận hàng trả và hoàn tiền cho bạn.</p>
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 

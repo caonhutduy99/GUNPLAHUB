@@ -74,6 +74,15 @@
                 @endunless
                 @if($isAdmin)
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active fw-semibold' : '' }}" href="{{ route('admin.dashboard') }}">Quản trị</a></li>
+                    @php($pendingOrders = \App\Models\Order::needsAction()->count())
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.orders.index') }}">
+                            Đơn hàng
+                            @if($pendingOrders > 0)
+                                <span class="badge rounded-pill text-bg-danger">{{ $pendingOrders }}</span>
+                            @endif
+                        </a>
+                    </li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.categories.index') }}">Danh mục</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.brands.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.brands.index') }}">Thương hiệu</a></li>

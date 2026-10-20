@@ -15,6 +15,7 @@ class DashboardController extends Controller
             'userCount' => User::where('role', 'customer')->count(),
             'productCount' => Product::count(),
             'orderCount' => Order::count(),
+            'pendingCount' => Order::needsAction()->count(),
         ]);
     }
 }

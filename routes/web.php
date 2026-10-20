@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
@@ -59,11 +60,15 @@ Route::middleware(['auth', EnsureUserIsCustomer::class])->group(function () {
     Route::get('/don-hang', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/don-hang/{order}', [OrderController::class, 'show'])->whereNumber('order')->name('orders.show');
     Route::post('/don-hang/{order}/huy', [OrderController::class, 'cancel'])->whereNumber('order')->name('orders.cancel');
+    Route::post('/don-hang/{order}/tra-hang', [OrderController::class, 'requestReturn'])->whereNumber('order')->name('orders.return');
 });
 
 // ---- Khu vực quản trị (chỉ admin) ----
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [AdminOrderController::class, 'show'])->whereNumber('order')->name('orders.show');
+    Route::post('orders/{order}/transition', [AdminOrderController::class, 'transition'])->whereNumber('order')->name('orders.transition');
     Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('products', ProductController::class)->except('show');
     Route::resource('brands', BrandController::class)->except('show');

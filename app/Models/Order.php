@@ -25,6 +25,13 @@ class Order extends Model
     public const RETURN_IN_PROGRESS = 'Đang trả hàng';
     public const REFUNDED = 'Đã trả hàng/Hoàn tiền';
 
+    public const STATUSES = [
+        self::PENDING, self::CONFIRMED, self::AWAITING_PICKUP, self::PICKED_UP, self::SHIPPING,
+        self::DELIVERED, self::CANCEL_PENDING, self::CANCELLED, self::DELIVERY_FAILED,
+        self::RETURNING, self::RETURNED_TO_SHOP, self::RETURN_PENDING, self::RETURN_IN_PROGRESS,
+        self::REFUNDED,
+    ];
+
     protected $fillable = [
         'user_id',
         'voucher_code',
@@ -34,6 +41,7 @@ class Order extends Model
         'status',
         'cancel_reason',
         'status_before_cancel',
+        'return_reason',
         'receiver_name',
         'receiver_phone',
         'shipping_address',
@@ -46,6 +54,12 @@ class Order extends Model
             'total_amount' => 'decimal:2',
             'shipping_fee' => 'decimal:2',
         ];
+    }
+
+    /** Các đơn đang chờ Admin xử lý: chờ xác nhận, chờ duyệt hủy, chờ duyệt trả hàng */
+    public function scopeNeedsAction($query)
+    {
+        return $query->whereIn('status', [self::PENDING, self::CANCEL_PENDING, self::RETURN_PENDING]);
     }
 
     /** Khách được tự hủy ngay (hoàn tồn kho tức thì) */
