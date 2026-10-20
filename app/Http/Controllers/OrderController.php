@@ -8,6 +8,8 @@ use App\Services\OrderService;
 use App\Support\ValidationMessages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
@@ -27,7 +29,7 @@ class OrderController extends Controller
     {
         $this->authorizeOwner($request, $order);
 
-        $order->load(['details.product', 'payment', 'voucher']);
+        $order->load(['details.product', 'payment', 'voucher', 'invoice']);
 
         return view('orders.show', compact('order'));
     }
@@ -62,16 +64,28 @@ class OrderController extends Controller
         $this->authorizeOwner($request, $order);
 
         $data = $request->validate(
-            ['return_reason' => ['required', 'string', 'min:10', 'max:500']],
+            [
+                'return_reason' => ['required', 'string', 'min:10', 'max:500'],
+                // Ảnh minh chứng lỗi sản phẩm (UC-12)
+                'return_image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            ],
             array_merge(ValidationMessages::common(), [
                 'return_reason.min' => 'Vui lòng mô tả rõ lỗi của sản phẩm (tối thiểu 10 ký tự).',
+                'return_image.required' => 'Vui lòng đính kèm ảnh minh chứng.',
             ]),
-            ['return_reason' => 'Lý do trả hàng']
+            ['return_reason' => 'Lý do trả hàng', 'return_image' => 'Ảnh minh chứng']
         );
 
+        $file = $request->file('return_image');
+        $name = Str::uuid() . '.' . $file->extension();
+        $file->move(public_path('images/returns'), $name);
+        $path = 'images/returns/' . $name;
+
         try {
-            $orders->requestReturn($order, $data['return_reason']);
+            $orders->requestReturn($order, $data['return_reason'], $path);
         } catch (OrderException $e) {
+            File::delete(public_path($path)); // yêu cầu không hợp lệ thì bỏ ảnh vừa tải lên
+
             return back()->with('error', $e->getMessage());
         }
 

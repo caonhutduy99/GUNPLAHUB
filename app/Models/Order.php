@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -32,16 +33,21 @@ class Order extends Model
         self::REFUNDED,
     ];
 
+    /** Các trạng thái được tính vào doanh thu (đã giao thành công và chưa hoàn tiền xong) */
+    public const REVENUE_STATUSES = [self::DELIVERED, self::RETURN_PENDING, self::RETURN_IN_PROGRESS];
+
     protected $fillable = [
         'user_id',
         'voucher_code',
         'order_date',
+        'delivered_at',
         'total_amount',
         'shipping_fee',
         'status',
         'cancel_reason',
         'status_before_cancel',
         'return_reason',
+        'return_image',
         'receiver_name',
         'receiver_phone',
         'shipping_address',
@@ -51,6 +57,7 @@ class Order extends Model
     {
         return [
             'order_date' => 'datetime',
+            'delivered_at' => 'datetime',
             'total_amount' => 'decimal:2',
             'shipping_fee' => 'decimal:2',
         ];
@@ -60,6 +67,18 @@ class Order extends Model
     public function scopeNeedsAction($query)
     {
         return $query->whereIn('status', [self::PENDING, self::CANCEL_PENDING, self::RETURN_PENDING]);
+    }
+
+    /** Các đơn được tính vào doanh thu */
+    public function scopeRevenue($query)
+    {
+        return $query->whereIn('status', self::REVENUE_STATUSES);
+    }
+
+    /** Lọc theo ngày giao thành công (đơn cũ chưa có ngày giao thì lấy ngày đặt) */
+    public function scopeDeliveredBetween($query, $from, $to)
+    {
+        return $query->whereBetween(DB::raw('COALESCE(orders.delivered_at, orders.order_date)'), [$from, $to]);
     }
 
     /** Khách được tự hủy ngay (hoàn tồn kho tức thì) */
@@ -121,6 +140,11 @@ class Order extends Model
     public function payment(): HasOne
     {
         return $this->hasOne(Payment::class);
+    }
+
+    public function invoice(): HasOne
+    {
+        return $this->hasOne(Invoice::class);
     }
 
     public function shipment(): HasOne

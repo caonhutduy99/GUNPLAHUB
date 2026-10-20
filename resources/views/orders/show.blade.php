@@ -5,7 +5,14 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
     <h3 class="mb-0">Đơn hàng #{{ $order->id }}</h3>
-    <span class="badge fs-6 text-bg-{{ $order->statusBadge() }}">{{ $order->status }}</span>
+    <div class="d-flex align-items-center gap-2">
+        @if($order->invoice)
+            <a href="{{ route('orders.invoice', $order) }}" class="btn btn-outline-dark btn-sm">
+                <i class="bi bi-receipt me-1"></i>Xem hóa đơn
+            </a>
+        @endif
+        <span class="badge fs-6 text-bg-{{ $order->statusBadge() }}">{{ $order->status }}</span>
+    </div>
 </div>
 
 <div class="row g-4">
@@ -24,7 +31,7 @@
                     </thead>
                     <tbody>
                         @foreach($order->details as $detail)
-                            @php $product = $detail->product @endphp
+                            @php($product = $detail->product)
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
@@ -155,12 +162,17 @@
             <div class="card shadow-sm mt-3">
                 <div class="card-body">
                     <h6 class="mb-2">Trả hàng / Hoàn tiền</h6>
-                    <p class="small text-muted">Chỉ áp dụng khi sản phẩm bị lỗi hoặc hư hỏng khi nhận hàng.</p>
-                    <form method="POST" action="{{ route('orders.return', $order) }}">
+                    <p class="small text-muted">Chỉ áp dụng khi sản phẩm bị lỗi hoặc hư hỏng khi nhận hàng, trong vòng 7 ngày kể từ khi nhận hàng. Vui lòng đính kèm ảnh minh chứng.</p>
+                    <form method="POST" action="{{ route('orders.return', $order) }}" enctype="multipart/form-data">
                         @csrf
                         <textarea name="return_reason" rows="3" placeholder="Mô tả lỗi của sản phẩm*"
                                   class="form-control mb-2 @error('return_reason') is-invalid @enderror" required>{{ old('return_reason') }}</textarea>
                         @error('return_reason')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <input type="file" name="return_image" accept=".jpg,.jpeg,.png,.webp"
+                               class="form-control mb-2 @error('return_image') is-invalid @enderror" required>
+                        @error('return_image')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <button type="submit" class="btn btn-outline-danger w-100">Gửi yêu cầu trả hàng</button>
@@ -174,6 +186,11 @@
                     <p class="small mb-0">Yêu cầu trả hàng của bạn đang chờ cửa hàng duyệt.</p>
                     @if($order->return_reason)
                         <p class="small text-muted mb-0 mt-2">Lý do: {{ $order->return_reason }}</p>
+                    @endif
+                    @if($order->return_image)
+                        <a href="{{ asset($order->return_image) }}" target="_blank" rel="noopener">
+                            <img src="{{ asset($order->return_image) }}" alt="Ảnh minh chứng" class="img-thumbnail mt-2" style="max-height: 120px;">
+                        </a>
                     @endif
                 </div>
             </div>

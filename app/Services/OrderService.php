@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\OrderException;
 use App\Models\AuditLog;
 use App\Models\CartItem;
+use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
@@ -14,6 +15,7 @@ use App\Models\Voucher;
 use App\Support\Pricing;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Toàn bộ nghiệp vụ đặt hàng và hủy đơn. Controller chỉ gọi vào đây.
@@ -39,7 +41,7 @@ class OrderService
         'reject_cancel' => ['from' => [Order::CANCEL_PENDING], 'to' => null, 'label' => 'Từ chối hủy (đơn tiếp tục)', 'style' => 'secondary'],
         'approve_return' => ['from' => [Order::RETURN_PENDING], 'to' => Order::RETURN_IN_PROGRESS, 'label' => 'Đồng ý trả hàng', 'style' => 'success'],
         'reject_return' => ['from' => [Order::RETURN_PENDING], 'to' => Order::DELIVERED, 'label' => 'Từ chối trả hàng', 'style' => 'secondary'],
-        'refund' => ['from' => [Order::RETURN_IN_PROGRESS], 'to' => Order::REFUNDED, 'label' => 'Đã nhận hàng trả, hoàn tiền', 'style' => 'success'],
+        'refund' => ['from' => [Order::RETURN_IN_PROGRESS], 'to' => Order::REFUNDED, 'label' => 'Hoàn tiền & Hoàn tất', 'style' => 'success'],
     ];
 
     /** Những trạng thái được ghi sang bảng vận đơn (shipments) */
@@ -260,16 +262,25 @@ class OrderService
     }
 
     /** Khách gửi yêu cầu trả hàng/hoàn tiền cho đơn đã giao (chỉ khi hàng lỗi/hư hỏng). */
-    public function requestReturn(Order $order, string $reason): void
+    public function requestReturn(Order $order, string $reason, ?string $imagePath = null): void
     {
-        DB::transaction(function () use ($order, $reason) {
+        DB::transaction(function () use ($order, $reason, $imagePath) {
             $order = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
 
             if ($order->status !== Order::DELIVERED) {
                 throw new OrderException('Chỉ đơn hàng đã giao mới có thể yêu cầu trả hàng.');
             }
 
-            $order->update(['status' => Order::RETURN_PENDING, 'return_reason' => $reason]);
+            // Chỉ được yêu cầu trả hàng trong vòng 7 ngày kể từ khi nhận hàng (UC-12)
+            if ($order->delivered_at && $order->delivered_at->lt(now()->subDays(7))) {
+                throw new OrderException('Đã quá 7 ngày kể từ khi nhận hàng nên không thể yêu cầu trả hàng.');
+            }
+
+            $order->update([
+                'status' => Order::RETURN_PENDING,
+                'return_reason' => $reason,
+                'return_image' => $imagePath,
+            ]);
             AuditLog::record("Khách yêu cầu trả hàng đơn #{$order->id} (Đã giao -> Chờ duyệt trả hàng)");
         });
     }
@@ -337,6 +348,9 @@ class OrderService
                         ->where('payment_method', 'COD')
                         ->where('status', 'Chờ xử lý')
                         ->update(['status' => 'Thành công']);
+
+                    $updates['delivered_at'] = now();
+                    $this->issueInvoice($order);
                     break;
 
                 case 'returned':
@@ -349,7 +363,13 @@ class OrderService
                     $updates['return_reason'] = null;
                     break;
 
-                // approve_return, refund: chỉ đổi trạng thái. Hàng trả vì lỗi/hư hỏng nên không tự cộng lại kho.
+                case 'refund':
+                    // UC-12: Admin đã kiểm tra hàng trả còn nguyên vẹn nên cộng lại tồn kho
+                    // (lượt dùng mã giảm giá không trả lại). Hoàn tiền online sẽ làm khi tích hợp VNPay.
+                    $this->restock($order, false);
+                    break;
+
+                // approve_return: chỉ đổi trạng thái.
             }
 
             $order->update($updates);
@@ -370,5 +390,27 @@ class OrderService
         Payment::where('order_id', $order->id)
             ->where('status', 'Chờ xử lý')
             ->update(['status' => 'Thất bại']);
+    }
+
+    /** Mỗi đơn giao thành công có đúng một hóa đơn với mã số duy nhất, ví dụ HD202610-000001. */
+    private function issueInvoice(Order $order): Invoice
+    {
+        $existing = Invoice::where('order_id', $order->id)->first();
+        if ($existing) {
+            return $existing;
+        }
+
+        $invoice = Invoice::create([
+            'order_id' => $order->id,
+            'invoice_number' => (string) Str::uuid(), // tạm thời, đổi ngay khi biết id
+            'issued_at' => now(),
+            'total_amount' => $order->total_amount,
+        ]);
+
+        $invoice->update([
+            'invoice_number' => sprintf('HD%s-%06d', now()->format('Ym'), $invoice->id),
+        ]);
+
+        return $invoice;
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactMessageController;
@@ -7,11 +8,13 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ShopController;
 use App\Http\Middleware\EnsureUserIsCustomer;
@@ -62,6 +65,7 @@ Route::middleware(['auth', EnsureUserIsCustomer::class])->group(function () {
     Route::get('/don-hang/{order}', [OrderController::class, 'show'])->whereNumber('order')->name('orders.show');
     Route::post('/don-hang/{order}/huy', [OrderController::class, 'cancel'])->whereNumber('order')->name('orders.cancel');
     Route::post('/don-hang/{order}/tra-hang', [OrderController::class, 'requestReturn'])->whereNumber('order')->name('orders.return');
+    Route::get('/don-hang/{order}/hoa-don', [InvoiceController::class, 'customer'])->whereNumber('order')->name('orders.invoice');
 });
 
 // ---- Khu vực quản trị (chỉ admin) ----
@@ -74,6 +78,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('products', ProductController::class)->except('show');
     Route::resource('brands', BrandController::class)->except('show');
     Route::get('contacts', [ContactMessageController::class, 'index'])->name('contacts.index');
+
+    Route::get('orders/{order}/invoice', [InvoiceController::class, 'admin'])->whereNumber('order')->name('orders.invoice');
+
+    Route::get('reports/revenue', [ReportController::class, 'revenue'])->name('reports.revenue');
+    Route::get('reports/revenue/export', [ReportController::class, 'exportRevenue'])->name('reports.revenue.export');
+    Route::get('reports/inventory', [ReportController::class, 'inventory'])->name('reports.inventory');
+    Route::get('reports/inventory/export', [ReportController::class, 'exportInventory'])->name('reports.inventory.export');
+    Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit.index');
 
     Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
     Route::get('customers/{customer}', [CustomerController::class, 'show'])->whereNumber('customer')->name('customers.show');

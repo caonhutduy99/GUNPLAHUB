@@ -5,7 +5,14 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
     <h3 class="mb-0">Đơn hàng #{{ $order->id }}</h3>
-    <span class="badge fs-6 text-bg-{{ $order->statusBadge() }}">{{ $order->status }}</span>
+    <div class="d-flex align-items-center gap-2">
+        @if($order->invoice)
+            <a href="{{ route('admin.orders.invoice', $order) }}" class="btn btn-outline-dark btn-sm">
+                <i class="bi bi-receipt me-1"></i>Hóa đơn {{ $order->invoice->invoice_number }}
+            </a>
+        @endif
+        <span class="badge fs-6 text-bg-{{ $order->statusBadge() }}">{{ $order->status }}</span>
+    </div>
 </div>
 
 <div class="row g-4">
@@ -120,6 +127,11 @@
             <div class="alert alert-warning">
                 <strong>Khách yêu cầu trả hàng</strong>
                 <div class="small mt-1">Lý do: {{ $order->return_reason ?: '—' }}</div>
+                @if($order->return_image)
+                    <a href="{{ asset($order->return_image) }}" target="_blank" rel="noopener">
+                        <img src="{{ asset($order->return_image) }}" alt="Ảnh minh chứng" class="img-thumbnail mt-2" style="max-height: 140px;">
+                    </a>
+                @endif
             </div>
         @elseif($order->status === \App\Models\Order::CANCELLED && $order->cancel_reason)
             <div class="alert alert-secondary small mb-3">Lý do hủy: {{ $order->cancel_reason }}</div>

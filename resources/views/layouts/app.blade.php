@@ -52,6 +52,13 @@
             box-shadow: 0 2px 8px rgba(0,0,0,.35); cursor: pointer;
         }
         .float-btn:hover { color: #fff; filter: brightness(1.1); }
+
+        /* Khi in / lưu PDF: ẩn menu, nút nổi, chân trang */
+        @media print {
+            nav.navbar, footer, .no-print, .position-fixed { display: none !important; }
+            body { background: #fff !important; color: #000 !important; }
+            .card { box-shadow: none !important; border-color: #ccc !important; }
+        }
     </style>
     @stack('styles')
 </head>
@@ -87,6 +94,15 @@
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.brands.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.brands.index') }}">Thương hiệu</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.customers.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.customers.index') }}">Khách hàng</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.reports.*', 'admin.audit.*') ? 'active fw-semibold' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Thống kê</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('admin.reports.revenue') }}">Báo cáo doanh thu</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.reports.inventory') }}">Báo cáo tồn kho</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.audit.index') }}">Nhật ký hệ thống</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.contacts.index') }}">Tin nhắn</a></li>
                 @endif
             </ul>
