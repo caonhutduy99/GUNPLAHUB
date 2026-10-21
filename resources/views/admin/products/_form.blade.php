@@ -57,12 +57,55 @@
         @enderror
     </div>
 
-    <div class="col-md-6">
-        <label for="price" class="form-label">Giá bán (VNĐ)</label>
-        <input type="number" id="price" name="price" min="1" step="1"
+    {{-- Phần thiết lập giá & quy tắc: giá bán không thấp hơn giá nhập --}}
+    <div class="col-md-4">
+        <label for="cost_price" class="form-label">Giá nhập / Giá vốn (VNĐ) <span class="text-danger">*</span></label>
+        <input type="number" id="cost_price" name="cost_price" min="0" step="1000"
+               value="{{ old('cost_price', $editing ? (int) $product->cost_price : '') }}"
+               class="form-control @error('cost_price') is-invalid @enderror" required
+               placeholder="Ví dụ: 250000">
+        <div class="form-text">Giá vốn khi nhập kho.</div>
+        @error('cost_price')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="col-md-4">
+        <label for="price" class="form-label">Giá bán (VNĐ) <span class="text-danger">*</span></label>
+        <input type="number" id="price" name="price" min="1" step="1000"
                value="{{ old('price', $editing ? (int) $product->price : '') }}"
-               class="form-control @error('price') is-invalid @enderror" required>
+               class="form-control @error('price') is-invalid @enderror" required
+               placeholder="Ví dụ: 350000">
+        <div class="form-text text-danger" id="priceRuleNotice">
+            <i class="bi bi-shield-exclamation me-1"></i>Quy tắc: Giá bán phải lớn hơn hoặc bằng giá nhập.
+        </div>
         @error('price')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="col-md-4">
+        <label for="price_type" class="form-label">Loại giá <span class="text-danger">*</span></label>
+        <select id="price_type" name="price_type" class="form-select @error('price_type') is-invalid @enderror" required>
+            @foreach(\App\Models\Product::PRICE_TYPES as $ptype)
+                <option value="{{ $ptype }}" @selected(old('price_type', $editing ? ($product->price_type ?? 'Giá bán lẻ') : 'Giá bán lẻ') === $ptype)>
+                    {{ $ptype }}
+                </option>
+            @endforeach
+        </select>
+        <div class="form-text">Phân loại giá áp dụng hiện tại.</div>
+        @error('price_type')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="col-12">
+        <label for="price_note" class="form-label">Ghi chú điều chỉnh giá (tùy chọn)</label>
+        <input type="text" id="price_note" name="price_note" value="{{ old('price_note') }}"
+               class="form-control @error('price_note') is-invalid @enderror"
+               placeholder="Ví dụ: Nhập lô hàng mới, Chương trình khuyến mãi hè, Thay đổi giá nhà cung cấp...">
+        <div class="form-text">Nội dung này sẽ được ghi vào <strong>Lịch sử giá</strong> của sản phẩm để theo dõi.</div>
+        @error('price_note')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
@@ -130,15 +173,47 @@
     </div>
 </div>
 
-@unless($editing)
-    @push('scripts')
-    <script>
-        // Chọn thương hiệu xong thì tự điền tiền tố mã thương hiệu vào ô SKU
-        (function () {
-            var brand = document.getElementById('brand_id');
-            var sku = document.getElementById('sku');
-            if (!brand || !sku) { return; }
+@push('scripts')
+<script>
+    (function () {
+        // Kiểm tra quy tắc giá: giá bán >= giá nhập
+        var costInput = document.getElementById('cost_price');
+        var priceInput = document.getElementById('price');
+        var notice = document.getElementById('priceRuleNotice');
 
+        function validatePriceRule() {
+            if (!costInput || !priceInput || !notice) return;
+            var cost = parseFloat(costInput.value) || 0;
+            var price = parseFloat(priceInput.value) || 0;
+
+            if (price > 0 && cost > 0 && price < cost) {
+                notice.className = 'form-text text-danger fw-bold';
+                notice.innerHTML = '<i class="bi bi-x-circle-fill me-1"></i>LỖI: Giá bán (' + price.toLocaleString() + ' đ) đang THẤP HƠN giá nhập (' + cost.toLocaleString() + ' đ)!';
+                priceInput.classList.add('is-invalid');
+            } else if (price > 0 && cost > 0) {
+                var diff = price - cost;
+                var percent = cost > 0 ? Math.round((diff / cost) * 100) : 0;
+                notice.className = 'form-text text-success';
+                notice.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Hợp lệ. Chênh lệch lợi nhuận: +' + diff.toLocaleString() + ' đ (+' + percent + '%)';
+                priceInput.classList.remove('is-invalid');
+            } else {
+                notice.className = 'form-text text-muted';
+                notice.innerHTML = '<i class="bi bi-shield-check me-1"></i>Quy tắc: Giá bán phải lớn hơn hoặc bằng giá nhập.';
+                priceInput.classList.remove('is-invalid');
+            }
+        }
+
+        if (costInput && priceInput) {
+            costInput.addEventListener('input', validatePriceRule);
+            priceInput.addEventListener('input', validatePriceRule);
+            validatePriceRule();
+        }
+
+        @unless($editing)
+        // Chọn thương hiệu xong thì tự điền tiền tố mã thương hiệu vào ô SKU
+        var brand = document.getElementById('brand_id');
+        var sku = document.getElementById('sku');
+        if (brand && sku) {
             var codes = Array.prototype.map.call(brand.options, function (o) { return o.getAttribute('data-code'); })
                 .filter(function (c) { return c; });
 
@@ -156,7 +231,8 @@
                 }
                 sku.value = code + '-' + rest;
             });
-        })();
-    </script>
-    @endpush
-@endunless
+        }
+        @endunless
+    })();
+</script>
+@endpush

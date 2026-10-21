@@ -22,11 +22,14 @@
     @else
         {{-- Thông tin khách hàng, nút đăng xuất nằm bên dưới --}}
         <div>
-            <div class="small lh-sm">Xin chào, <strong>{{ auth()->user()->full_name }}</strong></div>
-            <form method="POST" action="{{ route('logout') }}" class="mt-1">
-                @csrf
-                <button type="submit" class="btn btn-outline-light btn-sm py-0 px-2">Đăng xuất</button>
-            </form>
+            <div class="small lh-sm">Xin chào, <a href="{{ route('profile.show') }}" class="link-light fw-bold text-decoration-none" title="Xem hồ sơ cá nhân">{{ auth()->user()->full_name }}</a></div>
+            <div class="d-flex align-items-center gap-1 mt-1">
+                <a href="{{ route('profile.show') }}" class="btn btn-outline-light btn-sm py-0 px-2" title="Hồ sơ cá nhân">Hồ sơ</a>
+                <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-light btn-sm py-0 px-2">Đăng xuất</button>
+                </form>
+            </div>
         </div>
 
         @if($toolsIsAdmin)

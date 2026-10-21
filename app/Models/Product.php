@@ -11,6 +11,7 @@ class Product extends Model
     public const GRADES = ['EG', 'HG', 'RG', 'MG', 'PG'];
     public const SCALES = ['1/144', '1/100', '1/60'];
     public const STATUSES = ['Còn hàng', 'Hết hàng', 'Ngừng kinh doanh'];
+    public const PRICE_TYPES = ['Giá bán lẻ', 'Giá niêm yết', 'Giá khuyến mãi', 'Giá thanh lý', 'Giá sỉ'];
 
     // Khóa chính là chuỗi SKU, không tự tăng
     protected $primaryKey = 'sku';
@@ -22,7 +23,9 @@ class Product extends Model
         'category_id',
         'brand_id',
         'name',
+        'cost_price',
         'price',
+        'price_type',
         'stock_quantity',
         'grade',
         'scale',
@@ -34,6 +37,7 @@ class Product extends Model
     protected function casts(): array
     {
         return [
+            'cost_price' => 'decimal:2',
             'price' => 'decimal:2',
             'stock_quantity' => 'integer',
         ];
@@ -63,5 +67,10 @@ class Product extends Model
     public function orderDetails(): HasMany
     {
         return $this->hasMany(OrderDetail::class, 'product_sku', 'sku');
+    }
+
+    public function priceHistories(): HasMany
+    {
+        return $this->hasMany(PriceHistory::class, 'product_sku', 'sku')->latest();
     }
 }

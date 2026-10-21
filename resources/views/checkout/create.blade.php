@@ -39,7 +39,7 @@
                         <label for="shipping_address" class="form-label">Địa chỉ giao hàng</label>
                         <textarea id="shipping_address" name="shipping_address" rows="3"
                                   class="form-control @error('shipping_address') is-invalid @enderror"
-                                  placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành" required>{{ old('shipping_address') }}</textarea>
+                                  placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành" required>{{ old('shipping_address', $user->address) }}</textarea>
                         @error('shipping_address')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

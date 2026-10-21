@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use App\Http\Middleware\EnsureUserIsCustomer;
 use Illuminate\Support\Facades\Route;
@@ -39,9 +41,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/dang-ky', [AuthController::class, 'register']);
 });
 
-// ---- Đã đăng nhập ----
+// ---- Đã đăng nhập (chung cho cả Admin và Khách) ----
 Route::middleware('auth')->group(function () {
     Route::post('/dang-xuat', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/ho-so', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/ho-so', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/ho-so/doi-mat-khau', [ProfileController::class, 'updatePassword'])->name('profile.password');
 });
 
 // ---- Giỏ hàng (chỉ khách hàng đã đăng nhập) ----
@@ -77,6 +82,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('products', ProductController::class)->except('show');
     Route::resource('brands', BrandController::class)->except('show');
+    Route::resource('vouchers', VoucherController::class)->except('show');
     Route::get('contacts', [ContactMessageController::class, 'index'])->name('contacts.index');
 
     Route::get('orders/{order}/invoice', [InvoiceController::class, 'admin'])->whereNumber('order')->name('orders.invoice');

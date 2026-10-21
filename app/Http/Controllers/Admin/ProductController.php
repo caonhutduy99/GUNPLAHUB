@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\PriceHistory;
 use App\Models\Product;
 use App\Support\ValidationMessages;
 use Illuminate\Http\RedirectResponse;
@@ -55,7 +56,13 @@ class ProductController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $category = $this->categoryFrom($request);
-        $data = $request->validate($this->rules(null, $category), ValidationMessages::common(), $this->attributes());
+        $data = $request->validate(
+            $this->rules(null, $category),
+            array_merge(ValidationMessages::common(), [
+                'price.gte' => 'Quy tắc giá: Giá bán không được thấp hơn giá nhập.',
+            ]),
+            $this->attributes()
+        );
 
         $brand = Brand::findOrFail($data['brand_id']);
         $data['sku'] = strtoupper($data['sku']);
@@ -70,7 +77,9 @@ class ProductController extends Controller
             throw ValidationException::withMessages(['sku' => 'Mã SKU đã tồn tại.']);
         }
 
-        unset($data['image']);
+        $priceNote = $data['price_note'] ?? null;
+        unset($data['image'], $data['price_note']);
+
         $data['grade'] = $this->gradeFor($category);
         $data['status'] = $this->syncStatus($data['status'], (int) $data['stock_quantity']);
         if ($path = $this->saveImage($request)) {
@@ -78,13 +87,28 @@ class ProductController extends Controller
         }
 
         $product = Product::create($data);
-        AuditLog::record("Thêm sản phẩm {$product->sku}: {$product->name}");
 
-        return redirect()->route('admin.products.index')->with('success', 'Đã thêm sản phẩm.');
+        // Lưu lịch sử giá ban đầu
+        PriceHistory::create([
+            'product_sku' => $product->sku,
+            'user_id' => auth()->id(),
+            'old_cost_price' => null,
+            'cost_price' => $product->cost_price,
+            'old_price' => null,
+            'price' => $product->price,
+            'price_type' => $product->price_type ?? 'Giá bán lẻ',
+            'note' => $priceNote ?: 'Thiết lập giá ban đầu khi tạo sản phẩm',
+        ]);
+
+        AuditLog::record("Thêm sản phẩm {$product->sku}: {$product->name} (Giá nhập: " . number_format($product->cost_price) . "đ, Giá bán: " . number_format($product->price) . "đ)");
+
+        return redirect()->route('admin.products.index')->with('success', 'Đã thêm sản phẩm thành công.');
     }
 
     public function edit(Product $product)
     {
+        $product->load(['priceHistories.user']);
+
         return view('admin.products.edit', [
             'product' => $product,
             'categories' => Category::ordered()->get(),
@@ -95,9 +119,17 @@ class ProductController extends Controller
     public function update(Request $request, Product $product): RedirectResponse
     {
         $category = $this->categoryFrom($request);
-        $data = $request->validate($this->rules($product, $category), ValidationMessages::common(), $this->attributes());
+        $data = $request->validate(
+            $this->rules($product, $category),
+            array_merge(ValidationMessages::common(), [
+                'price.gte' => 'Quy tắc giá: Giá bán không được thấp hơn giá nhập.',
+            ]),
+            $this->attributes()
+        );
 
-        unset($data['image']);
+        $priceNote = $data['price_note'] ?? null;
+        unset($data['image'], $data['price_note']);
+
         $data['grade'] = $this->gradeFor($category);
         $data['status'] = $this->syncStatus($data['status'], (int) $data['stock_quantity']);
 
@@ -106,13 +138,37 @@ class ProductController extends Controller
             $data['image'] = $path;
         }
 
-        $oldPrice = $product->price;
+        $oldPrice = (float) $product->price;
+        $oldCostPrice = (float) $product->cost_price;
+        $oldPriceType = $product->price_type;
         $oldStock = $product->stock_quantity;
+
+        $newPrice = (float) $data['price'];
+        $newCostPrice = (float) $data['cost_price'];
+        $newPriceType = $data['price_type'];
+
         $product->update($data);
 
+        // Ghi lại lịch sử giá nếu giá bán, giá nhập hoặc loại giá có sự thay đổi
+        if ($oldPrice !== $newPrice || $oldCostPrice !== $newCostPrice || $oldPriceType !== $newPriceType) {
+            PriceHistory::create([
+                'product_sku' => $product->sku,
+                'user_id' => auth()->id(),
+                'old_cost_price' => $oldCostPrice,
+                'cost_price' => $newCostPrice,
+                'old_price' => $oldPrice,
+                'price' => $newPrice,
+                'price_type' => $newPriceType,
+                'note' => $priceNote ?: 'Điều chỉnh giá sản phẩm',
+            ]);
+        }
+
         $note = '';
-        if ((float) $oldPrice !== (float) $product->price) {
-            $note .= " | giá {$oldPrice} -> {$product->price}";
+        if ($oldCostPrice !== $newCostPrice) {
+            $note .= " | giá nhập " . number_format($oldCostPrice) . " -> " . number_format($newCostPrice);
+        }
+        if ($oldPrice !== $newPrice) {
+            $note .= " | giá bán " . number_format($oldPrice) . " -> " . number_format($newPrice);
         }
         if ($oldStock !== $product->stock_quantity) {
             $note .= " | tồn kho {$oldStock} -> {$product->stock_quantity}";
@@ -164,7 +220,10 @@ class ProductController extends Controller
             'brand_id' => ['required', 'exists:brands,id'],
             'category_id' => ['required', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
-            'price' => ['required', 'numeric', 'min:1', 'max:99999999'],
+            'cost_price' => ['required', 'numeric', 'min:0', 'max:99999999'],
+            'price' => ['required', 'numeric', 'min:1', 'gte:cost_price', 'max:99999999'],
+            'price_type' => ['required', Rule::in(Product::PRICE_TYPES)],
+            'price_note' => ['nullable', 'string', 'max:255'],
             'stock_quantity' => ['required', 'integer', 'min:0', 'max:100000'],
             'scale' => [$requiredIfGunpla, Rule::in(Product::SCALES)],
             'series' => [$requiredIfGunpla, 'string', 'max:50'],
@@ -180,7 +239,10 @@ class ProductController extends Controller
             'brand_id' => 'Thương hiệu',
             'category_id' => 'Cấp độ / Loại sản phẩm',
             'name' => 'Tên sản phẩm',
+            'cost_price' => 'Giá nhập',
             'price' => 'Giá bán',
+            'price_type' => 'Loại giá',
+            'price_note' => 'Ghi chú điều chỉnh giá',
             'stock_quantity' => 'Số lượng tồn kho',
             'scale' => 'Tỷ lệ',
             'series' => 'Series',

@@ -19,6 +19,7 @@ class Voucher extends Model
         'usage_limit',
         'used_count',
         'expiry_date',
+        'is_active',
     ];
 
     protected function casts(): array
@@ -29,6 +30,7 @@ class Voucher extends Model
             'usage_limit' => 'integer',
             'used_count' => 'integer',
             'expiry_date' => 'datetime',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -37,9 +39,39 @@ class Voucher extends Model
         return $this->expiry_date->isPast();
     }
 
+    /** Trạng thái hiển thị của mã giảm giá */
+    public function status(): string
+    {
+        if (isset($this->is_active) && ! $this->is_active) {
+            return 'Tạm ngừng';
+        }
+        if ($this->isExpired()) {
+            return 'Hết hạn';
+        }
+        if ($this->usage_limit !== null && $this->used_count >= $this->usage_limit) {
+            return 'Hết lượt';
+        }
+
+        return 'Đang áp dụng';
+    }
+
+    public function statusBadgeClass(): string
+    {
+        return match ($this->status()) {
+            'Đang áp dụng' => 'bg-success',
+            'Hết hạn' => 'bg-danger',
+            'Hết lượt' => 'bg-warning text-dark',
+            'Tạm ngừng' => 'bg-secondary',
+            default => 'bg-secondary',
+        };
+    }
+
     /** Trả về thông báo lỗi nếu mã không dùng được cho đơn có tiền hàng $subtotal, ngược lại trả null. */
     public function validationError(float $subtotal): ?string
     {
+        if (isset($this->is_active) && ! $this->is_active) {
+            return 'Mã giảm giá đã bị tạm ngừng áp dụng.';
+        }
         if ($this->isExpired()) {
             return 'Mã giảm giá đã hết hạn.';
         }

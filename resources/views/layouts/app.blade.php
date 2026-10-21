@@ -93,6 +93,7 @@
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.categories.index') }}">Danh mục</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.products.index') }}">Sản phẩm</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.brands.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.brands.index') }}">Thương hiệu</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.vouchers.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.vouchers.index') }}">Mã giảm giá</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.customers.*') ? 'active fw-semibold' : '' }}" href="{{ route('admin.customers.index') }}">Khách hàng</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.reports.*', 'admin.audit.*') ? 'active fw-semibold' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Thống kê</a>
