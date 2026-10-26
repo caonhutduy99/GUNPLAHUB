@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - GunplaHub</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- CSS chung của GunplaHub -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- CSS riêng cho đăng nhập, đăng ký -->
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="auth-page">
+
+    <main class="auth-container">
+        <a href="index.html" class="auth-logo">GunplaHub</a>
+
+        <p class="auth-subtitle">Gundam Model Store</p>
+
+        <h1 class="auth-title">Tạo tài khoản</h1>
+        <p class="text-center text-secondary mb-4">
+            Tham gia cộng đồng GunplaHub ngay hôm nay!
+        </p>
+
+        <form class="auth-form" id="register-form">
+            <div class="mb-3">
+                <label for="register-name" class="form-label">
+                    Họ và tên
+                </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="register-name"
+                    name="name"
+                    placeholder="Nhập họ và tên"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label for="register-email" class="form-label">
+                    Email
+                </label>
+                <input
+                    type="email"
+                    class="form-control"
+                    id="register-email"
+                    name="email"
+                    placeholder="Nhập email của bạn"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label for="register-password" class="form-label">
+                    Mật khẩu
+                </label>
+                <input
+                    type="password"
+                    class="form-control"
+                    id="register-password"
+                    name="password"
+                    placeholder="Tối thiểu 8 ký tự"
+                    minlength="8"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label for="confirm-password" class="form-label">
+                    Xác nhận mật khẩu
+                </label>
+                <input
+                    type="password"
+                    class="form-control"
+                    id="confirm-password"
+                    name="confirm_password"
+                    placeholder="Nhập lại mật khẩu"
+                    minlength="8"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="auth-submit">
+                Đăng ký
+            </button>
+        </form>
+
+        <p class="auth-switch">
+            Đã có tài khoản?
+            <a href="login.html">Đăng nhập</a>
+        </p>
+
+        <a href="index.html" class="auth-back">
+            ← Quay lại trang chủ
+        </a>
+    </main>
+
+    <script>
+        const registerForm = document.getElementById("register-form");
+        const passwordInput = document.getElementById("register-password");
+        const confirmPasswordInput = document.getElementById("confirm-password");
+    
+        registerForm.addEventListener("submit", function (event) {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                event.preventDefault();
+                alert("Mật khẩu xác nhận không khớp. Vui lòng nhập lại!");
+                confirmPasswordInput.focus();
+            } else {
+                event.preventDefault();
+                alert("Thông tin hợp lệ! Chức năng tạo tài khoản sẽ được kết nối sau.");
+            }
+        });
+    </script>
+    
+</body>
+</html>

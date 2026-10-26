@@ -1,0 +1,140 @@
+
+/* ===== GIAO DIỆN ĐĂNG NHẬP VÀ ĐĂNG KÝ ===== */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+    background: #f3f4f6;
+    font-family: Arial, sans-serif;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 460px;
+    padding: 36px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+.auth-logo {
+    display: block;
+    margin-bottom: 6px;
+    color: #212529;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.auth-subtitle {
+    margin-bottom: 30px;
+    color: #6c757d;
+    font-size: 14px;
+    text-align: center;
+}
+
+.auth-title {
+    margin-bottom: 10px;
+    color: #212529;
+    font-size: 27px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.auth-form .form-label {
+    margin-bottom: 8px;
+    color: #212529;
+    font-weight: 600;
+}
+
+.auth-form .form-control {
+    min-height: 46px;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.auth-form .form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.auth-form .form-check-input:checked {
+    border-color: #212529;
+    background-color: #212529;
+}
+
+.auth-submit {
+    width: 100%;
+    min-height: 48px;
+    margin-top: 8px;
+    border: 1px solid #ffc107;
+    border-radius: 8px;
+    background: #ffc107;
+    color: #212529;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease,
+                transform 0.2s ease;
+}
+
+.auth-submit:hover {
+    border-color: #e0a800;
+    background: #e0a800;
+    transform: translateY(-1px);
+}
+
+.auth-switch {
+    margin-top: 24px;
+    margin-bottom: 0;
+    color: #6c757d;
+    font-size: 14px;
+    text-align: center;
+}
+
+.auth-switch a {
+    color: #212529;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-switch a:hover {
+    color: #b88600;
+    text-decoration: underline;
+}
+
+.auth-back {
+    display: block;
+    margin-top: 20px;
+    color: #6c757d;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.auth-back:hover {
+    color: #212529;
+}
+
+@media (max-width: 480px) {
+    .auth-page {
+        padding: 20px 12px;
+    }
+
+    .auth-container {
+        padding: 28px 20px;
+        border-radius: 12px;
+    }
+
+    .auth-title {
+        font-size: 24px;
+    }
+}

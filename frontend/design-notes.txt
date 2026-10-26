@@ -1,0 +1,19 @@
+GUNPLAHUB - DESIGN NOTES
+
+1. Màu sắc
+
+* Màu chủ đạo: Chưa thống nhất
+* Màu nền: Chưa thống nhất
+* Màu nút bấm: Chưa thống nhất
+* Màu chữ: Chưa thống nhất
+
+2. Font chữ
+
+* Font tiêu đề: Chưa thống nhất
+* Font nội dung: Chưa thống nhất
+
+3. Tài nguyên
+
+* Ảnh sản phẩm: assets/images/
+* Banner: assets/images/
+* Icon: assets/icons/
