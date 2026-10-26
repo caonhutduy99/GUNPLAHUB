@@ -11,7 +11,6 @@ use App\Models\Product;
 use App\Support\ValidationMessages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -25,7 +24,7 @@ class ProductController extends Controller
         if ($keyword = trim((string) $request->input('q'))) {
             $query->where(function ($w) use ($keyword) {
                 $w->where('name', 'like', "%{$keyword}%")
-                  ->orWhere('sku', 'like', "%{$keyword}%");
+                    ->orWhere('sku', 'like', "%{$keyword}%");
             });
         }
         if ($request->filled('category_id')) {
@@ -68,7 +67,7 @@ class ProductController extends Controller
         $data['sku'] = strtoupper($data['sku']);
 
         // SKU phải bắt đầu bằng mã thương hiệu, ví dụ BAN-HG-UC-005
-        if (! str_starts_with($data['sku'], $brand->code . '-')) {
+        if (! str_starts_with($data['sku'], $brand->code.'-')) {
             throw ValidationException::withMessages([
                 'sku' => "Mã SKU phải bắt đầu bằng \"{$brand->code}-\" (mã của thương hiệu {$brand->name}).",
             ]);
@@ -78,15 +77,15 @@ class ProductController extends Controller
         }
 
         $priceNote = $data['price_note'] ?? null;
-        unset($data['image'], $data['price_note']);
+        unset($data['images'], $data['price_note']);
 
         $data['grade'] = $this->gradeFor($category);
         $data['status'] = $this->syncStatus($data['status'], (int) $data['stock_quantity']);
-        if ($path = $this->saveImage($request)) {
-            $data['image'] = $path;
-        }
+        $imagePaths = $this->saveImages($request);
+        $data['image'] = $imagePaths[0] ?? null;
 
         $product = Product::create($data);
+        $this->createProductImages($product, $imagePaths);
 
         // Lưu lịch sử giá ban đầu
         PriceHistory::create([
@@ -100,14 +99,14 @@ class ProductController extends Controller
             'note' => $priceNote ?: 'Thiết lập giá ban đầu khi tạo sản phẩm',
         ]);
 
-        AuditLog::record("Thêm sản phẩm {$product->sku}: {$product->name} (Giá nhập: " . number_format($product->cost_price) . "đ, Giá bán: " . number_format($product->price) . "đ)");
+        AuditLog::record("Thêm sản phẩm {$product->sku}: {$product->name} (Giá nhập: ".number_format($product->cost_price).'đ, Giá bán: '.number_format($product->price).'đ)');
 
         return redirect()->route('admin.products.index')->with('success', 'Đã thêm sản phẩm thành công.');
     }
 
     public function edit(Product $product)
     {
-        $product->load(['priceHistories.user']);
+        $product->load(['priceHistories.user', 'images']);
 
         return view('admin.products.edit', [
             'product' => $product,
@@ -128,14 +127,14 @@ class ProductController extends Controller
         );
 
         $priceNote = $data['price_note'] ?? null;
-        unset($data['image'], $data['price_note']);
+        unset($data['images'], $data['price_note']);
 
         $data['grade'] = $this->gradeFor($category);
         $data['status'] = $this->syncStatus($data['status'], (int) $data['stock_quantity']);
 
-        if ($path = $this->saveImage($request)) {
-            $this->deleteImage($product->image); // xóa ảnh cũ
-            $data['image'] = $path;
+        $imagePaths = $this->saveImages($request);
+        if ($imagePaths !== []) {
+            $data['image'] = $product->image ?: $imagePaths[0];
         }
 
         $oldPrice = (float) $product->price;
@@ -148,6 +147,7 @@ class ProductController extends Controller
         $newPriceType = $data['price_type'];
 
         $product->update($data);
+        $this->createProductImages($product, $imagePaths, (int) $product->images()->max('sort_order') + 1);
 
         // Ghi lại lịch sử giá nếu giá bán, giá nhập hoặc loại giá có sự thay đổi
         if ($oldPrice !== $newPrice || $oldCostPrice !== $newCostPrice || $oldPriceType !== $newPriceType) {
@@ -165,10 +165,10 @@ class ProductController extends Controller
 
         $note = '';
         if ($oldCostPrice !== $newCostPrice) {
-            $note .= " | giá nhập " . number_format($oldCostPrice) . " -> " . number_format($newCostPrice);
+            $note .= ' | giá nhập '.number_format($oldCostPrice).' -> '.number_format($newCostPrice);
         }
         if ($oldPrice !== $newPrice) {
-            $note .= " | giá bán " . number_format($oldPrice) . " -> " . number_format($newPrice);
+            $note .= ' | giá bán '.number_format($oldPrice).' -> '.number_format($newPrice);
         }
         if ($oldStock !== $product->stock_quantity) {
             $note .= " | tồn kho {$oldStock} -> {$product->stock_quantity}";
@@ -228,7 +228,8 @@ class ProductController extends Controller
             'scale' => [$requiredIfGunpla, Rule::in(Product::SCALES)],
             'series' => [$requiredIfGunpla, 'string', 'max:50'],
             'status' => ['required', Rule::in(Product::STATUSES)],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'images' => ['nullable', 'array', 'max:8'],
+            'images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }
 
@@ -247,7 +248,8 @@ class ProductController extends Controller
             'scale' => 'Tỷ lệ',
             'series' => 'Series',
             'status' => 'Trạng thái',
-            'image' => 'Ảnh sản phẩm',
+            'images' => 'Ảnh sản phẩm',
+            'images.*' => 'Ảnh sản phẩm',
         ];
     }
 
@@ -264,23 +266,29 @@ class ProductController extends Controller
         return $stock > 0 ? 'Còn hàng' : 'Hết hàng';
     }
 
-    private function saveImage(Request $request): ?string
+    private function saveImages(Request $request): array
     {
-        if (! $request->hasFile('image')) {
-            return null;
+        if (! $request->hasFile('images')) {
+            return [];
         }
 
-        $file = $request->file('image');
-        $name = Str::uuid() . '.' . $file->extension();
-        $file->move(public_path('images/products'), $name);
+        $paths = [];
+        foreach ($request->file('images') as $file) {
+            $name = Str::uuid().'.'.$file->extension();
+            $file->move(public_path('images/products'), $name);
+            $paths[] = 'images/products/'.$name;
+        }
 
-        return 'images/products/' . $name;
+        return $paths;
     }
 
-    private function deleteImage(?string $path): void
+    private function createProductImages(Product $product, array $paths, int $startingSortOrder = 0): void
     {
-        if ($path && File::exists(public_path($path))) {
-            File::delete(public_path($path));
+        foreach ($paths as $offset => $path) {
+            $product->images()->create([
+                'path' => $path,
+                'sort_order' => $startingSortOrder + $offset,
+            ]);
         }
     }
 }

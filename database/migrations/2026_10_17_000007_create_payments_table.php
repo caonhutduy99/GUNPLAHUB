@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->unique()->constrained('orders')->cascadeOnDelete();
-            $table->enum('payment_method', ['COD', 'VNPAY', 'MOMO']);
+            $table->enum('payment_method', ['COD', 'VNPAY', 'VIETQR', 'MOMO']);
             $table->string('transaction_code', 100)->nullable();
             $table->enum('status', ['Chờ xử lý', 'Thành công', 'Thất bại'])->default('Chờ xử lý');
             $table->timestamps();

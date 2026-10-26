@@ -18,9 +18,24 @@
     <div class="card-body p-4">
         <div class="row g-4">
             <div class="col-md-5">
-                @if($product->image_url)
+                @if($product->images->isNotEmpty())
+                    <div class="border rounded bg-white p-2 text-center">
+                        <img id="productImagePreview" src="{{ $product->images->first()->url }}" alt="{{ $product->name }}"
+                             class="img-fluid" style="height: 420px; width: 100%; object-fit: contain;">
+                    </div>
+                    @if($product->images->count() > 1)
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            @foreach($product->images as $image)
+                                <button type="button" class="btn p-0 border rounded bg-white product-image-thumb"
+                                        data-image-url="{{ $image->url }}" aria-label="Xem ảnh sản phẩm">
+                                    <img src="{{ $image->url }}" alt="" style="height: 64px; width: 64px; object-fit: contain;">
+                                </button>
+                            @endforeach
+                        </div>
+                    @endif
+                @elseif($product->image_url)
                     <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
-                         class="img-fluid rounded border bg-white" style="max-height: 420px; width: 100%; object-fit: contain;">
+                         class="img-fluid rounded border bg-white" style="height: 420px; width: 100%; object-fit: contain;">
                 @else
                     <div class="bg-secondary-subtle rounded d-flex align-items-center justify-content-center" style="height: 320px;">
                         <span class="text-muted">Chưa có ảnh</span>
@@ -30,6 +45,22 @@
 
             <div class="col-md-7">
                 <h3 class="mb-2">{{ $product->name }}</h3>
+                @auth
+                    @if(! auth()->user()->isAdmin())
+                        <form method="POST" action="{{ route($isWishlisted ? 'wishlist.destroy' : 'wishlist.store', $product) }}" class="mb-3">
+                            @csrf
+                            @if($isWishlisted)
+                                @method('DELETE')
+                            @endif
+                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-circle"
+                                    title="{{ $isWishlisted ? 'Bỏ khỏi yêu thích' : 'Thêm vào yêu thích' }}"
+                                    aria-label="{{ $isWishlisted ? 'Bỏ khỏi yêu thích' : 'Thêm vào yêu thích' }}"
+                                    style="width: 38px; height: 38px;">
+                                <i class="bi {{ $isWishlisted ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                            </button>
+                        </form>
+                    @endif
+                @endauth
                 <div class="mb-3">
                     <span class="badge text-bg-dark">{{ $product->grade ?: $product->category->short_name }}</span>
                     @if($product->scale)
@@ -98,3 +129,13 @@
     </div>
 @endif
 @endsection
+
+@push('scripts')
+<script>
+    document.querySelectorAll('.product-image-thumb').forEach(function (button) {
+        button.addEventListener('click', function () {
+            document.getElementById('productImagePreview').src = button.dataset.imageUrl;
+        });
+    });
+</script>
+@endpush

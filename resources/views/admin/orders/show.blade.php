@@ -74,7 +74,7 @@
                         <p class="mb-0 small text-muted">
                             Vận đơn:
                             @if($order->shipment)
-                                {{ $order->shipment->ghn_order_code ?: 'Chưa có mã GHN' }} · {{ $order->shipment->status }}
+                                {{ $order->shipment->carrier }} · {{ $order->shipment->ghn_order_code ?: 'Chưa có mã vận đơn' }} · {{ $order->shipment->status }}
                             @else
                                 Chưa tạo
                             @endif
@@ -158,8 +158,8 @@
 
                 @if($actions)
                     <div class="form-text mt-2">
-                        Các bước vận chuyển (Chờ lấy hàng, Đã lấy, Đang giao...) hiện do Admin cập nhật tay.
-                        Khi tích hợp GHN, các bước này sẽ được cập nhật tự động.
+                        Đây là luồng GHN Sandbox mô phỏng. Admin chuyển từng chặng để hệ thống ghi lại
+                        mã vận đơn và lịch sử hành trình cho khách hàng theo dõi.
                     </div>
                 @endif
             </div>

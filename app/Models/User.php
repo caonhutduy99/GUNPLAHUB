@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
+use App\Notifications\ResetPasswordNotification;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements CanResetPassword
 {
-    use HasFactory, Notifiable;
+    use CanResetPasswordTrait, HasFactory, Notifiable;
 
     /** Các lý do đưa vào danh sách đen (theo báo cáo UC-03) */
     public const BLACKLIST_REASONS = ['Bom hàng', 'Nợ xấu', 'Gian lận thanh toán', 'Khác'];
@@ -45,6 +48,11 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
+
     /** Admin đã đưa khách này vào Blacklist */
     public function blacklistedBy(): BelongsTo
     {
@@ -54,6 +62,11 @@ class User extends Authenticatable
     public function cartItems(): HasMany
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    public function wishlistItems(): HasMany
+    {
+        return $this->hasMany(WishlistItem::class);
     }
 
     public function orders(): HasMany

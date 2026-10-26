@@ -17,7 +17,11 @@ class ShopController extends Controller
     {
         abort_if($product->status === 'Ngừng kinh doanh', 404);
 
-        $product->load(['category', 'brand']);
+        $product->load(['category', 'brand', 'images']);
+
+        $isWishlisted = auth()->check()
+            && ! auth()->user()->isAdmin()
+            && $product->wishlistItems()->where('user_id', auth()->id())->exists();
 
         $related = Product::with(['category', 'brand'])
             ->where('category_id', $product->category_id)
@@ -27,6 +31,6 @@ class ShopController extends Controller
             ->take(4)
             ->get();
 
-        return view('shop.show', compact('product', 'related'));
+        return view('shop.show', compact('product', 'related', 'isWishlisted'));
     }
 }

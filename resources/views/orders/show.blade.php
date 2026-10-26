@@ -64,6 +64,19 @@
                 <p class="mb-1"><strong>Số điện thoại:</strong> {{ $order->receiver_phone }}</p>
                 <p class="mb-3"><strong>Địa chỉ:</strong> {{ $order->shipping_address }}</p>
 
+                @if($order->shipment)
+                    <h5 class="mb-2">Theo dõi vận chuyển</h5>
+                    <p class="mb-1"><strong>{{ $order->shipment->carrier }}</strong> · Mã vận đơn: <code>{{ $order->shipment->ghn_order_code }}</code></p>
+                    <div class="list-group list-group-flush mb-3">
+                        @foreach(array_reverse($order->shipment->tracking_events ?? []) as $event)
+                            <div class="list-group-item px-0">
+                                <div class="fw-semibold">{{ $event['label'] }}</div>
+                                <div class="small text-muted">{{ \Illuminate\Support\Carbon::parse($event['occurred_at'])->format('d/m/Y H:i') }}</div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
                 <h5 class="mb-2">Thanh toán</h5>
                 <p class="mb-0">
                     @php

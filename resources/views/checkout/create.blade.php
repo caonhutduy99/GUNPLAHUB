@@ -56,9 +56,15 @@
                         <input class="form-check-input" type="radio" name="payment_method" id="pay_cod" value="COD" checked>
                         <label class="form-check-label" for="pay_cod">Thanh toán khi nhận hàng (COD)</label>
                     </div>
-                    <div class="form-check text-muted">
-                        <input class="form-check-input" type="radio" name="payment_method" id="pay_vnpay" value="VNPAY" disabled>
-                        <label class="form-check-label" for="pay_vnpay">Thanh toán online qua VNPay (đang tích hợp)</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment_method" id="pay_vnpay" value="VNPAY"
+                               @checked(old('payment_method') === 'VNPAY')>
+                        <label class="form-check-label" for="pay_vnpay">VNPay sandbox (mô phỏng)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment_method" id="pay_vietqr" value="VIETQR"
+                               @checked(old('payment_method') === 'VIETQR')>
+                        <label class="form-check-label" for="pay_vietqr">VietQR chuyển khoản (sandbox)</label>
                     </div>
                     @error('payment_method')
                         <div class="text-danger small mt-2">{{ $message }}</div>

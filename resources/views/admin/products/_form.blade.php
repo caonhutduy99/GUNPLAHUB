@@ -157,18 +157,24 @@
         @enderror
     </div>
 
-    <div class="col-md-6">
-        <label for="image" class="form-label">Ảnh sản phẩm (jpg, png, webp, tối đa 2MB)</label>
-        <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.webp"
-               class="form-control @error('image') is-invalid @enderror">
-        @error('image')
+    <div class="col-12">
+        <label for="images" class="form-label">Ảnh sản phẩm (có thể chọn tối đa 8 ảnh, mỗi ảnh tối đa 2MB)</label>
+        <input type="file" id="images" name="images[]" accept=".jpg,.jpeg,.png,.webp" multiple
+               class="form-control @error('images') is-invalid @enderror @error('images.*') is-invalid @enderror">
+        @error('images')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
-        @if($editing && $product->image_url)
-            <div class="mt-2">
-                <img src="{{ $product->image_url }}" alt="" style="height: 80px; object-fit: contain;" class="border rounded bg-white">
-                <span class="text-muted small ms-2">Ảnh hiện tại (chọn ảnh mới để thay)</span>
+        @error('images.*')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+        @if($editing && $product->images->isNotEmpty())
+            <div class="d-flex flex-wrap gap-2 mt-2">
+                @foreach($product->images as $image)
+                    <img src="{{ $image->url }}" alt="" style="height: 80px; width: 80px; object-fit: contain;"
+                         class="border rounded bg-white p-1">
+                @endforeach
             </div>
+            <div class="form-text">Ảnh mới sẽ được thêm vào bộ sưu tập hiện tại.</div>
         @endif
     </div>
 </div>

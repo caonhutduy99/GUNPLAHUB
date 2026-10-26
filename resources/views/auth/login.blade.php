@@ -34,6 +34,10 @@
                         @enderror
                     </div>
 
+                    <div class="text-end mb-3">
+                        <a href="{{ route('password.request') }}" class="small">Quên mật khẩu?</a>
+                    </div>
+
                     <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" name="remember" id="remember">
                         <label class="form-check-label" for="remember">Ghi nhớ đăng nhập</label>

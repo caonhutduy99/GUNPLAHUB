@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\OrderException;
+use App\Mail\OrderConfirmation;
 use App\Services\OrderService;
 use App\Support\ValidationMessages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class CheckoutController extends Controller
 {
     /** Các phương thức thanh toán đang hỗ trợ (VNPay sẽ thêm ở bước tích hợp cổng thanh toán) */
-    private const PAYMENT_METHODS = ['COD'];
+    private const PAYMENT_METHODS = ['COD', 'VNPAY', 'VIETQR'];
 
     public function create(Request $request, OrderService $orders)
     {
@@ -106,8 +108,13 @@ class CheckoutController extends Controller
         }
 
         session()->forget('checkout_voucher');
+        $order->load(['user', 'details.product']);
+        Mail::to($order->user->email)->send(new OrderConfirmation($order));
 
-        return redirect()->route('orders.show', $order)
+        return redirect()->route(
+            in_array($data['payment_method'], ['VNPAY', 'VIETQR'], true) ? 'payments.show' : 'orders.show',
+            $order
+        )
             ->with('success', "Đặt hàng thành công! Mã đơn hàng của bạn là #{$order->id}.");
     }
 }

@@ -9,7 +9,6 @@ use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
-use App\Models\Shipment;
 use App\Models\User;
 use App\Models\Voucher;
 use App\Support\Pricing;
@@ -66,6 +65,7 @@ class OrderService
             $product = $item->product;
             if (! $product || $product->status !== 'Còn hàng' || $product->stock_quantity < $item->quantity) {
                 $problems[] = $product?->name ?? $item->product_sku;
+
                 continue;
             }
             $lines->push($item);
@@ -189,7 +189,7 @@ class OrderService
 
             CartItem::where('user_id', $user->id)->delete();
 
-            AuditLog::record("Khách đặt đơn #{$order->id} (" . $paymentMethod . ")");
+            AuditLog::record("Khách đặt đơn #{$order->id} (".$paymentMethod.')');
 
             return $order;
         });
@@ -302,11 +302,12 @@ class OrderService
      * Admin chuyển trạng thái đơn hàng theo đúng luồng, kèm các tác động đi theo:
      * hoàn tồn kho, cập nhật thanh toán, cập nhật vận đơn, ghi Audit.
      */
-    public function transition(Order $order, string $action, ?string $note = null): Order
+    public function transition(Order $order, string $action, ?string $note = null, ?ShipmentService $shipments = null): Order
     {
         $definition = self::ACTIONS[$action] ?? throw new OrderException('Thao tác không hợp lệ.');
+        $shipments ??= app(ShipmentService::class);
 
-        return DB::transaction(function () use ($order, $action, $note, $definition) {
+        return DB::transaction(function () use ($order, $action, $note, $definition, $shipments) {
             $order = Order::with('details')->whereKey($order->id)->lockForUpdate()->firstOrFail();
 
             if (! in_array($order->status, $definition['from'], true)) {
@@ -320,8 +321,7 @@ class OrderService
 
             switch ($action) {
                 case 'confirm':
-                    // TODO (tích hợp GHN): gọi API tạo vận đơn tại đây và lưu ghn_order_code
-                    Shipment::firstOrCreate(['order_id' => $order->id], ['status' => $to]);
+                    $shipments->create($order);
                     break;
 
                 case 'cancel':
@@ -369,16 +369,16 @@ class OrderService
                     $this->restock($order, false);
                     break;
 
-                // approve_return: chỉ đổi trạng thái.
+                    // approve_return: chỉ đổi trạng thái.
             }
 
             $order->update($updates);
 
             if (in_array($to, self::SHIPMENT_STATUSES, true)) {
-                Shipment::where('order_id', $order->id)->update(['status' => $to]);
+                $shipments->updateStatus($order, $to);
             }
 
-            AuditLog::record("Admin đổi trạng thái đơn #{$order->id}: {$from} -> {$to}" . ($note ? " | {$note}" : ''));
+            AuditLog::record("Admin đổi trạng thái đơn #{$order->id}: {$from} -> {$to}".($note ? " | {$note}" : ''));
 
             return $order;
         });

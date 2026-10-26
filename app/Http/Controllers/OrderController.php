@@ -29,9 +29,49 @@ class OrderController extends Controller
     {
         $this->authorizeOwner($request, $order);
 
-        $order->load(['details.product', 'payment', 'voucher', 'invoice']);
+        $order->load(['details.product', 'payment', 'voucher', 'invoice', 'shipment']);
 
         return view('orders.show', compact('order'));
+    }
+
+    public function payment(Request $request, Order $order)
+    {
+        $this->authorizeOwner($request, $order);
+        $order->load('payment');
+        abort_unless($order->payment && in_array($order->payment->payment_method, ['VNPAY', 'VIETQR'], true), 404);
+
+        $reference = 'GUNPLA'.$order->id;
+        $qrUrl = sprintf(
+            'https://img.vietqr.io/image/%s-%s-compact2.png?amount=%s&addInfo=%s&accountName=%s',
+            config('payments.vietqr.bank_id'),
+            config('payments.vietqr.account_number'),
+            (int) $order->total_amount,
+            urlencode($reference),
+            urlencode(config('payments.vietqr.account_name'))
+        );
+
+        return view('payments.show', [
+            'order' => $order,
+            'qrUrl' => $qrUrl,
+            'accountName' => config('payments.vietqr.account_name'),
+            'accountNumber' => config('payments.vietqr.account_number'),
+        ]);
+    }
+
+    public function simulatePayment(Request $request, Order $order): RedirectResponse
+    {
+        $this->authorizeOwner($request, $order);
+        abort_unless(config('payments.sandbox'), 404);
+
+        $payment = $order->payment;
+        abort_unless($payment && in_array($payment->payment_method, ['VNPAY', 'VIETQR'], true), 404);
+
+        $payment->update([
+            'status' => 'Thành công',
+            'transaction_code' => 'DEMO-'.str()->upper(str()->random(12)),
+        ]);
+
+        return redirect()->route('orders.show', $order)->with('success', 'Thanh toán sandbox thành công.');
     }
 
     public function cancel(Request $request, Order $order, OrderService $orders): RedirectResponse
@@ -77,9 +117,9 @@ class OrderController extends Controller
         );
 
         $file = $request->file('return_image');
-        $name = Str::uuid() . '.' . $file->extension();
+        $name = Str::uuid().'.'.$file->extension();
         $file->move(public_path('images/returns'), $name);
-        $path = 'images/returns/' . $name;
+        $path = 'images/returns/'.$name;
 
         try {
             $orders->requestReturn($order, $data['return_reason'], $path);

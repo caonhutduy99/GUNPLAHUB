@@ -19,6 +19,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Middleware\EnsureUserIsCustomer;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,10 @@ Route::post('/lien-he', [ContactController::class, 'store'])->middleware('thrott
 Route::middleware('guest')->group(function () {
     Route::get('/dang-nhap', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/dang-nhap', [AuthController::class, 'login']);
+    Route::get('/quen-mat-khau', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/quen-mat-khau', [AuthController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/dat-lai-mat-khau/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
+    Route::post('/dat-lai-mat-khau', [AuthController::class, 'resetPassword'])->name('password.update');
     Route::get('/dang-ky', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/dang-ky', [AuthController::class, 'register']);
 });
@@ -47,6 +52,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/ho-so', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/ho-so', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/ho-so/doi-mat-khau', [ProfileController::class, 'updatePassword'])->name('profile.password');
+});
+
+// ---- Danh sách yêu thích (chỉ khách hàng đã đăng nhập) ----
+Route::middleware(['auth', EnsureUserIsCustomer::class])->prefix('yeu-thich')->name('wishlist.')->group(function () {
+    Route::get('/', [WishlistController::class, 'index'])->name('index');
+    Route::post('/{product}', [WishlistController::class, 'store'])->name('store');
+    Route::delete('/{product}', [WishlistController::class, 'destroy'])->name('destroy');
 });
 
 // ---- Giỏ hàng (chỉ khách hàng đã đăng nhập) ----
@@ -71,6 +83,8 @@ Route::middleware(['auth', EnsureUserIsCustomer::class])->group(function () {
     Route::post('/don-hang/{order}/huy', [OrderController::class, 'cancel'])->whereNumber('order')->name('orders.cancel');
     Route::post('/don-hang/{order}/tra-hang', [OrderController::class, 'requestReturn'])->whereNumber('order')->name('orders.return');
     Route::get('/don-hang/{order}/hoa-don', [InvoiceController::class, 'customer'])->whereNumber('order')->name('orders.invoice');
+    Route::get('/thanh-toan/{order}', [OrderController::class, 'payment'])->whereNumber('order')->name('payments.show');
+    Route::post('/thanh-toan/{order}/sandbox', [OrderController::class, 'simulatePayment'])->whereNumber('order')->name('payments.simulate');
 });
 
 // ---- Khu vực quản trị (chỉ admin) ----

@@ -48,6 +48,9 @@
                         <a href="{{ route('orders.index') }}" class="btn btn-outline-dark btn-sm w-100">
                             <i class="bi bi-receipt me-1"></i>Xem tất cả đơn hàng
                         </a>
+                        <a href="{{ route('wishlist.index') }}" class="btn btn-outline-danger btn-sm w-100 mt-2">
+                            <i class="bi bi-heart me-1"></i>Danh sách yêu thích
+                        </a>
                     </div>
                 @endunless
             </div>

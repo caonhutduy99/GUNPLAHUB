@@ -6,6 +6,7 @@ use App\Exceptions\OrderException;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\OrderService;
+use App\Services\ShipmentService;
 use App\Support\ValidationMessages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class OrderController extends Controller
         if ($keyword = trim((string) $request->input('q'))) {
             $query->where(function ($w) use ($keyword) {
                 $w->where('receiver_name', 'like', "%{$keyword}%")
-                  ->orWhere('receiver_phone', 'like', "%{$keyword}%");
+                    ->orWhere('receiver_phone', 'like', "%{$keyword}%");
                 if (ctype_digit(ltrim($keyword, '#'))) {
                     $w->orWhere('id', (int) ltrim($keyword, '#'));
                 }
@@ -48,7 +49,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function transition(Request $request, Order $order, OrderService $orders): RedirectResponse
+    public function transition(Request $request, Order $order, OrderService $orders, ShipmentService $shipments): RedirectResponse
     {
         $data = $request->validate(
             [
@@ -61,7 +62,7 @@ class OrderController extends Controller
         );
 
         try {
-            $updated = $orders->transition($order, $data['action'], $data['note'] ?? null);
+            $updated = $orders->transition($order, $data['action'], $data['note'] ?? null, $shipments);
         } catch (OrderException $e) {
             return back()->with('error', $e->getMessage());
         }
