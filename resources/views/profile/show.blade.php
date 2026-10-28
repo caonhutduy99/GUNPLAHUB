@@ -99,7 +99,7 @@
                 <h5 class="mb-0 fw-bold"><i class="bi bi-person-gear text-primary me-2"></i>Thông tin tài khoản</h5>
             </div>
             <div class="card-body p-4">
-                <form method="POST" action="{{ route('profile.update') }}">
+                <form method="POST" action="{{ route('profile.update') }}" class="needs-constraint-validation" novalidate>
                     @csrf
                     @method('PUT')
 
@@ -158,34 +158,49 @@
                 <h5 class="mb-0 fw-bold"><i class="bi bi-shield-lock text-danger me-2"></i>Đổi mật khẩu</h5>
             </div>
             <div class="card-body p-4">
-                <form method="POST" action="{{ route('profile.password') }}">
+                <form method="POST" action="{{ route('profile.password') }}" class="needs-constraint-validation" novalidate>
                     @csrf
                     @method('PUT')
 
                     <div class="mb-3">
                         <label for="current_password" class="form-label">Mật khẩu hiện tại <span class="text-danger">*</span></label>
-                        <input type="password" id="current_password" name="current_password"
-                               class="form-control @error('current_password') is-invalid @enderror" required>
+                        <div class="input-group">
+                            <input type="password" id="current_password" name="current_password"
+                                   class="form-control @error('current_password') is-invalid @enderror" required>
+                            <button class="btn btn-outline-secondary btn-toggle-password" type="button" aria-label="Hiện mật khẩu">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                         @error('current_password')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label for="password" class="form-label">Mật khẩu mới <span class="text-danger">*</span></label>
-                            <input type="password" id="password" name="password"
-                                   class="form-control @error('password') is-invalid @enderror"
-                                   placeholder="Tối thiểu 6 ký tự" required>
+                            <div class="input-group">
+                                <input type="password" id="password" name="password"
+                                       class="form-control @error('password') is-invalid @enderror"
+                                       placeholder="Tối thiểu 8 ký tự" required>
+                                <button class="btn btn-outline-secondary btn-toggle-password" type="button" aria-label="Hiện mật khẩu">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
                             @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="col-md-6">
                             <label for="password_confirmation" class="form-label">Xác nhận mật khẩu mới <span class="text-danger">*</span></label>
-                            <input type="password" id="password_confirmation" name="password_confirmation"
-                                   class="form-control" placeholder="Nhập lại mật khẩu mới" required>
+                            <div class="input-group">
+                                <input type="password" id="password_confirmation" name="password_confirmation"
+                                       class="form-control" placeholder="Nhập lại mật khẩu mới" required>
+                                <button class="btn btn-outline-secondary btn-toggle-password" type="button" aria-label="Hiện mật khẩu">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 

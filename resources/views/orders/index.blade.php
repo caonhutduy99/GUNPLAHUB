@@ -3,38 +3,64 @@
 @section('title', 'Đơn hàng của tôi - GunplaHub')
 
 @section('content')
-<h3 class="mb-3">Đơn hàng của tôi</h3>
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+    <div>
+        <h4 class="fw-bold mb-1" style="letter-spacing: -0.01em;">
+            <i class="bi bi-box-seam-fill text-danger me-2"></i>Đơn hàng của tôi
+        </h4>
+        <p class="text-muted small mb-0">Theo dõi trạng thái xử lý, vận chuyển và lịch sử mua sắm.</p>
+    </div>
+    <a href="{{ route('products.index') }}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
+        <i class="bi bi-grid me-1"></i>Tiếp tục mua sắm
+    </a>
+</div>
 
-<div class="card shadow-sm">
+<div class="card shadow-sm border mb-4" style="border-radius: var(--gh-radius); overflow: hidden;">
     <div class="table-responsive">
         <table class="table table-hover mb-0 align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>Mã đơn</th>
-                    <th>Ngày đặt</th>
-                    <th class="text-center">Số sản phẩm</th>
-                    <th class="text-end">Tổng tiền</th>
-                    <th>Trạng thái</th>
-                    <th style="width: 120px;"></th>
+            <thead class="bg-body-tertiary">
+                <tr class="small text-muted text-uppercase" style="letter-spacing: 0.04em;">
+                    <th class="ps-3 py-3">Mã đơn</th>
+                    <th class="py-3">Thời gian đặt</th>
+                    <th class="text-center py-3">Số lượng mặt hàng</th>
+                    <th class="text-end py-3">Tổng thanh toán</th>
+                    <th class="py-3">Trạng thái đơn</th>
+                    <th style="width: 140px;" class="pe-3 py-3 text-end">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($orders as $order)
                     <tr>
-                        <td class="fw-semibold">#{{ $order->id }}</td>
-                        <td>{{ $order->order_date->format('d/m/Y H:i') }}</td>
-                        <td class="text-center">{{ $order->details_count }}</td>
-                        <td class="text-end">{{ \App\Support\Money::format($order->total_amount) }}</td>
-                        <td><span class="badge text-bg-{{ $order->statusBadge() }}">{{ $order->status }}</span></td>
-                        <td class="text-end">
-                            <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-outline-dark">Xem chi tiết</a>
+                        <td class="ps-3 py-3 fw-bold">
+                            <span class="text-danger">#{{ $order->id }}</span>
+                        </td>
+                        <td class="small text-muted">
+                            <i class="bi bi-calendar3 me-1"></i>{{ $order->order_date->format('d/m/Y H:i') }}
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-secondary-subtle text-secondary">{{ $order->details_count }} sản phẩm</span>
+                        </td>
+                        <td class="text-end fw-bold text-danger" style="font-size: 0.95rem;">
+                            {{ \App\Support\Money::format($order->total_amount) }}
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ $order->statusBadge() }}-subtle text-{{ $order->statusBadge() }} border border-{{ $order->statusBadge() }}-subtle px-2 py-1">
+                                {{ $order->status }}
+                            </span>
+                        </td>
+                        <td class="pe-3 py-3 text-end">
+                            <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1" style="font-size: 0.8rem; font-weight: 600;">
+                                Chi tiết <i class="bi bi-chevron-right ms-1"></i>
+                            </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted py-4">
-                            Bạn chưa có đơn hàng nào.
-                            <a href="{{ route('products.index') }}">Mua sắm ngay</a>
+                        <td colspan="6" class="text-center text-muted py-5">
+                            <i class="bi bi-inbox text-muted opacity-50 mb-3 d-block" style="font-size: 3rem;"></i>
+                            <h6 class="fw-bold mb-1">Bạn chưa có đơn hàng nào</h6>
+                            <p class="small text-muted mb-3">Hãy dạo quanh cửa hàng và chọn cho mình mô hình Gunpla yêu thích!</p>
+                            <a href="{{ route('products.index') }}" class="btn btn-danger btn-sm rounded-pill px-4">Mua sắm ngay</a>
                         </td>
                     </tr>
                 @endforelse
@@ -43,7 +69,7 @@
     </div>
 </div>
 
-<div class="mt-3">
+<div class="d-flex justify-content-center">
     {{ $orders->links('pagination::bootstrap-5') }}
 </div>
 @endsection

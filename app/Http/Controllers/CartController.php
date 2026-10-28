@@ -87,10 +87,14 @@ class CartController extends Controller
         $item->save();
 
         if ($limited) {
-            return back()->with('warning', "Kho chỉ còn {$product->stock_quantity} sản phẩm, giỏ hàng đã được cập nhật theo số lượng tối đa.");
+            return $request->boolean('buy_now')
+                ? redirect()->route('checkout.create')->with('warning', "Kho chỉ còn {$product->stock_quantity} sản phẩm, giỏ hàng đã được cập nhật theo số lượng tối đa.")
+                : back()->with('warning', "Kho chỉ còn {$product->stock_quantity} sản phẩm, giỏ hàng đã được cập nhật theo số lượng tối đa.");
         }
 
-        return back()->with('success', 'Đã thêm vào giỏ hàng.');
+        return $request->boolean('buy_now')
+            ? redirect()->route('checkout.create')
+            : back()->with('success', 'Đã thêm vào giỏ hàng.');
     }
 
     public function update(Request $request, string $sku): RedirectResponse
