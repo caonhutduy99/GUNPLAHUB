@@ -57,15 +57,6 @@
         border-radius: 50%; pointer-events: none;
     }
     
-    .commit-badge {
-        display: inline-flex; align-items: center; gap: 0.5rem;
-        padding: 0.4rem 0.85rem; border-radius: 9999px;
-        background-color: var(--gh-card-bg); border: 1px solid var(--gh-border);
-        font-size: 0.83rem; font-weight: 500; color: var(--bs-body-color);
-        box-shadow: var(--gh-shadow-sm);
-    }
-    .commit-badge i { color: var(--gh-primary); font-size: 1rem; }
-
     .grade-chip {
         display: inline-flex; align-items: center; gap: 0.4rem;
         padding: 0.4rem 0.9rem; border-radius: 8px;
@@ -85,30 +76,22 @@
 @endpush
 
 @section('content')
-{{-- Hero Showcase phong cách Japanese Premium Store --}}
+{{--  --}}
 <div class="hero-banner p-4 p-md-5 mb-4 text-white shadow-lg">
     <div class="hero-grid-pattern"></div>
     <div class="hero-glow"></div>
     <div class="position-relative z-1 row align-items-center g-4">
         <div class="col-lg-8">
             <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 border border-white border-opacity-10 mb-3 small">
-                <span class="badge bg-danger text-uppercase px-2" style="font-size: 0.65rem; letter-spacing: 0.05em;">Original</span>
-                <span class="text-white-50 small">プレミアム ガンプラ · BANDAI NAMCO CHÍNH HÃNG</span>
+                <span class="badge bg-danger text-uppercase px-2" style="font-size: 0.7rem; letter-spacing: 0.05em;">Original</span>
+                <span class="text-white-50 small">プレミアム ガンプラ · BANDAI NAMCO</span>
             </div>
             <h1 class="display-5 fw-bold mb-3 text-white" style="letter-spacing: -0.02em;">
-                Thế giới Gunpla & Mô hình Cơ giáp chính hãng
+                Thế giới Gunpla & Mô hình Mecha
             </h1>
             <p class="lead text-white-50 mb-4" style="max-width: 640px; font-size: 1.05rem; line-height: 1.6;">
-                Khám phá bộ sưu tập đầy đủ các dòng High Grade (HG), Real Grade (RG), Master Grade (MG), Perfect Grade (PG) cùng dụng cụ và phụ kiện cao cấp dành riêng cho Gunpla Builders.
+                Khám phá bộ sưu tập đầy đủ các dòng High Grade (HG), Real Grade (RG), Master Grade (MG), Perfect Grade (PG) cùng dụng cụ và phụ kiện dành riêng cho Gunpla Builders.
             </p>
-            <div class="d-flex flex-wrap align-items-center gap-3">
-                <a href="{{ route('products.index') }}" class="btn btn-danger btn-lg px-4 py-2 rounded-pill fw-semibold shadow-sm" style="font-size: 0.95rem;">
-                    <i class="bi bi-bag-check me-2"></i>Khám phá cửa hàng
-                </a>
-                <a href="{{ route('products.index', ['grade' => 'RG']) }}" class="btn btn-outline-light btn-lg px-4 py-2 rounded-pill" style="font-size: 0.95rem;">
-                    Dòng Real Grade (RG)
-                </a>
-            </div>
         </div>
 
         <div class="col-lg-4 d-none d-lg-block text-end">
@@ -116,15 +99,15 @@
                 <div class="small text-white-50 text-uppercase fw-bold mb-2" style="letter-spacing: 0.08em; font-size: 0.7rem;">Cấp độ phổ biến</div>
                 <div class="d-flex flex-column gap-2">
                     <a href="{{ route('products.index', ['grade' => 'RG']) }}" class="text-decoration-none text-white d-flex align-items-center justify-content-between p-2 rounded-3 bg-white bg-opacity-10">
-                        <span><strong class="text-danger">RG</strong> 1/144 Real Grade</span>
+                        <span><strong class="text-danger">HG</strong> 1/144 Hight Grade</span>
                         <i class="bi bi-chevron-right text-white-50 small"></i>
                     </a>
                     <a href="{{ route('products.index', ['grade' => 'MG']) }}" class="text-decoration-none text-white d-flex align-items-center justify-content-between p-2 rounded-3 bg-white bg-opacity-10">
-                        <span><strong class="text-danger">MG</strong> 1/100 Master Grade</span>
+                        <span><strong class="text-danger">RG</strong> 1/144 Real Grade</span>
                         <i class="bi bi-chevron-right text-white-50 small"></i>
                     </a>
                     <a href="{{ route('products.index', ['grade' => 'PG']) }}" class="text-decoration-none text-white d-flex align-items-center justify-content-between p-2 rounded-3 bg-white bg-opacity-10">
-                        <span><strong class="text-danger">PG</strong> 1/60 Perfect Grade</span>
+                        <span><strong class="text-danger">MG</strong> 1/100 Master Grade</span>
                         <i class="bi bi-chevron-right text-white-50 small"></i>
                     </a>
                 </div>
@@ -133,8 +116,8 @@
     </div>
 </div>
 
-{{-- Thanh thanh điều hướng nhanh & Cam kết chất lượng --}}
-<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+{{-- Thanh thanh điều hướng nhanh --}}
+
     <div class="d-flex flex-wrap align-items-center gap-2">
         {{-- Nút Danh mục sản phẩm (Mega Menu) --}}
         <div class="mega-wrap">
@@ -198,14 +181,6 @@
         <a href="{{ route('products.index', ['grade' => 'PG']) }}" class="grade-chip">PG 1/60</a>
     </div>
 
-    {{-- Cam kết của cửa hàng --}}
-    <div class="d-flex flex-wrap align-items-center gap-2">
-        @foreach(config('shop.commitments') as $commitment)
-            <span class="commit-badge">
-                <i class="bi {{ $commitment['icon'] }}"></i>{{ $commitment['text'] }}
-            </span>
-        @endforeach
-    </div>
 </div>
 
 {{-- Danh sách sản phẩm kèm bộ lọc --}}

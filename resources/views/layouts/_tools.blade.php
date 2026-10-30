@@ -1,4 +1,4 @@
-{{-- Thanh công cụ Header: Ô tìm kiếm to, Theme & Đơn hàng (bên trái giỏ), Giỏ hàng 2 khối (bên trái tài khoản), Tài khoản 2 khối (ngoài cùng) --}}
+{{-- Thanh công cụ Header: Ô tìm kiếm to, Theme & Đơn hàng, Giỏ hàng, Tài khoản 2 khối --}}
 @php
     $toolsUser = auth()->user();
     $toolsIsAdmin = $toolsUser && $toolsUser->isAdmin();
@@ -7,20 +7,20 @@
         : 0;
 @endphp
 <div class="d-flex align-items-center gap-2 text-white ms-auto">
-    {{-- 1. Ô tìm kiếm to hơn --}}
+    {{-- 1. Ô tìm kiếm --}}
     <form class="position-relative d-flex align-items-center" method="GET" action="{{ route('products.index') }}">
         <input class="form-control rounded-pill bg-dark-subtle border-secondary-subtle text-white pe-5" 
                type="search" name="q"
                value="{{ request()->routeIs('products.index') ? request('q') : '' }}"
                placeholder="Tìm kiếm Gunpla, phụ kiện..."
-               style="width: 280px; min-height: 44px; font-size: 0.92rem; padding-left: 1.15rem;">
+               style="width: 300px; min-height: 50px; font-size: 0.92rem; padding-left: 1.15rem;">
         <button class="btn btn-link btn-sm text-white-50 position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0" 
                 type="submit" aria-label="Tìm kiếm">
             <i class="bi bi-search" style="font-size: 1rem;"></i>
         </button>
     </form>
 
-    {{-- 2. Bên trái của giỏ hàng: Cột biểu tượng Theme (trên) & Đơn hàng (dưới) --}}
+    {{-- 2. Biểu tượng Theme (trên) & Đơn hàng (dưới) --}}
     <div class="d-flex flex-column gap-1 align-items-center justify-content-center" style="height: 58px;">
         {{-- Biểu tượng Theme tròn nhỏ --}}
         <button type="button" id="themeToggle" 
@@ -60,33 +60,14 @@
         @endauth
     </div>
 
-    {{-- 3. Bên trái của Tài khoản: Giỏ hàng 2 khối --}}
-    @unless($toolsIsAdmin)
-        <a href="{{ route('cart.index') }}" 
-           class="btn btn-danger rounded-3 px-3 d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none shadow-sm flex-shrink-0" 
-           style="height: 58px; font-weight: 600;"
-           title="Giỏ hàng">
-            <i class="bi bi-cart3 fs-4"></i>
-            <div class="text-start lh-sm">
-                <div style="font-size: 0.88rem; font-weight: 700;">Giỏ hàng</div>
-                @if($toolsCartCount > 0)
-                    <span class="badge bg-white text-danger fw-bold rounded-pill" style="font-size: 0.72rem; padding: 2px 7px;">
-                        {{ $toolsCartCount }} món
-                    </span>
-                @else
-                    <span class="text-white-50" style="font-size: 0.75rem;">(0 món)</span>
-                @endif
-            </div>
-        </a>
-    @endunless
 
-    {{-- 4. Ngoài cùng bên phải: Tài khoản 2 khối --}}
+    {{-- 3. Tài khoản --}}
     @guest
         <div class="d-flex flex-column gap-1 justify-content-center flex-shrink-0" style="height: 58px;">
-            <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm rounded-pill px-3 py-1 text-center" style="font-size: 0.8rem; line-height: 1.2;">
+            <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm rounded-pill px-3 py-1 text-center" style="font-size: 0.9rem; line-height: 1.2;">
                 <i class="bi bi-person me-1"></i>Đăng nhập
             </a>
-            <a href="{{ route('register') }}" class="btn btn-danger btn-sm rounded-pill px-3 py-1 text-center" style="font-size: 0.8rem; line-height: 1.2;">
+            <a href="{{ route('register') }}" class="btn btn-danger btn-sm rounded-pill px-3 py-1 text-center" style="font-size: 0.9rem; line-height: 1.2;">
                 Đăng ký
             </a>
         </div>
@@ -125,4 +106,24 @@
             </ul>
         </div>
     @endguest
+
+        {{-- 4. Giỏ hàng --}}
+    @unless($toolsIsAdmin)
+        <a href="{{ route('cart.index') }}" 
+           class="btn btn-danger rounded-3 px-3 d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none shadow-sm flex-shrink-0" 
+           style="height: 58px; font-weight: 600;"
+           title="Giỏ hàng">
+            <i class="bi bi-cart3 fs-4"></i>
+            <div class="text-start lh-sm">
+                <div style="font-size: 0.88rem; font-weight: 700;">Giỏ hàng</div>
+                @if($toolsUser)
+                    @if($toolsCartCount > 0)
+                        <span class="badge bg-white text-danger fw-bold rounded-pill" style="font-size: 0.72rem; padding: 2px 7px;">
+                            {{ $toolsCartCount }}
+                        </span>
+                    @endif
+                @endif
+            </div>
+        </a>
+    @endunless
 </div>

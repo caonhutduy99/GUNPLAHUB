@@ -188,7 +188,7 @@
         .gh-brand {
             font-weight: 800;
             letter-spacing: 0.04em;
-            font-size: 1.25rem;
+            font-size: 1.75rem;
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
@@ -207,7 +207,7 @@
         .gh-nav-link {
             color: rgba(255, 255, 255, 0.8) !important;
             font-weight: 500;
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             padding: 0.5rem 0.85rem !important;
             border-radius: var(--gh-radius-sm);
             transition: all 0.2s ease;
@@ -215,6 +215,28 @@
         .gh-nav-link:hover, .gh-nav-link.active {
             color: #ffffff !important;
             background: rgba(255, 255, 255, 0.1);
+        }
+        .gh-commitments {
+            background: rgba(15, 23, 42, 0.96);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.5rem 1rem;
+        }
+        .commit-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.85rem;
+            border-radius: 9999px;
+            background-color: var(--gh-card-bg);
+            border: 1px solid var(--gh-border);
+            font-size: 0.83rem;
+            font-weight: 500;
+            color: var(--bs-body-color);
+            box-shadow: var(--gh-shadow-sm);
+        }
+        .commit-badge i {
+            color: var(--gh-primary);
+            font-size: 1rem;
         }
 
         /* Alerts */
@@ -453,6 +475,15 @@
     </div>
 </nav>
 
+{{-- Cam kết của cửa hàng --}}
+    <div class="gh-commitments d-flex flex-wrap justify-content-center align-items-center gap-2">
+        @foreach(config('shop.commitments') as $commitment)
+            <span class="commit-badge">
+                <i class="bi {{ $commitment['icon'] }}"></i>{{ $commitment['text'] }}
+            </span>
+        @endforeach
+    </div>
+    
 <main class="container py-4 flex-grow-1">
     @if(session('success'))
         <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
