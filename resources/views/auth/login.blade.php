@@ -17,7 +17,7 @@
 
                 @if(session('url.intended'))
                     <div class="alert alert-info py-2 small mb-3">
-                        <i class="bi bi-info-circle me-1"></i>Vui lòng đăng nhập để tiếp tục.
+                        <x-icon name="info" class="me-1" />Vui lòng đăng nhập để tiếp tục.
                     </div>
                 @endif
 
@@ -42,7 +42,7 @@
                             <input type="password" id="password" name="password"
                                    class="form-control @error('password') is-invalid @enderror" placeholder="••••••••" required>
                             <button class="btn btn-outline-secondary btn-toggle-password" type="button" aria-label="Hiện mật khẩu">
-                                <i class="bi bi-eye"></i>
+                                <x-icon name="eye" />
                             </button>
                         </div>
                         @error('password')

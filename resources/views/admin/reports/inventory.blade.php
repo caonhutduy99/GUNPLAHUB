@@ -7,10 +7,10 @@
     <h3 class="mb-0">Báo cáo tồn kho</h3>
     <div class="no-print d-flex gap-2">
         <a href="{{ route('admin.reports.inventory.export') }}" class="btn btn-outline-success btn-sm">
-            <i class="bi bi-file-earmark-excel me-1"></i>Xuất Excel
+            <x-icon name="sheet" class="me-1" />Xuất Excel
         </a>
         <button type="button" class="btn btn-outline-dark btn-sm" onclick="window.print()">
-            <i class="bi bi-printer me-1"></i>In / Lưu PDF
+            <x-icon name="printer" class="me-1" />In / Lưu PDF
         </button>
     </div>
 </div>

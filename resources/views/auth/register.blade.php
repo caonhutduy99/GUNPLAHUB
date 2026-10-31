@@ -52,7 +52,7 @@
                                 <input type="password" id="password" name="password"
                                        class="form-control @error('password') is-invalid @enderror" placeholder="Tối thiểu 8 ký tự" required>
                                 <button class="btn btn-outline-secondary btn-toggle-password" type="button" aria-label="Hiện mật khẩu">
-                                    <i class="bi bi-eye"></i>
+                                    <x-icon name="eye" />
                                 </button>
                             </div>
                             @error('password')
@@ -65,7 +65,7 @@
                                 <input type="password" id="password_confirmation" name="password_confirmation"
                                        class="form-control" placeholder="Nhập lại mật khẩu" required>
                                 <button class="btn btn-outline-secondary btn-toggle-password" type="button" aria-label="Hiện mật khẩu">
-                                    <i class="bi bi-eye"></i>
+                                    <x-icon name="eye" />
                                 </button>
                             </div>
                         </div>

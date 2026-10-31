@@ -10,15 +10,15 @@
             <div class="card-body text-center p-4">
                 <div class="rounded-circle bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center mb-3"
                      style="width: 80px; height: 80px; font-size: 2.5rem;">
-                    <i class="bi bi-person-fill"></i>
+                    <x-icon name="user-round" size="2.5rem" />
                 </div>
                 <h5 class="mb-1 fw-bold">{{ $user->full_name }}</h5>
                 <p class="text-muted small mb-2">{{ $user->email }}</p>
                 <div>
                     @if($user->isAdmin())
-                        <span class="badge text-bg-danger"><i class="bi bi-shield-lock-fill me-1"></i>Quản trị viên</span>
+                        <span class="badge text-bg-danger"><x-icon name="lock" class="me-1" />Quản trị viên</span>
                     @else
-                        <span class="badge text-bg-success"><i class="bi bi-person-check-fill me-1"></i>Khách hàng thành viên</span>
+                        <span class="badge text-bg-success"><x-icon name="badge-check" class="me-1" />Khách hàng thành viên</span>
                     @endif
 
                     @if($user->is_blacklisted)
@@ -46,16 +46,16 @@
                 @unless($user->isAdmin())
                     <div class="mt-3">
                         <a href="{{ route('orders.index') }}" class="btn btn-outline-dark btn-sm w-100">
-                            <i class="bi bi-receipt me-1"></i>Xem tất cả đơn hàng
+                            <x-icon name="receipt" class="me-1" />Xem tất cả đơn hàng
                         </a>
                         <a href="{{ route('wishlist.index') }}" class="btn btn-outline-danger btn-sm w-100 mt-2">
-                            <i class="bi bi-heart me-1"></i>Danh sách yêu thích
+                            <x-icon name="heart" class="me-1" />Danh sách yêu thích
                         </a>
                     </div>
                 @endunless
             </div>
             <div class="card-footer bg-white small text-muted">
-                <i class="bi bi-calendar3 me-1"></i>Tham gia từ: {{ $user->created_at->format('d/m/Y') }}
+                <x-icon name="calendar" class="me-1" />Tham gia từ: {{ $user->created_at->format('d/m/Y') }}
             </div>
         </div>
 
@@ -64,7 +64,7 @@
             @if($recentOrders->isNotEmpty())
                 <div class="card shadow-sm">
                     <div class="card-header bg-white py-3">
-                        <h6 class="mb-0 fw-bold"><i class="bi bi-clock-history me-1"></i>Đơn hàng gần đây</h6>
+                        <h6 class="mb-0 fw-bold"><x-icon name="refresh-cw" class="me-1" />Đơn hàng gần đây</h6>
                     </div>
                     <ul class="list-group list-group-flush small">
                         @foreach($recentOrders as $order)
@@ -96,7 +96,7 @@
         {{-- Form cập nhật hồ sơ cá nhân --}}
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-white py-3">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-person-gear text-primary me-2"></i>Thông tin tài khoản</h5>
+                <h5 class="mb-0 fw-bold"><x-icon name="user-cog" class="text-primary me-2" />Thông tin tài khoản</h5>
             </div>
             <div class="card-body p-4">
                 <form method="POST" action="{{ route('profile.update') }}" class="needs-constraint-validation" novalidate>
@@ -145,7 +145,7 @@
 
                     <div class="pt-2">
                         <button type="submit" class="btn btn-dark">
-                            <i class="bi bi-save me-1"></i>Lưu thông tin cá nhân
+                            <x-icon name="save" class="me-1" />Lưu thông tin cá nhân
                         </button>
                     </div>
                 </form>
@@ -155,7 +155,7 @@
         {{-- Form đổi mật khẩu --}}
         <div class="card shadow-sm">
             <div class="card-header bg-white py-3">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-shield-lock text-danger me-2"></i>Đổi mật khẩu</h5>
+                <h5 class="mb-0 fw-bold"><x-icon name="lock" class="text-danger me-2" />Đổi mật khẩu</h5>
             </div>
             <div class="card-body p-4">
                 <form method="POST" action="{{ route('profile.password') }}" class="needs-constraint-validation" novalidate>
@@ -168,7 +168,7 @@
                             <input type="password" id="current_password" name="current_password"
                                    class="form-control @error('current_password') is-invalid @enderror" required>
                             <button class="btn btn-outline-secondary btn-toggle-password" type="button" aria-label="Hiện mật khẩu">
-                                <i class="bi bi-eye"></i>
+                                <x-icon name="eye" />
                             </button>
                         </div>
                         @error('current_password')
@@ -184,7 +184,7 @@
                                        class="form-control @error('password') is-invalid @enderror"
                                        placeholder="Tối thiểu 8 ký tự" required>
                                 <button class="btn btn-outline-secondary btn-toggle-password" type="button" aria-label="Hiện mật khẩu">
-                                    <i class="bi bi-eye"></i>
+                                    <x-icon name="eye" />
                                 </button>
                             </div>
                             @error('password')
@@ -198,7 +198,7 @@
                                 <input type="password" id="password_confirmation" name="password_confirmation"
                                        class="form-control" placeholder="Nhập lại mật khẩu mới" required>
                                 <button class="btn btn-outline-secondary btn-toggle-password" type="button" aria-label="Hiện mật khẩu">
-                                    <i class="bi bi-eye"></i>
+                                    <x-icon name="eye" />
                                 </button>
                             </div>
                         </div>
@@ -206,7 +206,7 @@
 
                     <div class="pt-2">
                         <button type="submit" class="btn btn-outline-danger">
-                            <i class="bi bi-key me-1"></i>Cập nhật mật khẩu
+                            <x-icon name="key-round" class="me-1" />Cập nhật mật khẩu
                         </button>
                     </div>
                 </form>

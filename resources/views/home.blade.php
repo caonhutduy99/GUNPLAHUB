@@ -56,6 +56,10 @@
         background: radial-gradient(circle, rgba(254, 117, 254, 0.3) 0%, rgba(254, 117, 254, 0) 70%);
         border-radius: 50%; pointer-events: none;
     }
+    .hero-title {
+        font-size: clamp(2rem, 3.2vw, 2.7rem);
+        white-space: nowrap;
+    }
     
     .grade-chip {
         display: inline-flex; align-items: center; gap: 0.4rem;
@@ -71,6 +75,7 @@
 
     @media (max-width: 767.98px) {
         .mega-sub { position: static; width: auto; border: 0; box-shadow: none; grid-template-columns: 1fr; }
+        .hero-title { white-space: normal; }
     }
 </style>
 @endpush
@@ -86,7 +91,7 @@
                 <span class="badge bg-danger text-uppercase px-2" style="font-size: 0.7rem; letter-spacing: 0.05em;">Original</span>
                 <span class="text-white-50 small">プレミアム ガンプラ · BANDAI NAMCO</span>
             </div>
-            <h1 class="display-5 fw-bold mb-3 text-white" style="letter-spacing: -0.02em;">
+            <h1 class="hero-title fw-bold mb-3 text-white" style="letter-spacing: -0.02em;">
                 Thế giới Gunpla & Mô hình Mecha
             </h1>
             <p class="lead text-white-50 mb-4" style="max-width: 640px; font-size: 1.05rem; line-height: 1.6;">
@@ -134,7 +139,7 @@
                     </li>
                     <li class="has-sub">
                         <a href="{{ route('products.index') }}">
-                            <i class="bi bi-box-seam text-muted"></i> Cấp độ Gunpla 
+                            <i class="bi bi-box-seam text-muted"></i> Gundam / Mecha
                             <i class="bi bi-chevron-right ms-auto small text-muted"></i>
                         </a>
                         <div class="mega-sub">

@@ -27,7 +27,7 @@
 
 <div class="d-flex align-items-center justify-content-between mb-3">
     <h4 class="fw-bold mb-0" style="letter-spacing: -0.01em;">
-        <i class="bi bi-cart3 text-danger me-2"></i>Giỏ hàng của bạn
+        <x-icon name="shopping-cart" class="text-danger me-2" />Giỏ hàng của bạn
     </h4>
     <span class="text-muted small">({{ $lines->count() }} loại sản phẩm)</span>
 </div>
@@ -38,18 +38,18 @@
 
 @if($blacklisted)
     <div class="alert alert-danger mb-3">
-        <i class="bi bi-shield-x me-2"></i>Tài khoản của bạn đang nằm trong danh sách hạn chế nên không thể đặt hàng. Vui lòng liên hệ cửa hàng để được hỗ trợ.
+        <x-icon name="shield-alert" class="me-2" />Tài khoản của bạn đang nằm trong danh sách hạn chế nên không thể đặt hàng. Vui lòng liên hệ cửa hàng để được hỗ trợ.
     </div>
 @endif
 
 @if($lines->isEmpty())
     <div class="card shadow-sm border text-center py-5 my-4" style="border-radius: var(--gh-radius);">
         <div class="card-body">
-            <i class="bi bi-cart-x text-muted opacity-50 mb-3" style="font-size: 3.5rem;"></i>
+            <x-icon name="shopping-cart" size="3.5rem" class="text-muted opacity-50 mb-3" />
             <h5 class="fw-bold mb-2">Giỏ hàng của bạn đang trống</h5>
             <p class="text-muted small mb-4">Hãy khám phá các mẫu Gunpla Bandai chính hãng mới nhất để bổ sung vào bộ sưu tập!</p>
             <a href="{{ route('products.index') }}" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold">
-                <i class="bi bi-grid me-2"></i>Khám phá cửa hàng ngay
+                <x-icon name="layout-grid" class="me-2" />Khám phá cửa hàng ngay
             </a>
         </div>
     </div>
@@ -81,7 +81,7 @@
                                                      class="border bg-white p-1 flex-shrink-0">
                                             @else
                                                 <div class="bg-secondary-subtle rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width: 65px; height: 65px;">
-                                                    <i class="bi bi-box-seam text-secondary"></i>
+                                                    <x-icon name="package-open" class="text-secondary" />
                                                 </div>
                                             @endif
                                             <div>
@@ -106,7 +106,7 @@
                                             <input type="number" name="quantity" value="{{ $line->quantity }}" min="1" max="{{ $product->stock_quantity }}"
                                                    class="form-control form-control-sm text-center fw-bold" style="width: 60px;">
                                             <button type="submit" class="btn btn-outline-secondary btn-sm p-1" title="Cập nhật số lượng">
-                                                <i class="bi bi-arrow-repeat"></i>
+                                                <x-icon name="refresh-cw" />
                                             </button>
                                         </form>
                                     </td>
@@ -119,7 +119,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger border-0 p-1" title="Xóa">
-                                                <i class="bi bi-trash fs-6"></i>
+                                                <x-icon name="trash" size="1rem" />
                                             </button>
                                         </form>
                                     </td>
@@ -132,13 +132,13 @@
 
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                 <a href="{{ route('products.index') }}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
-                    <i class="bi bi-arrow-left me-1"></i>Tiếp tục chọn mô hình
+                    <x-icon name="arrow-left" class="me-1" />Tiếp tục chọn mô hình
                 </a>
                 <form method="POST" action="{{ route('cart.clear') }}" onsubmit="return confirm('Xóa toàn bộ giỏ hàng?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">
-                        <i class="bi bi-trash me-1"></i>Xóa sạch giỏ hàng
+                        <x-icon name="trash" class="me-1" />Xóa sạch giỏ hàng
                     </button>
                 </form>
             </div>
@@ -150,7 +150,7 @@
                 <div class="card-body p-4">
                     <h5 class="fw-bold mb-3 d-flex align-items-center justify-content-between">
                         <span>Tóm tắt thanh toán</span>
-                        <i class="bi bi-receipt text-danger"></i>
+                        <x-icon name="receipt" class="text-danger" />
                     </h5>
 
                     <div class="d-flex justify-content-between mb-2 small text-muted">
@@ -169,7 +169,7 @@
 
                     @if($shippingFee > 0 && isset($freeShippingFrom))
                         <div class="p-2 rounded-2 bg-body-tertiary small text-muted mb-3 border">
-                            <i class="bi bi-truck text-danger me-1"></i>Mua thêm <strong>{{ \App\Support\Money::format($freeShippingFrom - $subtotal) }}</strong> để được <strong>FREESHIP</strong> toàn quốc!
+                            <x-icon name="truck" class="text-danger me-1" />Mua thêm <strong>{{ \App\Support\Money::format($freeShippingFrom - $subtotal) }}</strong> để được <strong>FREESHIP</strong> toàn quốc!
                         </div>
                     @endif
 
@@ -189,14 +189,14 @@
                     @elseif(Route::has('checkout.create'))
                         <a href="{{ route('checkout.create') }}" class="btn btn-danger w-100 py-2 rounded-pill fw-semibold shadow-sm d-flex align-items-center justify-content-center gap-2" style="font-size: 1rem;">
                             <span>Tiến hành đặt hàng</span>
-                            <i class="bi bi-arrow-right"></i>
+                            <x-icon name="arrow-right" />
                         </a>
                     @else
                         <button type="button" class="btn btn-dark w-100 py-2 rounded-pill" disabled>Tiến hành đặt hàng</button>
                     @endif
 
                     <div class="text-center small text-muted mt-3">
-                        <i class="bi bi-shield-lock text-success me-1"></i>Thông tin đơn hàng được bảo mật tuyệt đối
+                        <x-icon name="lock" class="text-success me-1" />Thông tin đơn hàng được bảo mật tuyệt đối
                     </div>
                 </div>
             </div>

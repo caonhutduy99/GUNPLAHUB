@@ -6,12 +6,12 @@
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
     <div>
         <h4 class="fw-bold mb-1" style="letter-spacing: -0.01em;">
-            <i class="bi bi-box-seam-fill text-danger me-2"></i>Đơn hàng của tôi
+            <x-icon name="package-open" class="text-danger me-2" />Đơn hàng của tôi
         </h4>
         <p class="text-muted small mb-0">Theo dõi trạng thái xử lý, vận chuyển và lịch sử mua sắm.</p>
     </div>
     <a href="{{ route('products.index') }}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
-        <i class="bi bi-grid me-1"></i>Tiếp tục mua sắm
+        <x-icon name="layout-grid" class="me-1" />Tiếp tục mua sắm
     </a>
 </div>
 
@@ -35,7 +35,7 @@
                             <span class="text-danger">#{{ $order->id }}</span>
                         </td>
                         <td class="small text-muted">
-                            <i class="bi bi-calendar3 me-1"></i>{{ $order->order_date->format('d/m/Y H:i') }}
+                            <x-icon name="calendar" class="me-1" />{{ $order->order_date->format('d/m/Y H:i') }}
                         </td>
                         <td class="text-center">
                             <span class="badge bg-secondary-subtle text-secondary">{{ $order->details_count }} sản phẩm</span>
@@ -50,14 +50,14 @@
                         </td>
                         <td class="pe-3 py-3 text-end">
                             <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1" style="font-size: 0.8rem; font-weight: 600;">
-                                Chi tiết <i class="bi bi-chevron-right ms-1"></i>
+                                Chi tiết <x-icon name="chevron-right" class="ms-1" />
                             </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
                         <td colspan="6" class="text-center text-muted py-5">
-                            <i class="bi bi-inbox text-muted opacity-50 mb-3 d-block" style="font-size: 3rem;"></i>
+                            <x-icon name="package-open" size="3rem" class="text-muted opacity-50 mb-3 d-block" />
                             <h6 class="fw-bold mb-1">Bạn chưa có đơn hàng nào</h6>
                             <p class="small text-muted mb-3">Hãy dạo quanh cửa hàng và chọn cho mình mô hình Gunpla yêu thích!</p>
                             <a href="{{ route('products.index') }}" class="btn btn-danger btn-sm rounded-pill px-4">Mua sắm ngay</a>

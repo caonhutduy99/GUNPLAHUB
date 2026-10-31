@@ -6,7 +6,7 @@
 @section('content')
 <div class="no-print d-flex justify-content-between mb-3">
     <a href="{{ $backUrl }}" class="btn btn-outline-secondary">← Quay lại</a>
-    <button type="button" class="btn btn-dark" onclick="window.print()"><i class="bi bi-printer me-1"></i>In hóa đơn / Lưu PDF</button>
+    <button type="button" class="btn btn-dark" onclick="window.print()"><x-icon name="printer" class="me-1" />In hóa đơn / Lưu PDF</button>
 </div>
 
 <div class="card shadow-sm">

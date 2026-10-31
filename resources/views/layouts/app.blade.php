@@ -22,7 +22,7 @@
         })();
     </script>
 
-    {{-- Google Font: Be Vietnam Pro (Đẹp, sắc nét, hỗ trợ tiếng Việt hoàn hảo) --}}
+    {{-- Font: Be Vietnam Pro--}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
@@ -94,6 +94,17 @@
             color: var(--bs-body-color);
             letter-spacing: -0.01em;
             -webkit-font-smoothing: antialiased;
+        }
+
+        .gh-icon {
+            display: inline-block;
+            width: var(--gh-icon-size, 1em);
+            height: var(--gh-icon-size, 1em);
+            flex: 0 0 auto;
+            vertical-align: -0.125em;
+            background-color: currentColor;
+            -webkit-mask: var(--gh-icon-url) center / contain no-repeat;
+            mask: var(--gh-icon-url) center / contain no-repeat;
         }
 
         /* Card Styling */
@@ -258,7 +269,7 @@
         .gh-brand-badge {
             background: var(--gh-accent);
             color: #07101f;
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             font-weight: 700;
             padding: 2px 6px;
             border-radius: 4px;
@@ -271,6 +282,9 @@
             padding: 0.5rem 0.85rem !important;
             border-radius: var(--gh-radius-sm);
             transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
         }
         .gh-nav-link:hover {
             color: #07101f !important;
@@ -422,7 +436,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-{{-- Thanh điều hướng chuẩn hiện diện xuyên suốt --}}
+{{-- Thanh điều hướng --}}
 <nav class="navbar navbar-expand-lg gh-navbar sticky-top">
     <div class="container">
         <a class="navbar-brand gh-brand" href="{{ route('home') }}">
@@ -430,24 +444,24 @@
             <span class="gh-brand-badge">STORE</span>
         </a>
         <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="bi bi-list fs-2"></i>
+            <x-icon name="menu" size="1.5rem" />
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
                 <li class="nav-item">
                     <a class="nav-link gh-nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
-                        <i class="bi bi-house-door me-1"></i>Trang chủ
+                        <x-icon name="house" class="me-1" />Trang chủ
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link gh-nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                        <i class="bi bi-grid me-1"></i>Cửa hàng
+                        <x-icon name="layout-grid" class="me-1" />Cửa hàng
                     </a>
                 </li>
                 @unless($isAdmin)
                     <li class="nav-item">
                         <a class="nav-link gh-nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
-                            <i class="bi bi-chat-dots me-1"></i>Liên hệ
+                            <x-icon name="send" class="me-1" />Liên hệ
                         </a>
                     </li>
                 @endunless
@@ -458,22 +472,22 @@
                     @endphp
                     <li class="nav-item dropdown">
                         <a class="nav-link gh-nav-link dropdown-toggle {{ $isHangHoaActive ? 'active fw-bold' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-boxes me-1"></i>Hàng hóa
+                            <x-icon name="package-open" class="me-1" />Hàng hóa
                         </a>
                         <ul class="dropdown-menu shadow border-0" style="border-radius: 12px; font-size: 0.9rem;">
                             <li>
                                 <a class="dropdown-item py-2 {{ request()->routeIs('admin.products.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.products.index') }}">
-                                    <i class="bi bi-box-seam me-2"></i>Sản phẩm
+                                    <x-icon name="package-open" class="me-2" />Sản phẩm
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item py-2 {{ request()->routeIs('admin.categories.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.categories.index') }}">
-                                    <i class="bi bi-tags me-2"></i>Danh mục
+                                    <x-icon name="layout-grid" class="me-2" />Danh mục
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item py-2 {{ request()->routeIs('admin.brands.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.brands.index') }}">
-                                    <i class="bi bi-award me-2"></i>Thương hiệu
+                                    <x-icon name="badge-check" class="me-2" />Thương hiệu
                                 </a>
                             </li>
                         </ul>
@@ -486,7 +500,7 @@
                     @endphp
                     <li class="nav-item dropdown">
                         <a class="nav-link gh-nav-link dropdown-toggle {{ $isConNguoiActive ? 'active fw-bold' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-people me-1"></i>Con người
+                            <x-icon name="user-cog" class="me-1" />Con người
                             @if($pendingOrders > 0)
                                 <span class="badge rounded-pill bg-danger ms-1" style="font-size: 0.68rem; padding: 2px 6px;">{{ $pendingOrders }}</span>
                             @endif
@@ -494,12 +508,12 @@
                         <ul class="dropdown-menu shadow border-0" style="border-radius: 12px; font-size: 0.9rem;">
                             <li>
                                 <a class="dropdown-item py-2 {{ request()->routeIs('admin.customers.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.customers.index') }}">
-                                    <i class="bi bi-person-lines-fill me-2"></i>Khách hàng
+                                    <x-icon name="user" class="me-2" />Khách hàng
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item py-2 d-flex align-items-center justify-content-between {{ request()->routeIs('admin.orders.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.orders.index') }}">
-                                    <span><i class="bi bi-receipt me-2"></i>Đơn hàng</span>
+                                    <span><x-icon name="shopping-cart" class="me-2" />Đơn hàng</span>
                                     @if($pendingOrders > 0)
                                         <span class="badge rounded-pill bg-danger" style="font-size: 0.7rem;">{{ $pendingOrders }}</span>
                                     @endif
@@ -507,7 +521,7 @@
                             </li>
                             <li>
                                 <a class="dropdown-item py-2 {{ request()->routeIs('admin.contacts.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.contacts.index') }}">
-                                    <i class="bi bi-chat-dots me-2"></i>Tin nhắn
+                                    <x-icon name="mail" class="me-2" />Tin nhắn
                                 </a>
                             </li>
                         </ul>
@@ -516,7 +530,7 @@
                     {{-- 3. Mã giảm giá --}}
                     <li class="nav-item">
                         <a class="nav-link gh-nav-link {{ request()->routeIs('admin.vouchers.*') ? 'active' : '' }}" href="{{ route('admin.vouchers.index') }}">
-                            <i class="bi bi-ticket-perforated me-1"></i>Mã giảm giá
+                            <x-icon name="ticket" class="me-1" />Mã giảm giá
                         </a>
                     </li>
 
@@ -526,18 +540,18 @@
                     @endphp
                     <li class="nav-item dropdown">
                         <a class="nav-link gh-nav-link dropdown-toggle {{ $isBaoCaoActive ? 'active fw-bold' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-graph-up me-1"></i>Báo cáo
+                            <x-icon name="circle-dollar-sign" class="me-1" />Báo cáo
                         </a>
                         <ul class="dropdown-menu shadow border-0" style="border-radius: 12px; font-size: 0.9rem;">
-                            <li><a class="dropdown-item py-2 {{ request()->routeIs('admin.reports.revenue') ? 'active fw-bold' : '' }}" href="{{ route('admin.reports.revenue') }}"><i class="bi bi-graph-up me-2"></i>Báo cáo doanh thu</a></li>
-                            <li><a class="dropdown-item py-2 {{ request()->routeIs('admin.reports.inventory') ? 'active fw-bold' : '' }}" href="{{ route('admin.reports.inventory') }}"><i class="bi bi-boxes me-2"></i>Báo cáo tồn kho</a></li>
+                            <li><a class="dropdown-item py-2 {{ request()->routeIs('admin.reports.revenue') ? 'active fw-bold' : '' }}" href="{{ route('admin.reports.revenue') }}"><x-icon name="circle-dollar-sign" class="me-2" />Báo cáo doanh thu</a></li>
+                            <li><a class="dropdown-item py-2 {{ request()->routeIs('admin.reports.inventory') ? 'active fw-bold' : '' }}" href="{{ route('admin.reports.inventory') }}"><x-icon name="package-open" class="me-2" />Báo cáo tồn kho</a></li>
                         </ul>
                     </li>
 
                     {{-- 5. Nhật ký --}}
                     <li class="nav-item">
                         <a class="nav-link gh-nav-link {{ request()->routeIs('admin.audit.*') ? 'active' : '' }}" href="{{ route('admin.audit.index') }}">
-                            <i class="bi bi-journal-text me-1"></i>Nhật ký
+                            <x-icon name="settings" class="me-1" />Nhật ký
                         </a>
                     </li>
                 @endif
@@ -552,7 +566,7 @@
     <div class="gh-commitments d-flex flex-wrap justify-content-center align-items-center gap-2">
         @foreach(config('shop.commitments') as $commitment)
             <span class="commit-badge">
-                <i class="bi {{ $commitment['icon'] }}"></i>{{ $commitment['text'] }}
+                <x-icon name="{{ $commitment['icon'] }}" />{{ $commitment['text'] }}
             </span>
         @endforeach
     </div>
@@ -560,19 +574,19 @@
 <main class="container py-4 flex-grow-1">
     @if(session('success'))
         <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
-            <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+            <x-icon name="circle-check" class="me-2 fs-5" />
             <div>{{ session('success') }}</div>
         </div>
     @endif
     @if(session('error'))
         <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+            <x-icon name="triangle-alert" class="me-2 fs-5" />
             <div>{{ session('error') }}</div>
         </div>
     @endif
     @if(session('warning'))
         <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
-            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+            <x-icon name="info" class="me-2 fs-5" />
             <div>{{ session('warning') }}</div>
         </div>
     @endif
@@ -580,7 +594,7 @@
     @yield('content')
 </main>
 
-{{-- Footer phong cách Japanese Clean Store --}}
+{{-- Footer --}}
 <footer class="mt-auto pt-5 pb-4 border-top" style="background-color: var(--gh-card-bg); border-color: var(--gh-border) !important;">
     <div class="container">
         <div class="row g-4 mb-4">
@@ -590,16 +604,16 @@
                     <span class="gh-brand-badge">STORE</span>
                 </a>
                 <p class="text-muted small mb-3 lh-base">
-                    GunplaHub chuyên cung cấp các dòng mô hình Gundam chính hãng Bandai Nhật Bản, dụng cụ và phụ kiện cao cấp cho Builder tại Việt Nam.
+                    GunplaHub chuyên cung cấp các dòng mô hình Gundam chính hãng Bandai Namco Nhật Bản, phụ kiện nâng cấp và dụng cụ lắp ráp cho Builder tại Việt Nam.
                 </p>
                 <div class="small text-muted mb-2">
-                    <i class="bi bi-geo-alt-fill text-danger me-2"></i>{{ config('shop.address') ?: 'Hệ thống phân phối Gunpla chính hãng toàn quốc' }}
+                    <x-icon name="map-pin" class="text-danger me-2" />{{ config('shop.address') ?: 'Hệ thống phân phối Gunpla chính hãng toàn quốc' }}
                 </div>
                 <div class="small text-muted mb-2">
-                    <i class="bi bi-telephone-fill text-danger me-2"></i>Hotline: <a href="tel:{{ $phoneDigits }}" class="text-reset fw-semibold">{{ $shopPhone }}</a>
+                    <x-icon name="phone" class="text-danger me-2" />Hotline: <a href="tel:{{ $phoneDigits }}" class="text-reset fw-semibold">{{ $shopPhone }}</a>
                 </div>
                 <div class="small text-muted">
-                    <i class="bi bi-shield-check text-success me-2"></i>100% Sản phẩm phân phối chính hãng
+                    <x-icon name="shield-check" class="text-success me-2" />100% Sản phẩm phân phối chính hãng
                 </div>
             </div>
 
@@ -610,7 +624,6 @@
                     <li><a href="{{ route('products.index', ['grade' => 'RG']) }}" class="text-decoration-none text-muted">Real Grade (RG 1/144)</a></li>
                     <li><a href="{{ route('products.index', ['grade' => 'MG']) }}" class="text-decoration-none text-muted">Master Grade (MG 1/100)</a></li>
                     <li><a href="{{ route('products.index', ['grade' => 'PG']) }}" class="text-decoration-none text-muted">Perfect Grade (PG 1/60)</a></li>
-                    <li><a href="{{ route('products.index', ['grade' => 'SD']) }}" class="text-decoration-none text-muted">SD & BB Senshi</a></li>
                 </ul>
             </div>
 
@@ -628,19 +641,18 @@
                 <h6 class="fw-bold text-uppercase small mb-3" style="letter-spacing: 0.05em;">Phương thức thanh toán</h6>
                 <p class="text-muted small mb-3">Hỗ trợ đa dạng phương thức thanh toán an toàn, tiện lợi.</p>
                 <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><i class="bi bi-cash-stack me-1"></i>Tiền mặt (COD)</span>
-                    <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><i class="bi bi-qr-code me-1"></i>VietQR Pay</span>
-                    <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><i class="bi bi-credit-card me-1"></i>VNPay</span>
+                    <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="wallet" class="me-1" />Tiền mặt (COD)</span>
+                    <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="qr-code" class="me-1" />VietQR Pay</span>
+                    <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="credit-card" class="me-1" />VNPay</span>
                 </div>
                 <div class="p-2 border rounded-3 bg-body-tertiary small text-muted">
-                    <i class="bi bi-box-seam text-danger me-1"></i>Đóng gói 3 lớp chống móp hộp khi vận chuyển xa.
+                    <x-icon name="package-open" class="text-danger me-1" />Đóng gói 3 lớp chống móp hộp khi vận chuyển xa.
                 </div>
             </div>
         </div>
 
         <div class="border-top pt-3 d-flex flex-wrap justify-content-between align-items-center small text-muted" style="border-color: var(--gh-border) !important;">
             <div>&copy; {{ date('Y') }} {{ config('shop.name') }}. All rights reserved.</div>
-            <div>Thiết kế theo chuẩn Clean & Premium Japanese Storefront</div>
         </div>
     </div>
 </footer>
@@ -648,11 +660,11 @@
 {{-- Nút nổi: về đầu trang, gọi điện, Zalo --}}
 <div class="position-fixed d-flex flex-column gap-2" style="right: 18px; bottom: 18px; z-index: 1040;">
     <button type="button" id="backToTop" class="float-btn" style="background: var(--gh-primary); display: none;" title="Về đầu trang" aria-label="Về đầu trang">
-        <i class="bi bi-chevron-up"></i>
+        <x-icon name="chevron-up" />
     </button>
     @unless($isAdmin)
     <a href="tel:{{ $phoneDigits }}" class="float-btn" style="background: var(--gh-primary);" title="Gọi {{ $shopPhone }}" aria-label="Gọi điện thoại">
-        <i class="bi bi-telephone-fill"></i>
+        <x-icon name="phone" />
     </a>
     <a href="https://zalo.me/{{ $phoneDigits }}" target="_blank" rel="noopener" class="float-btn"
        style="background: #0068ff; font-size: .8rem; font-weight: 700;" title="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
@@ -700,17 +712,17 @@
                                     <input type="number" name="quantity" id="qvQuantity" value="1" min="1" max="99" class="form-control text-center fw-bold">
                                 </div>
                                 <button type="submit" name="buy_now" value="0" class="btn btn-outline-danger fw-bold rounded-pill flex-grow-1 py-2">
-                                    <i class="bi bi-cart-plus-fill me-1"></i>Thêm vào giỏ
+                                    <x-icon name="shopping-cart" class="me-1" />Thêm vào giỏ
                                 </button>
                             </div>
                             <button type="submit" name="buy_now" value="1" class="btn btn-danger w-100 fw-bold rounded-pill shadow-sm py-2" style="font-size: 1rem;">
-                                <i class="bi bi-bag-check-fill me-1"></i>Tiến hành mua hàng luôn
+                                <x-icon name="shopping-cart" class="me-1" />Tiến hành mua hàng luôn
                             </button>
                         </form>
 
                         <div class="text-end pt-2 border-top" style="border-color: var(--gh-border) !important;">
                             <a href="#" id="qvDetailLink" class="small text-muted text-decoration-none fw-semibold">
-                                Xem toàn bộ trang chi tiết sản phẩm <i class="bi bi-arrow-right ms-1"></i>
+                                Xem toàn bộ trang chi tiết sản phẩm <x-icon name="arrow-right" class="ms-1" />
                             </a>
                         </div>
                     </div>
@@ -730,7 +742,9 @@
         function render() {
             if (!btn) { return; }
             var dark = root.getAttribute('data-bs-theme') === 'dark';
-            btn.innerHTML = dark ? '<i class="bi bi-sun-fill text-warning"></i>' : '<i class="bi bi-moon-stars-fill text-white"></i>';
+            btn.innerHTML = dark
+                ? '<span class="gh-icon text-warning" style="--gh-icon-size: 1em; --gh-icon-url: url(\'/icons/sun.svg\');"></span>'
+                : '<span class="gh-icon text-white" style="--gh-icon-size: 1em; --gh-icon-url: url(\'/icons/moon.svg\');"></span>';
         }
 
         if (btn) btn.addEventListener('click', function () {
@@ -821,18 +835,26 @@
             var input = inputGroup.querySelector('input');
             if (!input) return;
 
-            var icon = toggleBtn.querySelector('i');
+            var icon = toggleBtn.querySelector('.gh-icon, i');
             if (input.type === 'password') {
                 input.type = 'text';
                 if (icon) {
-                    icon.classList.remove('bi-eye');
-                    icon.classList.add('bi-eye-slash');
+                    if (icon.classList.contains('gh-icon')) {
+                        icon.style.setProperty('--gh-icon-url', "url('/icons/eye-off.svg')");
+                    } else {
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                    }
                 }
             } else {
                 input.type = 'password';
                 if (icon) {
-                    icon.classList.remove('bi-eye-slash');
-                    icon.classList.add('bi-eye');
+                    if (icon.classList.contains('gh-icon')) {
+                        icon.style.setProperty('--gh-icon-url', "url('/icons/eye.svg')");
+                    } else {
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    }
                 }
             }
         });

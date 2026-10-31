@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="mb-0"><i class="bi bi-ticket-perforated me-2"></i>Quản lý mã giảm giá</h3>
+    <h3 class="mb-0"><x-icon name="ticket" class="me-2" />Quản lý mã giảm giá</h3>
     <a href="{{ route('admin.vouchers.create') }}" class="btn btn-dark">
-        <i class="bi bi-plus-lg me-1"></i>Thêm mã giảm giá
+        <x-icon name="plus" class="me-1" />Thêm mã giảm giá
     </a>
 </div>
 
@@ -16,7 +16,7 @@
         <form method="GET" action="{{ route('admin.vouchers.index') }}" class="row g-2 align-items-center">
             <div class="col-md-5">
                 <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <span class="input-group-text"><x-icon name="search" /></span>
                     <input type="text" name="q" class="form-control" placeholder="Tìm theo mã giảm giá..."
                            value="{{ request('q') }}">
                 </div>
@@ -88,7 +88,7 @@
                         <td class="text-end">
                             <div class="btn-group btn-group-sm">
                                 <a href="{{ route('admin.vouchers.edit', $voucher) }}" class="btn btn-outline-primary" title="Sửa">
-                                    <i class="bi bi-pencil"></i>
+                                    <x-icon name="settings" />
                                 </a>
                                 <form method="POST" action="{{ route('admin.vouchers.destroy', $voucher) }}"
                                       onsubmit="return confirm('Bạn có chắc muốn xóa hoặc tạm ngừng mã giảm giá {{ $voucher->code }}?');"
@@ -96,7 +96,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-outline-danger" title="Xóa/Tạm ngừng">
-                                        <i class="bi bi-trash"></i>
+                                        <x-icon name="trash" />
                                     </button>
                                 </form>
                             </div>

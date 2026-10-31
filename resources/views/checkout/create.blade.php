@@ -36,7 +36,7 @@
             <div class="text-center position-relative z-1">
                 <a href="{{ route('cart.index') }}" class="text-decoration-none">
                     <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success text-white fw-bold shadow-sm" style="width: 36px; height: 36px; font-size: 0.9rem;">
-                        <i class="bi bi-check-lg"></i>
+                        <x-icon name="check" />
                     </div>
                     <div class="small fw-semibold mt-1 text-muted">Giỏ hàng</div>
                 </a>
@@ -63,7 +63,7 @@
             {{-- Thông tin giao hàng --}}
             <div class="card shadow-sm border mb-4" style="border-radius: var(--gh-radius);">
                 <div class="card-header bg-transparent py-3 border-bottom d-flex align-items-center gap-2" style="border-color: var(--gh-border) !important;">
-                    <i class="bi bi-geo-alt-fill text-danger fs-5"></i>
+                    <x-icon name="map-pin" class="text-danger fs-5" />
                     <h5 class="fw-bold mb-0" style="font-size: 1.05rem;">1. Thông tin người nhận hàng</h5>
                 </div>
                 <div class="card-body p-4">
@@ -106,7 +106,7 @@
             {{-- Phương thức thanh toán --}}
             <div class="card shadow-sm border mb-4" style="border-radius: var(--gh-radius);">
                 <div class="card-header bg-transparent py-3 border-bottom d-flex align-items-center gap-2" style="border-color: var(--gh-border) !important;">
-                    <i class="bi bi-credit-card-fill text-danger fs-5"></i>
+                    <x-icon name="credit-card" class="text-danger fs-5" />
                     <h5 class="fw-bold mb-0" style="font-size: 1.05rem;">2. Phương thức thanh toán</h5>
                 </div>
                 <div class="card-body p-4">
@@ -116,7 +116,7 @@
                             <input class="form-check-input mt-0 flex-shrink-0" type="radio" name="payment_method" id="pay_cod" value="COD" checked>
                             <div class="d-flex align-items-center justify-content-between flex-grow-1 payment-option-content">
                                 <div>
-                                    <div class="fw-bold"><i class="bi bi-cash-stack text-success me-2"></i>Thanh toán khi nhận hàng (COD)</div>
+                                    <div class="fw-bold"><x-icon name="wallet" class="text-success me-2" />Thanh toán khi nhận hàng (COD)</div>
                                     <div class="small text-muted">Nhận mô hình, kiểm tra hộp nguyên seal rồi mới thanh toán cho shipper.</div>
                                 </div>
                                 <span class="badge bg-secondary-subtle text-secondary small">Phổ biến</span>
@@ -129,7 +129,7 @@
                                    @checked(old('payment_method') === 'VIETQR')>
                             <div class="d-flex align-items-center justify-content-between flex-grow-1 payment-option-content">
                                 <div>
-                                    <div class="fw-bold"><i class="bi bi-qr-code-scan text-primary me-2"></i>VietQR Chuyển khoản (Sandbox)</div>
+                                    <div class="fw-bold"><x-icon name="scan-qr-code" class="text-primary me-2" />VietQR Chuyển khoản (Sandbox)</div>
                                     <div class="small text-muted">Quét mã QR chuyển khoản nhanh qua ứng dụng mọi ngân hàng tại Việt Nam.</div>
                                 </div>
                                 <span class="badge bg-primary-subtle text-primary small">Nhanh chóng</span>
@@ -142,7 +142,7 @@
                                    @checked(old('payment_method') === 'VNPAY')>
                             <div class="d-flex align-items-center justify-content-between flex-grow-1 payment-option-content">
                                 <div>
-                                    <div class="fw-bold"><i class="bi bi-shield-check text-info me-2"></i>Cổng thanh toán VNPay Sandbox</div>
+                                    <div class="fw-bold"><x-icon name="shield-check" class="text-info me-2" />Cổng thanh toán VNPay Sandbox</div>
                                     <div class="small text-muted">Mô phỏng thanh toán trực tuyến qua cổng VNPay điện tử.</div>
                                 </div>
                                 <span class="badge bg-info-subtle text-info small">Online</span>
@@ -159,12 +159,12 @@
             {{-- Mã giảm giá Voucher --}}
             <div class="card shadow-sm border mb-4" style="border-radius: var(--gh-radius);">
                 <div class="card-header bg-transparent py-3 border-bottom d-flex align-items-center gap-2" style="border-color: var(--gh-border) !important;">
-                    <i class="bi bi-ticket-perforated-fill text-danger fs-5"></i>
+                    <x-icon name="ticket" class="text-danger fs-5" />
                     <h5 class="fw-bold mb-0" style="font-size: 1.05rem;">3. Mã ưu đãi / Voucher</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="input-group">
-                        <span class="input-group-text bg-body-tertiary border-end-0"><i class="bi bi-tag text-muted"></i></span>
+                        <span class="input-group-text bg-body-tertiary border-end-0"><x-icon name="tag" class="text-muted" /></span>
                         <input type="text" name="voucher_code" value="{{ $code }}" placeholder="Nhập mã voucher (Ví dụ: GUNPLA10)..."
                                class="form-control text-uppercase @error('voucher_code') is-invalid @enderror">
                         <button type="submit" formaction="{{ route('checkout.voucher.apply') }}" formnovalidate
@@ -181,12 +181,12 @@
 
                     @if($voucher)
                         <div class="alert alert-success mt-3 py-2 px-3 small d-flex align-items-center mb-0">
-                            <i class="bi bi-check-circle-fill me-2 fs-6"></i>
+                            <x-icon name="circle-check" class="me-2 fs-6" />
                             <div>Đã áp dụng mã ưu đãi <strong>{{ $voucher->code }}</strong>: Giảm ngay <strong>{{ \App\Support\Money::format($discount) }}</strong>.</div>
                         </div>
                     @elseif($voucherError && ! $errors->has('voucher_code'))
                         <div class="alert alert-danger mt-3 py-2 px-3 small d-flex align-items-center mb-0">
-                            <i class="bi bi-exclamation-circle-fill me-2 fs-6"></i>
+                            <x-icon name="circle-x" class="me-2 fs-6" />
                             <div>{{ $voucherError }}</div>
                         </div>
                     @endif
@@ -261,13 +261,13 @@
                     </div>
 
                     <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2" style="font-size: 1.05rem;">
-                        <i class="bi bi-shield-lock-fill"></i>
+                        <x-icon name="lock" />
                         <span>Xác nhận & Hoàn tất đặt hàng</span>
                     </button>
 
                     <div class="text-center mt-3">
                         <a href="{{ route('cart.index') }}" class="text-muted small text-decoration-none">
-                            <i class="bi bi-chevron-left me-1"></i>Quay lại chỉnh sửa giỏ hàng
+                            <x-icon name="chevron-left" class="me-1" />Quay lại chỉnh sửa giỏ hàng
                         </a>
                     </div>
                 </div>

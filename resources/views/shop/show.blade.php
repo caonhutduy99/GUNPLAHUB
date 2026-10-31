@@ -67,7 +67,7 @@
                              class="img-fluid object-fit-contain" style="max-height: 420px; width: 100%;">
                     @else
                         <div class="text-muted d-flex flex-column align-items-center justify-content-center py-5">
-                            <i class="bi bi-box-seam fs-1 text-secondary opacity-50 mb-2"></i>
+                            <x-icon name="package-open" size="2.5rem" class="text-secondary opacity-50 mb-2" />
                             <span>Chưa có hình ảnh mô hình</span>
                         </div>
                     @endif
@@ -164,7 +164,7 @@
                             <button type="submit" name="buy_now" value="0" 
                                     class="btn btn-outline-danger btn-lg px-4 py-2 rounded-pill fw-bold flex-grow-1 shadow-sm d-flex align-items-center justify-content-center gap-2" 
                                     style="font-size: 0.95rem;">
-                                <i class="bi bi-cart-plus-fill"></i>
+                                <x-icon name="shopping-cart" />
                                 <span>Thêm vào giỏ hàng</span>
                             </button>
 
@@ -177,7 +177,7 @@
                                     @if($isWishlisted)
                                         @method('DELETE')
                                     @endif
-                                    <i class="bi {{ $isWishlisted ? 'bi-heart-fill text-danger' : 'bi-heart' }}" style="font-size: 1.25rem;"></i>
+                                    <x-icon name="heart" size="1.25rem" class="{{ $isWishlisted ? 'text-danger' : '' }}" />
                                 </button>
                             @endauth
                         </div>
@@ -186,13 +186,13 @@
                         <button type="submit" name="buy_now" value="1" 
                                 class="btn btn-danger btn-lg w-100 py-2 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2" 
                                 style="font-size: 1.05rem;">
-                            <i class="bi bi-bag-check-fill"></i>
+                            <x-icon name="shopping-cart" />
                             <span>Tiến hành mua hàng luôn</span>
                         </button>
 
                         @guest
                             <div class="form-text small text-muted mt-2">
-                                <i class="bi bi-info-circle me-1"></i>Bạn cần <a href="{{ route('login') }}" class="text-danger fw-semibold">đăng nhập</a> để mua hàng hoặc lưu vào giỏ.
+                                <x-icon name="info" class="me-1" />Bạn cần <a href="{{ route('login') }}" class="text-danger fw-semibold">đăng nhập</a> để mua hàng hoặc lưu vào giỏ.
                             </div>
                         @endguest
                     </form>
@@ -237,21 +237,21 @@
                 <div class="row g-2 pt-3 border-top" style="border-color: var(--gh-border) !important;">
                     <div class="col-sm-4">
                         <div class="p-2 border rounded-3 text-center bg-body-tertiary">
-                            <i class="bi bi-patch-check-fill text-danger fs-5 d-block mb-1"></i>
+                            <x-icon name="badge-check" size="1.25rem" class="text-danger d-block mb-1" />
                             <div class="small fw-semibold">100% Chính hãng</div>
                             <div class="text-muted" style="font-size: 0.72rem;">Nhập trực tiếp Bandai</div>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="p-2 border rounded-3 text-center bg-body-tertiary">
-                            <i class="bi bi-box-seam-fill text-primary fs-5 d-block mb-1"></i>
+                            <x-icon name="package-open" size="1.25rem" class="text-primary d-block mb-1" />
                             <div class="small fw-semibold">Đóng gói chuẩn</div>
                             <div class="text-muted" style="font-size: 0.72rem;">Bọc 3 lớp chống móp</div>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="p-2 border rounded-3 text-center bg-body-tertiary">
-                            <i class="bi bi-arrow-repeat text-success fs-5 d-block mb-1"></i>
+                            <x-icon name="refresh-cw" size="1.25rem" class="text-success d-block mb-1" />
                             <div class="small fw-semibold">Đổi trả 7 ngày</div>
                             <div class="text-muted" style="font-size: 0.72rem;">Nếu lỗi từ runner/hộp</div>
                         </div>
@@ -267,10 +267,10 @@
     <div class="mb-5">
         <div class="d-flex align-items-center justify-content-between mb-3">
             <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
-                <i class="bi bi-collection text-danger"></i> Sản phẩm cùng danh mục
+                <x-icon name="layout-grid" class="text-danger" /> Sản phẩm cùng danh mục
             </h5>
             <a href="{{ route('products.index', ['category_id' => $product->category_id]) }}" class="small text-decoration-none text-muted fw-semibold">
-                Xem thêm <i class="bi bi-chevron-right ms-1"></i>
+                Xem thêm <x-icon name="chevron-right" class="ms-1" />
             </a>
         </div>
         <div class="row g-3">

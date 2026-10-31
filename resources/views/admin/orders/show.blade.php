@@ -8,7 +8,7 @@
     <div class="d-flex align-items-center gap-2">
         @if($order->invoice)
             <a href="{{ route('admin.orders.invoice', $order) }}" class="btn btn-outline-dark btn-sm">
-                <i class="bi bi-receipt me-1"></i>Hóa đơn {{ $order->invoice->invoice_number }}
+                <x-icon name="receipt" class="me-1" />Hóa đơn {{ $order->invoice->invoice_number }}
             </a>
         @endif
         <span class="badge fs-6 text-bg-{{ $order->statusBadge() }}">{{ $order->status }}</span>

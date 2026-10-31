@@ -8,9 +8,9 @@
         <div class="card shadow-sm">
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Sửa mã giảm giá: <code class="text-primary">{{ $voucher->code }}</code></h4>
+                    <h4 class="mb-0"><x-icon name="settings" class="me-2" />Sửa mã giảm giá: <code class="text-primary">{{ $voucher->code }}</code></h4>
                     <a href="{{ route('admin.vouchers.index') }}" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-arrow-left me-1"></i>Quay lại
+                        <x-icon name="arrow-left" class="me-1" />Quay lại
                     </a>
                 </div>
 
@@ -79,7 +79,7 @@
 
                     <div class="mt-4 pt-2 border-top">
                         <button type="submit" class="btn btn-dark">
-                            <i class="bi bi-check-lg me-1"></i>Lưu thay đổi
+                            <x-icon name="check" class="me-1" />Lưu thay đổi
                         </button>
                         <a href="{{ route('admin.vouchers.index') }}" class="btn btn-outline-secondary ms-2">Hủy</a>
                     </div>

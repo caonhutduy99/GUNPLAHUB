@@ -25,7 +25,7 @@
                     <form method="POST" action="{{ route('payments.simulate', $order) }}" class="mt-3">
                         @csrf
                         <button type="submit" class="btn btn-success">
-                            <i class="bi bi-check-circle me-1"></i>Giả lập thanh toán thành công
+                            <x-icon name="circle-check" class="me-1" />Giả lập thanh toán thành công
                         </button>
                     </form>
                     <p class="small text-muted mt-2">Chỉ dùng được trong môi trường sandbox/demo.</p>

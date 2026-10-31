@@ -77,7 +77,7 @@
                class="form-control @error('price') is-invalid @enderror" required
                placeholder="Ví dụ: 350000">
         <div class="form-text text-danger" id="priceRuleNotice">
-            <i class="bi bi-shield-exclamation me-1"></i>Quy tắc: Giá bán phải lớn hơn hoặc bằng giá nhập.
+            <x-icon name="shield-alert" class="me-1" />Quy tắc: Giá bán phải lớn hơn hoặc bằng giá nhập.
         </div>
         @error('price')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -194,17 +194,17 @@
 
             if (price > 0 && cost > 0 && price < cost) {
                 notice.className = 'form-text text-danger fw-bold';
-                notice.innerHTML = '<i class="bi bi-x-circle-fill me-1"></i>LỖI: Giá bán (' + price.toLocaleString() + ' đ) đang THẤP HƠN giá nhập (' + cost.toLocaleString() + ' đ)!';
+                notice.innerHTML = '<span class="gh-icon me-1" style="--gh-icon-size: 1em; --gh-icon-url: url(\'/icons/circle-x.svg\');"></span>LỖI: Giá bán (' + price.toLocaleString() + ' đ) đang THẤP HƠN giá nhập (' + cost.toLocaleString() + ' đ)!';
                 priceInput.classList.add('is-invalid');
             } else if (price > 0 && cost > 0) {
                 var diff = price - cost;
                 var percent = cost > 0 ? Math.round((diff / cost) * 100) : 0;
                 notice.className = 'form-text text-success';
-                notice.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Hợp lệ. Chênh lệch lợi nhuận: +' + diff.toLocaleString() + ' đ (+' + percent + '%)';
+                notice.innerHTML = '<span class="gh-icon me-1" style="--gh-icon-size: 1em; --gh-icon-url: url(\'/icons/circle-check.svg\');"></span>Hợp lệ. Chênh lệch lợi nhuận: +' + diff.toLocaleString() + ' đ (+' + percent + '%)';
                 priceInput.classList.remove('is-invalid');
             } else {
                 notice.className = 'form-text text-muted';
-                notice.innerHTML = '<i class="bi bi-shield-check me-1"></i>Quy tắc: Giá bán phải lớn hơn hoặc bằng giá nhập.';
+                notice.innerHTML = '<span class="gh-icon me-1" style="--gh-icon-size: 1em; --gh-icon-url: url(\'/icons/shield-check.svg\');"></span>Quy tắc: Giá bán phải lớn hơn hoặc bằng giá nhập.';
                 priceInput.classList.remove('is-invalid');
             }
         }

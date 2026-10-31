@@ -49,7 +49,7 @@
                      style="transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
             @else
                 <div class="text-muted d-flex flex-column align-items-center justify-content-center text-center p-3">
-                    <i class="bi bi-box-seam fs-2 mb-1 text-secondary opacity-50"></i>
+                    <x-icon name="package-open" size="2rem" class="mb-1 text-secondary opacity-50" />
                     <span class="small text-muted">{{ $product->grade ? $product->grade . ' ' . $product->scale : $product->category->short_name }}</span>
                 </div>
             @endif
@@ -66,7 +66,7 @@
                     <button type="submit" 
                             class="btn-hover-action btn-hover-yellow shadow-lg"
                             title="Thêm vào giỏ hàng" aria-label="Thêm vào giỏ hàng">
-                        <i class="bi bi-cart-plus-fill"></i>
+                        <x-icon name="shopping-cart" />
                         <span>Thêm giỏ</span>
                     </button>
                 </form>
@@ -89,7 +89,7 @@
                     data-stock="{{ $product->stock_quantity }}"
                     data-detail-url="{{ route('products.show', $product) }}"
                     title="Xem nhanh chi tiết" aria-label="Xem nhanh chi tiết">
-                <i class="bi bi-eye-fill"></i>
+                <x-icon name="eye" />
                 <span>Xem nhanh</span>
             </button>
         </div>
@@ -135,7 +135,7 @@
                                 style="width: 32px; height: 32px;"
                                 title="{{ $inWishlist ? 'Bỏ thích' : 'Yêu thích' }}"
                                 aria-label="Yêu thích">
-                            <i class="bi {{ $inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart' }}" style="font-size: 0.85rem;"></i>
+                            <x-icon name="heart" size="0.85rem" class="{{ $inWishlist ? 'text-danger' : '' }}" />
                         </button>
                     </form>
                 @endif

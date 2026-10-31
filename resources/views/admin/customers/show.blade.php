@@ -18,8 +18,8 @@
         <div class="card shadow-sm mb-3">
             <div class="card-body">
                 <h6 class="mb-3">Hồ sơ khách hàng</h6>
-                <p class="mb-1"><i class="bi bi-envelope me-2"></i>{{ $customer->email }}</p>
-                <p class="mb-1"><i class="bi bi-telephone me-2"></i>{{ $customer->phone ?: '—' }}</p>
+                <p class="mb-1"><x-icon name="mail" class="me-2" />{{ $customer->email }}</p>
+                <p class="mb-1"><x-icon name="phone" class="me-2" />{{ $customer->phone ?: '—' }}</p>
                 <p class="mb-0 small text-muted">Đăng ký ngày {{ $customer->created_at->format('d/m/Y') }}</p>
 
                 @if($addresses->isNotEmpty())

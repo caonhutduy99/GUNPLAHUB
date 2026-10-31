@@ -8,7 +8,7 @@
     <div class="d-flex align-items-center gap-2">
         @if($order->invoice)
             <a href="{{ route('orders.invoice', $order) }}" class="btn btn-outline-dark btn-sm">
-                <i class="bi bi-receipt me-1"></i>Xem hóa đơn
+                <x-icon name="receipt" class="me-1" />Xem hóa đơn
             </a>
         @endif
         <span class="badge fs-6 text-bg-{{ $order->statusBadge() }}">{{ $order->status }}</span>

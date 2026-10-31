@@ -12,7 +12,7 @@
         <form method="GET" action="{{ $action }}" class="card shadow-sm border" style="border-radius: var(--gh-radius); position: sticky; top: 84px;">
             <div class="card-header bg-transparent py-3 border-bottom d-flex align-items-center justify-content-between" style="border-color: var(--gh-border) !important;">
                 <span class="fw-bold d-flex align-items-center gap-2" style="font-size: 0.95rem;">
-                    <i class="bi bi-funnel text-danger"></i> Bộ lọc tìm kiếm
+                    <x-icon name="funnel" class="text-danger" /> Bộ lọc tìm kiếm
                 </span>
                 @if(request()->hasAny(['q', 'brand_id', 'category_id', 'price_range', 'price_min', 'price_max', 'series', 'in_stock']))
                     <a href="{{ $action }}" class="badge bg-danger-subtle text-danger text-decoration-none border border-danger-subtle px-2 py-1">
@@ -26,7 +26,7 @@
                 <div class="mb-3">
                     <label class="form-label small fw-bold text-uppercase text-muted" style="letter-spacing: 0.05em; font-size: 0.75rem;">Từ khóa</label>
                     <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-body-tertiary border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <span class="input-group-text bg-body-tertiary border-end-0"><x-icon name="search" class="text-muted" /></span>
                         <input type="text" name="q" value="{{ request('q') }}" class="form-control border-start-0" placeholder="Tên hoặc Mã sản phẩm...">
                     </div>
                 </div>
@@ -121,7 +121,7 @@
 
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-dark btn-sm rounded-pill fw-semibold py-2">
-                        <i class="bi bi-check-lg me-1"></i> Áp dụng bộ lọc
+                        <x-icon name="check" class="me-1" /> Áp dụng bộ lọc
                     </button>
                     @if(request()->hasAny(['q', 'brand_id', 'category_id', 'price_range', 'price_min', 'price_max', 'series', 'in_stock']))
                         <a href="{{ $action }}" class="btn btn-outline-secondary btn-sm rounded-pill">
@@ -167,7 +167,7 @@
             @empty
                 <div class="col-12">
                     <div class="card border text-center p-5" style="border-radius: var(--gh-radius);">
-                        <i class="bi bi-box2 text-muted opacity-50 mb-3" style="font-size: 3rem;"></i>
+                        <x-icon name="box" size="3rem" class="text-muted opacity-50 mb-3" />
                         <h5 class="fw-bold mb-2">Không tìm thấy sản phẩm phù hợp</h5>
                         <p class="text-muted small mb-3">Vui lòng thử tìm với từ khóa khác hoặc bỏ bớt các tiêu chí lọc đang chọn.</p>
                         <div>

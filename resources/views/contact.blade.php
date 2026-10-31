@@ -5,7 +5,7 @@
 @section('content')
 <div class="mb-4">
     <h3 class="fw-bold mb-1" style="letter-spacing: -0.02em;">
-        <i class="bi bi-chat-dots-fill text-danger me-2"></i>Liên hệ & Hỗ trợ khách hàng
+        <x-icon name="send" class="text-danger me-2" />Liên hệ & Hỗ trợ khách hàng
     </h3>
     <p class="text-muted small mb-0">Chúng tôi sẵn sàng tư vấn và giải đáp mọi thắc mắc của Gunpla Builders.</p>
 </div>
@@ -21,12 +21,12 @@
                 </div>
                 <h4 class="fw-bold mb-3">{{ config('shop.name') }} Store</h4>
                 <p class="text-muted small mb-4">
-                    Hệ thống cung cấp mô hình Gunpla chính hãng Bandai Namco Nhật Bản, phụ kiện nâng cấp và dụng cụ lắp ráp chuyên nghiệp.
+                    Hệ thống cung cấp mô hình Gunpla chính hãng Bandai Namco Nhật Bản, phụ kiện nâng cấp và dụng cụ lắp ráp.
                 </p>
 
                 <div class="d-flex flex-column gap-3">
                     <div class="d-flex align-items-start gap-3 p-3 rounded-3 bg-body-tertiary border" style="border-color: var(--gh-border) !important;">
-                        <i class="bi bi-geo-alt-fill text-danger fs-5 mt-1"></i>
+                        <x-icon name="map-pin" class="text-danger fs-5 mt-1" />
                         <div>
                             <div class="small fw-bold text-uppercase text-muted" style="letter-spacing: 0.05em; font-size: 0.75rem;">Địa chỉ cửa hàng</div>
                             <div class="small fw-medium">{{ config('shop.address') ?: 'Hệ thống phân phối Gunpla chính hãng toàn quốc' }}</div>
@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="d-flex align-items-start gap-3 p-3 rounded-3 bg-body-tertiary border" style="border-color: var(--gh-border) !important;">
-                        <i class="bi bi-telephone-fill text-danger fs-5 mt-1"></i>
+                        <x-icon name="phone" class="text-danger fs-5 mt-1" />
                         <div>
                             <div class="small fw-bold text-uppercase text-muted" style="letter-spacing: 0.05em; font-size: 0.75rem;">Số điện thoại tư vấn</div>
                             <a href="tel:{{ preg_replace('/\D/', '', config('shop.phone')) }}" class="small fw-bold text-danger text-decoration-none fs-6">
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="d-flex align-items-start gap-3 p-3 rounded-3 bg-body-tertiary border" style="border-color: var(--gh-border) !important;">
-                        <i class="bi bi-envelope-fill text-danger fs-5 mt-1"></i>
+                        <x-icon name="mail" class="text-danger fs-5 mt-1" />
                         <div>
                             <div class="small fw-bold text-uppercase text-muted" style="letter-spacing: 0.05em; font-size: 0.75rem;">Email tiếp nhận</div>
                             <div class="small fw-medium">{{ config('shop.email') ?: 'contact@gunplahub.vn' }}</div>
@@ -105,7 +105,7 @@
 
                         <div class="col-12 pt-2">
                             <button type="submit" class="btn btn-danger btn-lg rounded-pill px-4 fw-semibold shadow-sm d-inline-flex align-items-center gap-2" style="font-size: 0.95rem;">
-                                <i class="bi bi-send-fill"></i>
+                                <x-icon name="send" />
                                 <span>Gửi tin nhắn liên hệ</span>
                             </button>
                         </div>

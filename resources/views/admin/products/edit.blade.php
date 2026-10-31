@@ -8,7 +8,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="mb-0">Sửa sản phẩm <code class="text-primary">{{ $product->sku }}</code></h4>
             <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left me-1"></i>Quay lại danh sách
+                <x-icon name="arrow-left" class="me-1" />Quay lại danh sách
             </a>
         </div>
 
@@ -19,7 +19,7 @@
 
             <div class="mt-4 pt-3 border-top">
                 <button type="submit" class="btn btn-dark">
-                    <i class="bi bi-check-lg me-1"></i>Lưu thay đổi
+                    <x-icon name="check" class="me-1" />Lưu thay đổi
                 </button>
                 <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary ms-2">Hủy</a>
             </div>
@@ -31,7 +31,7 @@
 <div class="card shadow-sm">
     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
         <h5 class="mb-0 text-dark">
-            <i class="bi bi-clock-history text-primary me-2"></i>Lịch sử thay đổi giá (Price History)
+            <x-icon name="refresh-cw" class="text-primary me-2" />Lịch sử thay đổi giá (Price History)
         </h5>
         <span class="badge bg-secondary-subtle text-secondary border">
             {{ $product->priceHistories->count() }} lượt ghi nhận
@@ -58,7 +58,7 @@
                     @endphp
                     <tr>
                         <td class="text-nowrap small">
-                            <i class="bi bi-calendar3 me-1 text-muted"></i>
+                            <x-icon name="calendar" class="me-1 text-muted" />
                             {{ $history->created_at->format('d/m/Y H:i') }}
                         </td>
                         <td>
@@ -94,7 +94,7 @@
                         </td>
                         <td class="small">
                             @if($history->user)
-                                <i class="bi bi-person-check text-success me-1"></i>{{ $history->user->full_name }}
+                                <x-icon name="badge-check" class="text-success me-1" />{{ $history->user->full_name }}
                             @else
                                 <span class="text-muted">Hệ thống</span>
                             @endif
@@ -106,7 +106,7 @@
                 @empty
                     <tr>
                         <td colspan="7" class="text-center py-4 text-muted">
-                            <i class="bi bi-info-circle me-1"></i>Chưa có lịch sử thay đổi giá nào được ghi nhận cho sản phẩm này.
+                            <x-icon name="info" class="me-1" />Chưa có lịch sử thay đổi giá nào được ghi nhận cho sản phẩm này.
                         </td>
                     </tr>
                 @endforelse
