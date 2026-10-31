@@ -4,7 +4,7 @@
     <div class="col-md-6">
         <label for="brand_id" class="form-label">Thương hiệu</label>
         <select id="brand_id" name="brand_id" class="form-select @error('brand_id') is-invalid @enderror" required>
-            <option value="">-- Chọn thương hiệu --</option>
+            <option value="">Chọn thương hiệu </option>
             @foreach($brands as $brand)
                 <option value="{{ $brand->id }}" data-code="{{ $brand->code }}"
                     @selected(old('brand_id', $editing ? $product->brand_id : '') == $brand->id)>
@@ -20,7 +20,7 @@
     <div class="col-md-6">
         <label for="category_id" class="form-label">Cấp độ / Loại sản phẩm</label>
         <select id="category_id" name="category_id" class="form-select @error('category_id') is-invalid @enderror" required>
-            <option value="">-- Chọn --</option>
+            <option value="">Chọn </option>
             @foreach($categories as $category)
                 <option value="{{ $category->id }}"
                     @selected(old('category_id', $editing ? $product->category_id : '') == $category->id)>
@@ -123,7 +123,7 @@
     <div class="col-md-6">
         <label for="scale" class="form-label">Tỷ lệ</label>
         <select id="scale" name="scale" class="form-select @error('scale') is-invalid @enderror">
-            <option value="">-- Không có --</option>
+            <option value="">Không có </option>
             @foreach(\App\Models\Product::SCALES as $scale)
                 <option value="{{ $scale }}" @selected(old('scale', $editing ? $product->scale : '') === $scale)>{{ $scale }}</option>
             @endforeach
@@ -170,8 +170,17 @@
         @if($editing && $product->images->isNotEmpty())
             <div class="d-flex flex-wrap gap-2 mt-2">
                 @foreach($product->images as $image)
-                    <img src="{{ $image->url }}" alt="" style="height: 80px; width: 80px; object-fit: contain;"
-                         class="border rounded bg-white p-1">
+                    <div class="position-relative">
+                        <img src="{{ $image->url }}" alt="" style="height: 80px; width: 80px; object-fit: contain;"
+                             class="border rounded bg-white p-1">
+                        <button type="button"
+                                class="btn btn-danger btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center position-absolute top-0 end-0 translate-middle"
+                                style="width: 24px; height: 24px; z-index: 2;"
+                                data-delete-image="{{ route('admin.products.images.destroy', [$product, $image]) }}"
+                                aria-label="Xóa ảnh" title="Xóa ảnh">
+                            <x-icon name="x" size="0.9rem" />
+                        </button>
+                    </div>
                 @endforeach
             </div>
             <div class="form-text">Ảnh mới sẽ được thêm vào bộ sưu tập hiện tại.</div>
@@ -182,6 +191,23 @@
 @push('scripts')
 <script>
     (function () {
+        document.querySelectorAll('[data-delete-image]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                if (!window.confirm('Bạn có chắc muốn xóa ảnh này?')) {
+                    return;
+                }
+
+                var form = document.createElement('form');
+                var token = document.querySelector('input[name="_token"]');
+                form.method = 'POST';
+                form.action = button.getAttribute('data-delete-image');
+                form.innerHTML = '<input type="hidden" name="_token" value="' + token.value + '">'
+                    + '<input type="hidden" name="_method" value="DELETE">';
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+
         // Kiểm tra quy tắc giá: giá bán >= giá nhập
         var costInput = document.getElementById('cost_price');
         var priceInput = document.getElementById('price');

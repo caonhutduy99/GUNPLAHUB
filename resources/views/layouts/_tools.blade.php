@@ -8,17 +8,19 @@
 @endphp
 <div class="d-flex align-items-center gap-1 text-white ms-auto">
     {{-- 1. Ô tìm kiếm --}}
-    <form class="position-relative d-flex align-items-center" method="GET" action="{{ route('products.index') }}">
-        <input class="form-control rounded-pill bg-dark-subtle border-secondary-subtle text-white pe-5" 
-               type="search" name="q"
-               value="{{ request()->routeIs('products.index') ? request('q') : '' }}"
-               placeholder="Tìm kiếm Gunpla, phụ kiện..."
-               style="width: 250px; min-height: 46px; font-size: 0.8rem; padding-left: 0.9rem;">
-        <button class="btn btn-link btn-sm text-white-50 position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0" 
-                type="submit" aria-label="Tìm kiếm">
-            <x-icon name="search" size="1rem" />
-        </button>
-    </form>
+    @unless($toolsIsAdmin)
+        <form class="position-relative d-flex align-items-center" method="GET" action="{{ route('products.index') }}">
+            <input class="form-control rounded-pill bg-dark-subtle border-secondary-subtle text-white pe-5"
+                   type="search" name="q"
+                   value="{{ request()->routeIs('products.index') ? request('q') : '' }}"
+                   placeholder="Tìm kiếm Gunpla, phụ kiện..."
+                   style="width: 250px; min-height: 46px; font-size: 0.8rem; padding-left: 0.9rem;">
+            <button class="btn btn-link btn-sm text-white-50 position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0"
+                    type="submit" aria-label="Tìm kiếm">
+                <x-icon name="search" size="1rem" />
+            </button>
+        </form>
+    @endunless
 
     {{-- 2. Biểu tượng Theme (trên) & Đơn hàng (dưới) --}}
     <div class="d-flex flex-column gap-1 align-items-center justify-content-center" style="height: 50px;">
@@ -88,7 +90,6 @@
             <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="border-radius: 12px; font-size: 0.9rem; z-index: 1060;">
                 @if($toolsIsAdmin)
                     <li><span class="dropdown-header text-uppercase small fw-bold">Quản trị viên</span></li>
-                    <li><a class="dropdown-item py-2" href="{{ route('admin.dashboard') }}"><x-icon name="layout-grid" class="me-2" />Bảng điều khiển</a></li>
                     <li><a class="dropdown-item py-2" href="{{ route('profile.show') }}"><x-icon name="user-round" class="me-2" />Tài khoản</a></li>
                 @else
                     <li><a class="dropdown-item py-2" href="{{ route('profile.show') }}"><x-icon name="user-round" class="me-2" />Tài khoản</a></li>

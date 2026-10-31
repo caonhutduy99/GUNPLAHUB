@@ -31,7 +31,7 @@
 <div class="card shadow-sm">
     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
         <h5 class="mb-0 text-dark">
-            <x-icon name="refresh-cw" class="text-primary me-2" />Lịch sử thay đổi giá (Price History)
+            <x-icon name="refresh-cw" class="text-primary me-2" />Lịch sử thay đổi giá
         </h5>
         <span class="badge bg-secondary-subtle text-secondary border">
             {{ $product->priceHistories->count() }} lượt ghi nhận

@@ -8,9 +8,11 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\PriceHistory;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Support\ValidationMessages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -192,6 +194,26 @@ class ProductController extends Controller
             ->with('success', 'Sản phẩm đã chuyển sang "Ngừng kinh doanh".');
     }
 
+    public function destroyImage(Product $product, ProductImage $image): RedirectResponse
+    {
+        abort_unless($image->product_sku === $product->sku, 404);
+
+        $wasPrimary = $product->image === $image->path;
+        $image->delete();
+
+        if (str_starts_with($image->path, 'images/products/') && File::exists(public_path($image->path))) {
+            File::delete(public_path($image->path));
+        }
+
+        if ($wasPrimary) {
+            $product->update(['image' => $product->images()->value('path')]);
+        }
+
+        AuditLog::record("Xóa ảnh sản phẩm {$product->sku}");
+
+        return back()->with('success', 'Đã xóa ảnh sản phẩm.');
+    }
+
     // ---------------- Hàm phụ ----------------
 
     private function categoryFrom(Request $request): ?Category
@@ -228,7 +250,7 @@ class ProductController extends Controller
             'scale' => [$requiredIfGunpla, Rule::in(Product::SCALES)],
             'series' => [$requiredIfGunpla, 'string', 'max:50'],
             'status' => ['required', Rule::in(Product::STATUSES)],
-            'images' => ['nullable', 'array', 'max:8'],
+            'images' => ['nullable', 'array', 'max:'.max(0, 8 - ($product?->images()->count() ?? 0))],
             'images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }

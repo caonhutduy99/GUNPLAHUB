@@ -470,16 +470,24 @@
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
-                <li class="nav-item">
-                    <a class="nav-link gh-nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
-                        Trang chủ
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link gh-nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                        Cửa hàng
-                    </a>
-                </li>
+                @if($isAdmin)
+                    <li class="nav-item">
+                        <a class="nav-link gh-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                            <x-icon name="layout-grid" class="me-1" />Quản trị
+                        </a>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a class="nav-link gh-nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
+                            Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link gh-nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
+                            Cửa hàng
+                        </a>
+                    </li>
+                @endif
                 @unless($isAdmin)
                     <li class="nav-item">
                         <a class="nav-link gh-nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
@@ -625,7 +633,7 @@
                     <span class="text-body">GUNPLA</span><span class="text-danger">HUB</span>
                     <span class="gh-brand-badge">STORE</span>
                 </a>
-                <p class="text-muted small mb-3 lh-base">
+                <p class="text-muted small mb-3 lh-base text-justify" style="text-align: justify;">
                     GunplaHub chuyên cung cấp các dòng mô hình Gundam chính hãng Bandai Namco Nhật Bản, phụ kiện nâng cấp và dụng cụ lắp ráp cho Builder tại Việt Nam.
                 </p>
                 <div class="small text-muted mb-2">

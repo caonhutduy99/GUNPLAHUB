@@ -21,6 +21,14 @@
                         <span class="badge text-bg-success"><x-icon name="badge-check" class="me-1" />Khách hàng thành viên</span>
                     @endif
 
+                    @if($user->isAdmin())
+                        <div class="mt-3">
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-dark btn-sm w-100">
+                                <x-icon name="layout-grid" class="me-1" />Bảng điều khiển
+                            </a>
+                        </div>
+                    @endif
+
                     @if($user->is_blacklisted)
                         <span class="badge text-bg-dark ms-1">Hạn chế đặt hàng</span>
                     @endif

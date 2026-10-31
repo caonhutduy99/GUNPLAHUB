@@ -96,6 +96,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('orders/{order}/transition', [AdminOrderController::class, 'transition'])->whereNumber('order')->name('orders.transition');
     Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('products', ProductController::class)->except('show');
+    Route::delete('products/{product}/images/{image}', [ProductController::class, 'destroyImage'])
+        ->whereNumber('image')
+        ->name('products.images.destroy');
     Route::resource('brands', BrandController::class)->except('show');
     Route::resource('vouchers', VoucherController::class)->except('show');
     Route::get('contacts', [ContactMessageController::class, 'index'])->name('contacts.index');

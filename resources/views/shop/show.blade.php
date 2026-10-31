@@ -13,6 +13,18 @@
         border-color: var(--gh-primary);
         box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.2);
     }
+    .product-gallery-control {
+        width: 36px;
+        height: 36px;
+        border: 0;
+        background: rgba(7, 16, 31, 0.72);
+        color: #fff;
+        opacity: 0.85;
+    }
+    .product-gallery-control:hover {
+        opacity: 1;
+        background: var(--gh-primary);
+    }
     .stock-pulse {
         display: inline-block; width: 8px; height: 8px; border-radius: 50%;
         background-color: #10b981; margin-right: 6px;
@@ -71,6 +83,16 @@
                             <span>Chưa có hình ảnh mô hình</span>
                         </div>
                     @endif
+                    @if($product->images->count() > 1)
+                        <button type="button" class="product-gallery-control rounded-circle position-absolute top-50 start-0 translate-middle-y ms-2 d-inline-flex align-items-center justify-content-center"
+                                data-gallery-direction="-1" aria-label="Xem ảnh trước">
+                            <x-icon name="chevron-left" />
+                        </button>
+                        <button type="button" class="product-gallery-control rounded-circle position-absolute top-50 end-0 translate-middle-y me-2 d-inline-flex align-items-center justify-content-center"
+                                data-gallery-direction="1" aria-label="Xem ảnh tiếp theo">
+                            <x-icon name="chevron-right" />
+                        </button>
+                    @endif
                 </div>
 
                 {{-- Bộ sưu tập ảnh nhỏ (Thumbnails) --}}
@@ -78,7 +100,8 @@
                     <div class="d-flex flex-wrap gap-2 mt-3 justify-content-center">
                         @foreach($product->images as $index => $image)
                             <button type="button" class="product-thumb-btn {{ $index === 0 ? 'active' : '' }}"
-                                    data-image-url="{{ $image->url }}" aria-label="Xem ảnh {{ $index + 1 }}">
+                                    data-image-url="{{ $image->url }}" data-image-index="{{ $index }}"
+                                    aria-label="Xem ảnh {{ $index + 1 }}">
                                 <img src="{{ $image->url }}" alt="" class="w-100 h-100 object-fit-contain">
                             </button>
                         @endforeach
@@ -236,24 +259,21 @@
                 {{-- Cam kết của GunplaHub dành cho Builder --}}
                 <div class="row g-2 pt-3 border-top" style="border-color: var(--gh-border) !important;">
                     <div class="col-sm-4">
-                        <div class="p-2 border rounded-3 text-center bg-body-tertiary">
-                            <x-icon name="badge-check" size="1.25rem" class="text-danger d-block mb-1" />
-                            <div class="small fw-semibold">100% Chính hãng</div>
-                            <div class="text-muted" style="font-size: 0.72rem;">Nhập trực tiếp Bandai</div>
+                        <div class="p-2 border rounded-3 bg-body-tertiary d-flex align-items-center gap-2 text-start">
+                            <x-icon name="badge-check" size="1.25rem" class="text-danger flex-shrink-0" />
+                            <div><div class="small fw-semibold">100% Chính hãng</div><div class="text-muted" style="font-size: 0.72rem;">Nhập trực tiếp Bandai</div></div>
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <div class="p-2 border rounded-3 text-center bg-body-tertiary">
-                            <x-icon name="package-open" size="1.25rem" class="text-primary d-block mb-1" />
-                            <div class="small fw-semibold">Đóng gói chuẩn</div>
-                            <div class="text-muted" style="font-size: 0.72rem;">Bọc 3 lớp chống móp</div>
+                        <div class="p-2 border rounded-3 bg-body-tertiary d-flex align-items-center gap-2 text-start">
+                            <x-icon name="package-open" size="1.25rem" class="text-primary flex-shrink-0" />
+                            <div><div class="small fw-semibold">Đóng gói chuẩn</div><div class="text-muted" style="font-size: 0.72rem;">Bọc 3 lớp chống móp</div></div>
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <div class="p-2 border rounded-3 text-center bg-body-tertiary">
-                            <x-icon name="refresh-cw" size="1.25rem" class="text-success d-block mb-1" />
-                            <div class="small fw-semibold">Đổi trả 7 ngày</div>
-                            <div class="text-muted" style="font-size: 0.72rem;">Nếu lỗi từ runner/hộp</div>
+                        <div class="p-2 border rounded-3 bg-body-tertiary d-flex align-items-center gap-2 text-start">
+                            <x-icon name="refresh-cw" size="1.25rem" class="text-success flex-shrink-0" />
+                            <div><div class="small fw-semibold">Đổi trả 7 ngày</div><div class="text-muted" style="font-size: 0.72rem;">Nếu lỗi từ runner/hộp</div></div>
                         </div>
                     </div>
                 </div>
@@ -286,15 +306,36 @@
 
 @push('scripts')
 <script>
-    document.querySelectorAll('.product-thumb-btn').forEach(function (button) {
-        button.addEventListener('click', function () {
-            document.querySelectorAll('.product-thumb-btn').forEach(function(b) { b.classList.remove('active'); });
-            button.classList.add('active');
-            var img = document.getElementById('productImagePreview');
-            if (img) {
-                img.src = button.dataset.imageUrl;
+    (function () {
+        var thumbnails = Array.prototype.slice.call(document.querySelectorAll('.product-thumb-btn'));
+        var preview = document.getElementById('productImagePreview');
+
+        function showImage(index) {
+            if (!preview || thumbnails.length === 0) {
+                return;
             }
+
+            var normalizedIndex = (index + thumbnails.length) % thumbnails.length;
+            var button = thumbnails[normalizedIndex];
+            thumbnails.forEach(function (thumbnail) { thumbnail.classList.remove('active'); });
+            button.classList.add('active');
+            preview.src = button.dataset.imageUrl;
+        }
+
+        thumbnails.forEach(function (button) {
+            button.addEventListener('click', function () {
+                showImage(parseInt(button.dataset.imageIndex, 10));
+            });
         });
-    });
+
+        document.querySelectorAll('[data-gallery-direction]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var activeIndex = thumbnails.findIndex(function (thumbnail) {
+                    return thumbnail.classList.contains('active');
+                });
+                showImage(activeIndex + parseInt(button.dataset.galleryDirection, 10));
+            });
+        });
+    })();
 </script>
 @endpush

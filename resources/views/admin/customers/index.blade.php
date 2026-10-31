@@ -18,7 +18,7 @@
     </div>
     <div class="col-md-3">
         <select name="status" class="form-select">
-            <option value="">-- Tất cả --</option>
+            <option value="">Tất cả</option>
             <option value="normal" @selected(request('status') === 'normal')>Đang hoạt động</option>
             <option value="blacklist" @selected(request('status') === 'blacklist')>Trong Blacklist</option>
         </select>

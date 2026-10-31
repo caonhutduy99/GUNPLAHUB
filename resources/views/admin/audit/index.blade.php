@@ -12,7 +12,7 @@
     </div>
     <div class="col-md-3">
         <select name="user_id" class="form-select">
-            <option value="">-- Tất cả người dùng --</option>
+            <option value="">Tất cả người dùng</option>
             @foreach($users as $user)
                 <option value="{{ $user->id }}" @selected(request('user_id') == $user->id)>
                     {{ $user->full_name }}{{ $user->role === 'admin' ? ' (admin)' : '' }}

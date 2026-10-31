@@ -18,7 +18,7 @@
     </div>
     <div class="col-md-4">
         <select name="status" class="form-select">
-            <option value="">-- Tất cả trạng thái --</option>
+            <option value="">Tất cả trạng thái</option>
             @foreach($statuses as $status)
                 <option value="{{ $status }}" @selected(request('status') === $status)>{{ $status }}</option>
             @endforeach

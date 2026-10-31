@@ -6,7 +6,7 @@
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
         <h3 class="fw-bold mb-1" style="letter-spacing: -0.02em;">
-            <x-icon name="layout-grid" class="text-danger me-2" />Bảng điều khiển Quản trị
+            <x-icon name="layout-grid" class="text-danger me-2" />Quản trị cửa hàng 
         </h3>
         <p class="text-muted small mb-0">Tổng quan tình hình kinh doanh và các tác vụ vận hành cửa hàng.</p>
     </div>
@@ -14,78 +14,20 @@
         <span class="badge bg-body-tertiary text-muted border px-3 py-2 small">
             <x-icon name="calendar" class="me-1" />{{ now()->format('d/m/Y - H:i') }}
         </span>
-        <a href="{{ route('home') }}" class="btn btn-outline-dark btn-sm rounded-pill px-3" target="_blank">
-            <x-icon name="move-right" class="me-1" />Xem Storefront
-        </a>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ route('home') }}" class="btn btn-outline-dark btn-sm rounded-pill px-3" target="_blank">
+                <x-icon name="house" class="me-1" />Xem trang chủ
+            </a>
+            <a href="{{ route('products.index') }}" class="btn btn-outline-dark btn-sm rounded-pill px-3" target="_blank">
+                <x-icon name="move-right" class="me-1" />Xem cửa hàng
+            </a>
+        </div>
     </div>
 </div>
 
 {{-- Các chỉ số tổng quan (Stat Cards) --}}
 <div class="row g-3 mb-4">
-    {{-- Khách hàng --}}
-    <div class="col-6 col-lg-3">
-        <div class="card h-100 shadow-sm border p-3" style="border-radius: var(--gh-radius);">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="small text-muted fw-bold text-uppercase" style="letter-spacing: 0.05em; font-size: 0.72rem;">Khách hàng</span>
-                <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary-subtle text-primary" style="width: 36px; height: 36px;">
-                    <x-icon name="user-round" />
-                </div>
-            </div>
-            <div class="display-6 fw-bold mb-1" style="font-size: 2rem;">{{ number_format($userCount) }}</div>
-            <div class="small text-muted">Tài khoản đăng ký</div>
-        </div>
-    </div>
-
-    {{-- Sản phẩm --}}
-    <div class="col-6 col-lg-3">
-        <div class="card h-100 shadow-sm border p-3" style="border-radius: var(--gh-radius);">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="small text-muted fw-bold text-uppercase" style="letter-spacing: 0.05em; font-size: 0.72rem;">Sản phẩm</span>
-                <div class="rounded-circle d-flex align-items-center justify-content-center bg-info-subtle text-info-emphasis" style="width: 36px; height: 36px;">
-                    <x-icon name="package-open" />
-                </div>
-            </div>
-            <div class="display-6 fw-bold mb-1" style="font-size: 2rem;">{{ number_format($productCount) }}</div>
-            <div class="small text-muted">Mô hình & phụ kiện</div>
-        </div>
-    </div>
-
-    {{-- Tổng số Đơn hàng --}}
-    <div class="col-6 col-lg-3">
-        <div class="card h-100 shadow-sm border p-3" style="border-radius: var(--gh-radius);">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="small text-muted fw-bold text-uppercase" style="letter-spacing: 0.05em; font-size: 0.72rem;">Tổng đơn hàng</span>
-                <div class="rounded-circle d-flex align-items-center justify-content-center bg-success-subtle text-success" style="width: 36px; height: 36px;">
-                    <x-icon name="receipt" />
-                </div>
-            </div>
-            <div class="display-6 fw-bold mb-1" style="font-size: 2rem;">{{ number_format($orderCount) }}</div>
-            <div class="small text-muted">Đơn đã ghi nhận</div>
-        </div>
-    </div>
-
-    {{-- Đơn cần xử lý --}}
-    <div class="col-6 col-lg-3">
-        <a href="{{ route('admin.orders.index') }}" class="text-decoration-none">
-            <div class="card h-100 shadow-sm border p-3 {{ $pendingCount > 0 ? 'border-danger bg-danger-subtle bg-opacity-10' : '' }}" style="border-radius: var(--gh-radius);">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="small fw-bold text-uppercase {{ $pendingCount > 0 ? 'text-danger' : 'text-muted' }}" style="letter-spacing: 0.05em; font-size: 0.72rem;">Đơn cần duyệt</span>
-                    <div class="rounded-circle d-flex align-items-center justify-content-center {{ $pendingCount > 0 ? 'bg-danger text-white' : 'bg-body-secondary text-muted' }}" style="width: 36px; height: 36px;">
-                        <x-icon name="triangle-alert" />
-                    </div>
-                </div>
-                <div class="display-6 fw-bold mb-1 {{ $pendingCount > 0 ? 'text-danger' : 'text-body' }}" style="font-size: 2rem;">
-                    {{ number_format($pendingCount) }}
-                </div>
-                <div class="small {{ $pendingCount > 0 ? 'text-danger fw-semibold' : 'text-muted' }}">
-                    {{ $pendingCount > 0 ? 'Cần xử lý ngay →' : 'Đã xử lý hết' }}
-                </div>
-            </div>
-        </a>
-    </div>
-</div>
-
-{{-- Khối Thống kê Doanh thu --}}
+    {{-- Khối Thống kê Doanh thu --}}
 <div class="row g-3 mb-4">
     <div class="col-md-6">
         <div class="card shadow-sm border p-4" style="border-radius: var(--gh-radius);">
@@ -115,6 +57,70 @@
         </a>
     </div>
 </div>
+    
+{{-- Đơn cần xử lý --}}
+    <div class="col-6 col-lg-3">
+        <a href="{{ route('admin.orders.index') }}" class="text-decoration-none">
+            <div class="card h-100 shadow-sm border p-3 {{ $pendingCount > 0 ? 'border-danger bg-danger-subtle bg-opacity-10' : '' }}" style="border-radius: var(--gh-radius);">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="small fw-bold text-uppercase {{ $pendingCount > 0 ? 'text-danger' : 'text-muted' }}" style="letter-spacing: 0.05em; font-size: 0.72rem;">Đơn cần duyệt</span>
+                    <div class="rounded-circle d-flex align-items-center justify-content-center {{ $pendingCount > 0 ? 'bg-danger text-white' : 'bg-body-secondary text-muted' }}" style="width: 36px; height: 36px;">
+                        <x-icon name="triangle-alert" />
+                    </div>
+                </div>
+                <div class="display-6 fw-bold mb-1 {{ $pendingCount > 0 ? 'text-danger' : 'text-body' }}" style="font-size: 2rem;">
+                    {{ number_format($pendingCount) }}
+                </div>
+                <div class="small {{ $pendingCount > 0 ? 'text-danger fw-semibold' : 'text-muted' }}">
+                    {{ $pendingCount > 0 ? 'Cần xử lý ngay →' : 'Đã xử lý hết' }}
+                </div>
+            </div>
+        </a>
+    </div>
+
+    {{-- Sản phẩm --}}
+    <div class="col-6 col-lg-3">
+        <div class="card h-100 shadow-sm border p-3" style="border-radius: var(--gh-radius);">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="small text-muted fw-bold text-uppercase" style="letter-spacing: 0.05em; font-size: 0.72rem;">Sản phẩm</span>
+                <div class="rounded-circle d-flex align-items-center justify-content-center bg-info-subtle text-info-emphasis" style="width: 36px; height: 36px;">
+                    <x-icon name="package-open" />
+                </div>
+            </div>
+            <div class="display-6 fw-bold mb-1" style="font-size: 2rem;">{{ number_format($productCount) }}</div>
+            <div class="small text-muted">Mô hình & phụ kiện</div>
+        </div>
+    </div>
+
+    {{-- Khách hàng --}}
+    <div class="col-6 col-lg-3">
+        <div class="card h-100 shadow-sm border p-3" style="border-radius: var(--gh-radius);">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="small text-muted fw-bold text-uppercase" style="letter-spacing: 0.05em; font-size: 0.72rem;">Khách hàng</span>
+                <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary-subtle text-primary" style="width: 36px; height: 36px;">
+                    <x-icon name="user-round" />
+                </div>
+            </div>
+            <div class="display-6 fw-bold mb-1" style="font-size: 2rem;">{{ number_format($userCount) }}</div>
+            <div class="small text-muted">Tài khoản đăng ký</div>
+        </div>
+    </div>
+
+    {{-- Tổng số Đơn hàng --}}
+    <div class="col-6 col-lg-3">
+        <div class="card h-100 shadow-sm border p-3" style="border-radius: var(--gh-radius);">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="small text-muted fw-bold text-uppercase" style="letter-spacing: 0.05em; font-size: 0.72rem;">Tổng đơn hàng</span>
+                <div class="rounded-circle d-flex align-items-center justify-content-center bg-success-subtle text-success" style="width: 36px; height: 36px;">
+                    <x-icon name="receipt" />
+                </div>
+            </div>
+            <div class="display-6 fw-bold mb-1" style="font-size: 2rem;">{{ number_format($orderCount) }}</div>
+            <div class="small text-muted">Đơn đã ghi nhận</div>
+        </div>
+    </div>
+</div>
+
 
 {{-- Các lối tắt quản trị (Quick Actions) --}}
 <div class="card shadow-sm border mb-4" style="border-radius: var(--gh-radius);">

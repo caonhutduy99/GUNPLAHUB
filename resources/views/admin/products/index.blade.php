@@ -14,7 +14,7 @@
     </div>
     <div class="col-md-2">
         <select name="brand_id" class="form-select">
-            <option value="">-- Thương hiệu --</option>
+            <option value="">Thương hiệu</option>
             @foreach($brands as $brand)
                 <option value="{{ $brand->id }}" @selected(request('brand_id') == $brand->id)>{{ $brand->name }}</option>
             @endforeach
@@ -22,7 +22,7 @@
     </div>
     <div class="col-md-3">
         <select name="category_id" class="form-select">
-            <option value="">-- Cấp độ / Loại --</option>
+            <option value="">Cấp độ / Loại</option>
             @foreach($categories as $category)
                 <option value="{{ $category->id }}" @selected(request('category_id') == $category->id)>{{ $category->name }}</option>
             @endforeach
@@ -30,7 +30,7 @@
     </div>
     <div class="col-md-2">
         <select name="status" class="form-select">
-            <option value="">-- Trạng thái --</option>
+            <option value="">Trạng thái</option>
             @foreach(\App\Models\Product::STATUSES as $status)
                 <option value="{{ $status }}" @selected(request('status') === $status)>{{ $status }}</option>
             @endforeach

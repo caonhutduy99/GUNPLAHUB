@@ -23,7 +23,7 @@
             </div>
             <div class="col-md-4">
                 <select name="status" class="form-select" onchange="this.form.submit()">
-                    <option value="">-- Tất cả trạng thái --</option>
+                    <option value="">Tất cả trạng thái</option>
                     <option value="active" @selected(request('status') === 'active')>Đang áp dụng</option>
                     <option value="expired" @selected(request('status') === 'expired')>Hết hạn</option>
                     <option value="depleted" @selected(request('status') === 'depleted')>Hết lượt</option>
