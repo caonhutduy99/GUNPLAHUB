@@ -309,6 +309,13 @@
             color: #07101f !important;
             background: var(--gh-soft);
         }
+        .gh-account-tools {
+            width: 150px;
+        }
+        .gh-account-tools > a,
+        .gh-account-tools > button {
+            width: 100%;
+        }
         .gh-commitments {
             background: rgba(7, 11, 22, 0.98);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -465,18 +472,18 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
                 <li class="nav-item">
                     <a class="nav-link gh-nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
-                        <x-icon name="house" class="me-1" />Trang chủ
+                        Trang chủ
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link gh-nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                        <x-icon name="layout-grid" class="me-1" />Cửa hàng
+                        Cửa hàng
                     </a>
                 </li>
                 @unless($isAdmin)
                     <li class="nav-item">
                         <a class="nav-link gh-nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
-                            <x-icon name="send" class="me-1" />Liên hệ
+                            Liên hệ
                         </a>
                     </li>
                 @endunless

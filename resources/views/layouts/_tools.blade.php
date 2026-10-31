@@ -13,7 +13,7 @@
                type="search" name="q"
                value="{{ request()->routeIs('products.index') ? request('q') : '' }}"
                placeholder="Tìm kiếm Gunpla, phụ kiện..."
-               style="width: 240px; min-height: 46px; font-size: 0.75rem; padding-left: 0.9rem;">
+               style="width: 250px; min-height: 46px; font-size: 0.8rem; padding-left: 0.9rem;">
         <button class="btn btn-link btn-sm text-white-50 position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0" 
                 type="submit" aria-label="Tìm kiếm">
             <x-icon name="search" size="1rem" />
@@ -63,7 +63,7 @@
 
     {{-- 3. Tài khoản --}}
     @guest
-        <div class="d-flex flex-column gap-1 justify-content-center flex-shrink-0" style="height: 50px;">
+        <div class="gh-account-tools d-flex flex-column gap-1 justify-content-center flex-shrink-0" style="height: 50px;">
             <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm rounded-pill px-2 py-1 text-center" style="font-size: 0.8rem; line-height: 1.1;">
                 <x-icon name="user-round" class="me-1" />Đăng nhập
             </a>
@@ -72,10 +72,10 @@
             </a>
         </div>
     @else
-        <div class="dropdown flex-shrink-0">
+        <div class="gh-account-tools dropdown flex-shrink-0">
             <button class="btn btn-outline-light rounded-3 px-3 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm text-start" 
                     type="button" data-bs-toggle="dropdown" aria-expanded="false" 
-                    style="height: 50px; min-width: 120px;">
+                    style="height: 50px; width: 150px;">
                 <div class="rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center flex-shrink-0" style="width: 29px; height: 29px;">
                     <x-icon name="{{ $toolsIsAdmin ? 'lock' : 'user-round' }}" size="1.25rem" />
                 </div>
