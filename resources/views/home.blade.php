@@ -66,20 +66,23 @@
     .brand-logo {
         display: inline-flex;
         align-items: center;
-        min-height: 34px;
-        padding: 0.35rem 0.6rem;
+        justify-content: center;
+        width: 76px;
+        height: 54px;
+        padding: 0.4rem;
         border-radius: 0.45rem;
-        background: rgba(255, 255, 255, 0.14);
-        color: #fff;
-        font-size: 0.72rem;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        white-space: nowrap;
+        background: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.75);
+        box-shadow: 0 4px 12px rgba(7, 21, 70, 0.18);
     }
-    .brand-logo-bandai { color: #8bd3ff; border: 1px solid #1687d9; }
-    .brand-logo-motor { color: #ff9a76; border: 1px solid #ff5500; }
-    .brand-logo-inera { color: #a7ffcf; border: 1px solid #00c853; }
-    .brand-logo-koto { color: #d7c2ff; border: 1px solid #a78bfa; }
+    .brand-logo img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
     
     .grade-chip {
         display: inline-flex; align-items: center; gap: 0.4rem;
@@ -123,10 +126,21 @@
             <div class="brand-showcase d-inline-block text-start p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-15 backdrop-blur">
                 <div class="small text-white-50 text-uppercase fw-bold mb-2" style="letter-spacing: 0.08em; font-size: 0.7rem;">Thương hiệu nổi bật</div>
                 <div class="d-flex flex-wrap gap-2 justify-content-end">
-                    <span class="brand-logo brand-logo-bandai">BANDAI</span>
-                    <span class="brand-logo brand-logo-motor">MOTOR NUCLEAR</span>
-                    <span class="brand-logo brand-logo-inera">INERA+</span>
-                    <span class="brand-logo brand-logo-koto">KOTOBUKIYA</span>
+                    <span class="brand-logo" title="Bandai Spirits">
+                        <img src="{{ asset('logos/bandaispirits.svg') }}" alt="Bandai Spirits">
+                    </span>
+                    <span class="brand-logo" title="Motor Nuclear">
+                        <img src="{{ asset('logos/motornuclear.svg') }}" alt="Motor Nuclear">
+                    </span>
+                    <span class="brand-logo" title="Blokees">
+                        <img src="{{ asset('logos/Blokees.svg') }}" alt="Blokees">
+                    </span>
+                    <span class="brand-logo" title="Daban Model">
+                        <img src="{{ asset('logos/dabanmodel.svg') }}" alt="Daban Model">
+                    </span>
+                    <span class="brand-logo" title="Moshow Toy">
+                        <img src="{{ asset('logos/moshowtoy.svg') }}" alt="Moshow Toy">
+                    </span>
                 </div>
             </div>
         </div>
