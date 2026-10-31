@@ -4,7 +4,8 @@
     $isCustomer = auth()->check() && ! auth()->user()->isAdmin();
     $inWishlist = $isCustomer && auth()->user()->wishlistItems()->where('product_sku', $product->sku)->exists();
 @endphp
-<div class="card h-100 card-product border position-relative d-flex flex-column overflow-hidden" 
+<div class="card h-100 card-product border position-relative d-flex flex-column overflow-hidden product-card-link"
+     data-product-url="{{ route('products.show', $product) }}"
      style="border-radius: 14px; transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;">
     
     {{-- Khung hiển thị ảnh với hiệu ứng zoom và popup thao tác nhanh --}}
@@ -57,7 +58,7 @@
 
         {{-- Popup nổi khi đưa chuột vào (Hover Actions) --}}
         <div class="product-hover-overlay position-absolute top-50 start-50 translate-middle d-flex align-items-center gap-2 z-3">
-            {{-- Ô màu vàng: Thêm vào giỏ hàng --}}
+            {{-- Nút thêm vào giỏ hàng --}}
             @if($product->status === 'Còn hàng' && $product->stock_quantity > 0)
                 <form method="POST" action="{{ route('cart.add') }}" class="d-inline">
                     @csrf
@@ -66,13 +67,12 @@
                     <button type="submit" 
                             class="btn-hover-action btn-hover-yellow shadow-lg"
                             title="Thêm vào giỏ hàng" aria-label="Thêm vào giỏ hàng">
-                        <x-icon name="shopping-cart" />
-                        <span>Thêm giỏ</span>
+                        <x-icon name="shopping-cart" size="1.5rem" />
                     </button>
                 </form>
             @endif
 
-            {{-- Ô màu hồng: Xem nhanh trang chi tiết mà không cần bấm vào sản phẩm --}}
+            {{-- Nút xem nhanh --}}
             <button type="button" 
                     class="btn-hover-action btn-hover-pink shadow-lg btn-quick-view"
                     data-bs-toggle="modal"
@@ -89,8 +89,7 @@
                     data-stock="{{ $product->stock_quantity }}"
                     data-detail-url="{{ route('products.show', $product) }}"
                     title="Xem nhanh chi tiết" aria-label="Xem nhanh chi tiết">
-                <x-icon name="eye" />
-                <span>Xem nhanh</span>
+                <x-icon name="eye" size="1.5rem" />
             </button>
         </div>
     </div>
@@ -119,7 +118,7 @@
         {{-- Giá và nút bấm hành động --}}
         <div class="mt-auto pt-2 border-top d-flex align-items-center justify-content-between" style="border-color: var(--gh-border) !important;">
             <div>
-                <span class="text-danger fw-bold" style="font-size: 1.05rem; letter-spacing: -0.01em;">
+                <span class="product-price fw-bold" style="font-size: 1.05rem; letter-spacing: -0.01em;">
                     {{ \App\Support\Money::format($product->price) }}
                 </span>
             </div>
@@ -140,9 +139,6 @@
                     </form>
                 @endif
 
-                <a href="{{ route('products.show', $product) }}" class="btn btn-outline-dark btn-sm rounded-pill px-3 py-1" style="font-size: 0.8rem; font-weight: 600;">
-                    Xem
-                </a>
             </div>
         </div>
     </div>

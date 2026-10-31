@@ -136,7 +136,7 @@
     {{-- Danh sách sản phẩm & Toolbar sắp xếp --}}
     <div class="col-lg-9">
         {{-- Toolbar phía trên --}}
-        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 p-3 bg-body rounded-3 border" style="border-color: var(--gh-border) !important;">
+        <div class="shop-sort-toolbar d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 p-3 rounded-3 border">
             <div class="d-flex align-items-center gap-2">
                 @if(request('q'))
                     <span class="small text-muted">Kết quả cho: <strong>"{{ request('q') }}"</strong></span>
@@ -147,7 +147,7 @@
                 <span class="small text-muted me-1 fw-semibold">Sắp xếp:</span>
                 @foreach($sorts as $key => $label)
                     <a href="{{ request()->fullUrlWithQuery(['sort' => $key, 'page' => null]) }}"
-                       class="btn btn-sm rounded-pill px-3 py-1 {{ $sort === $key ? 'btn-dark fw-bold' : 'btn-outline-secondary' }}"
+                       class="btn btn-sm rounded-pill px-3 py-1 {{ $sort === $key ? 'btn-dark fw-bold' : 'btn-outline-secondary' }} {{ in_array($key, ['bestseller', 'price_asc'], true) ? 'sort-hover-accent' : '' }}"
                        style="font-size: 0.8rem;">
                         {{ $label }}
                     </a>

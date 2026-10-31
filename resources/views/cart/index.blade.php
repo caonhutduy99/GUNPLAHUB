@@ -89,7 +89,7 @@
                                                     {{ $product->name }}
                                                 </a>
                                                 <div class="d-flex align-items-center gap-2 small">
-                                                    <code class="text-danger small">Mã: {{ $product->sku }}</code>
+                                                    <code class="product-sku small">Mã: {{ $product->sku }}</code>
                                                     <span class="text-muted">·</span>
                                                     <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.7rem;">Kho: {{ $product->stock_quantity }}</span>
                                                 </div>

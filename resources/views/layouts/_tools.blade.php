@@ -26,9 +26,9 @@
     <div class="d-flex flex-column gap-1 align-items-center justify-content-center" style="height: 50px;">
         {{-- Biểu tượng Theme tròn nhỏ --}}
         <button type="button" id="themeToggle"
-                class="gh-tools-circle btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center"
+                class="gh-tools-circle theme-toggle btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center"
                 title="Đổi giao diện sáng/tối"
-                style="width:24px;height:24px;font-size:0.72rem;"
+                style="width:34px;height:34px;font-size:0.9rem;"
                 aria-label="Đổi giao diện sáng/tối">
         </button>
 
@@ -38,7 +38,7 @@
                 <a href="{{ route('orders.index') }}"
                    class="gh-tools-circle btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center"
                    title="Đơn hàng của tôi"
-                   style="width:24px;height:24px;font-size:0.72rem;"
+                   style="width:34px;height:34px;font-size:0.9rem;"
                    aria-label="Đơn hàng của tôi">
                     <x-icon name="package-open" />
                 </a>
@@ -46,7 +46,7 @@
                 <a href="{{ route('admin.orders.index') }}"
                    class="gh-tools-circle btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center"
                    title="Quản lý đơn hàng"
-                   style="width: 24px; height: 24px; font-size: 0.72rem;"
+                   style="width: 34px; height: 34px; font-size: 0.9rem;"
                    aria-label="Quản lý đơn hàng">
                     <x-icon name="receipt" />
                 </a>
@@ -55,7 +55,7 @@
             <a href="{{ route('orders.index') }}"
                class="gh-tools-circle btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center"
                title="Đơn hàng"
-               style="width: 24px; height: 24px; font-size: 0.72rem;"
+               style="width: 34px; height: 34px; font-size: 0.9rem;"
                aria-label="Đơn hàng">
                 <x-icon name="package-open" />
             </a>
@@ -67,7 +67,7 @@
     @guest
         <div class="gh-account-tools d-flex flex-column gap-1 justify-content-center flex-shrink-0" style="height: 50px;">
             <a href="{{ route('login') }}" class="gh-login-button btn btn-sm rounded-pill px-2 py-1 text-center" style="font-size: 0.8rem; line-height: 1.1;">
-                <x-icon name="user-round" class="me-1" />Đăng nhập
+                Đăng nhập
             </a>
             <a href="{{ route('register') }}" class="btn btn-danger btn-sm rounded-pill px-2 py-1 text-center" style="font-size: 0.8rem; line-height: 1.1;">
                 Đăng ký
@@ -78,9 +78,6 @@
             <button class="gh-account-button btn rounded-3 px-3 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm text-start"
                     type="button" data-bs-toggle="dropdown" aria-expanded="false"
                     style="height: 50px; width: 150px;">
-                <div class="rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center flex-shrink-0" style="width: 29px; height: 29px;">
-                    <x-icon name="{{ $toolsIsAdmin ? 'lock' : 'user-round' }}" size="1.25rem" />
-                </div>
                 <div class="lh-sm me-1">
                     <div class="gh-account-label text-uppercase fw-semibold" style="font-size: 0.6rem; letter-spacing: 0.03em;">Tài khoản</div>
                     <div class="gh-account-name fw-bold text-truncate" style="max-width: 100px; font-size: 0.78rem;">{{ $toolsUser->full_name }}</div>
@@ -90,9 +87,9 @@
             <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="border-radius: 12px; font-size: 0.9rem; z-index: 1060;">
                 @if($toolsIsAdmin)
                     <li><span class="dropdown-header text-uppercase small fw-bold">Quản trị viên</span></li>
-                    <li><a class="dropdown-item py-2" href="{{ route('profile.show') }}"><x-icon name="user-round" class="me-2" />Tài khoản</a></li>
+                    <li><a class="dropdown-item py-2" href="{{ route('profile.show') }}">Tài khoản</a></li>
                 @else
-                    <li><a class="dropdown-item py-2" href="{{ route('profile.show') }}"><x-icon name="user-round" class="me-2" />Tài khoản</a></li>
+                    <li><a class="dropdown-item py-2" href="{{ route('profile.show') }}">Tài khoản</a></li>
                     <li><a class="dropdown-item py-2" href="{{ route('orders.index') }}"><x-icon name="package-open" class="me-2" />Đơn hàng của tôi</a></li>
                 @endif
                 <li><hr class="dropdown-divider"></li>

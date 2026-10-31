@@ -32,32 +32,55 @@
     <style>
         :root {
             --gh-font: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --gh-primary: #0f30a7;
-            --gh-primary-hover: #2d55ff;
-            --gh-accent: #2d55ff;
+
+            /* LIGHT MODE */
+            --gh-primary: #2f58ec;
+            /* Màu hover: trạng thái rê chuột và hiệu ứng tương tác */
+            --gh-primary-hover: #1031a3;
+            /* Màu nhấn: viền focus, icon và điểm nhấn */
+            --gh-accent: #2f58ec;
+            /* Màu cảnh báo/nguy hiểm */
             --gh-alert: #ff2a2a;
-            --gh-secondary: #7c3aed;
-            --gh-soft: #0f30a7;
-            --gh-primary-subtle: #eff6ff;
+            /* Màu phụ: nhóm quản trị, badge và thành phần phụ */
+            --gh-secondary: #1031a3;
+            /* Màu nền active của menu */
+            --gh-soft: #2f58ec;
+            /* Màu nền phụ nhẹ */
+            --gh-primary-subtle: #6899d9;
+            /* Màu chữ trên nền phụ */
             --gh-primary-subtle-text: #1e3a8a;
-            --gh-dark: #0f172a;
+            /* Màu chữ đậm phụ */
+            --gh-dark: #12327d;
+            /* Màu chữ menu và chữ phụ */
             --gh-slate: #334155;
-            --gh-muted: #64748b;
+            /* Màu chữ mờ/ghi chú */
+            --gh-muted: #657fa2;
+            /* Màu viền input, card, navbar */
             --gh-border: #e2e8f0;
+            /* Màu nền card, dropdown, form */
             --gh-card-bg: #ffffff;
+            /* Màu nền toàn trang */
             --gh-body-bg: #f8fafc;
+            /* Màu nền thanh điều hướng */
             --gh-navbar-bg: #ffffff;
-            --gh-footer-bg: #070a12;
+            /* Màu nền footer */
+            --gh-footer-bg: #112764;
+
+            /* Màu Bootstrap dùng cho nút/trạng thái */
             --bs-primary: #0f30a7;
             --bs-primary-rgb: 15, 48, 167;
-            --bs-danger: #ff5500;
+            /* Màu nút giỏ hàng, mua ngay, giá sản phẩm */
+            --bs-danger: #ff7632;
             --bs-danger-rgb: 255, 85, 0;
-            --bs-success: #00c853;
+            /* Màu thành công */
+            --bs-success: #3cff00;
             --bs-success-rgb: 0, 200, 83;
-            --bs-warning: #f59e0b;
+            /* Màu cảnh báo */
+            --bs-warning: #fff919;
             --bs-warning-rgb: 245, 158, 11;
-            --bs-body-color: #0f172a;
-            --bs-body-bg: #f8fafc;
+            /* Màu chữ và nền mặc định */
+            --bs-body-color: #000000;
+            --bs-body-bg: #ffffff;
             --gh-radius-sm: 8px;
             --gh-radius: 14px;
             --gh-radius-lg: 20px;
@@ -67,29 +90,42 @@
         }
 
         [data-bs-theme="dark"] {
-            --gh-primary: #1e3a8a;
-            --gh-primary-hover: #00e5ff;
-            --gh-accent: #00e5ff;
-            --gh-alert: #ff5252;
+            /* DARK MODE*/
+            --gh-primary: #1846ea;
+            /* Cyan neon khi hover */
+            --gh-primary-hover: #1031a3;
+            /* Màu nhấn cyan */
+            --gh-accent: #0b87ac;
+            /* Màu cảnh báo/nguy hiểm */
+            --gh-alert: #ff2a2a;
+            /* Màu tím phụ */
             --gh-secondary: #a78bfa;
-            --gh-soft: #00e5ff;
+            /* Màu active menu */
+            --gh-soft: #1846ea;
+            /* Nền phụ và chữ trên nền phụ */
             --gh-primary-subtle: rgba(0, 229, 255, 0.12);
             --gh-primary-subtle-text: #00e5ff;
+            /* Màu chữ sáng */
             --gh-dark: #f1f5f9;
             --gh-slate: #cbd5e1;
-            --gh-muted: #64748b;
-            --gh-border: #243352;
-            --gh-card-bg: #161f33;
-            --gh-body-bg: #0b0f19;
-            --gh-navbar-bg: #0b0f19;
-            --gh-footer-bg: #070a12;
+            /* Màu chữ mờ */
+            --gh-muted: #8595ab;
+            /* Màu viền */
+            --gh-border: #2d5fc4;
+            /* Nền card */
+            --gh-card-bg: #183d8f;
+            /* Nền toàn trang */
+            --gh-body-bg: #0e2a8c;
+            /* Nền navbar và footer */
+            --gh-navbar-bg: #071546;
+            --gh-footer-bg: #071546;
             --bs-primary: #1e3a8a;
             --bs-primary-rgb: 30, 58, 138;
-            --bs-danger: #ff5500;
+            --bs-danger: #ff7632;
             --bs-danger-rgb: 255, 85, 0;
-            --bs-success: #00c853;
+            --bs-success: #3cff00;
             --bs-success-rgb: 0, 200, 83;
-            --bs-warning: #f59e0b;
+            --bs-warning: #fff919;
             --bs-warning-rgb: 245, 158, 11;
             --bs-body-color: #f1f5f9;
             --bs-body-bg: #0b0f19;
@@ -163,24 +199,25 @@
             color: #ffffff !important;
             transform: translateY(-1px);
         }
+        /* Màu giỏ hàng */
         .btn-danger {
-            background-color: #ff5500 !important;
-            border-color: #ff5500 !important;
+            background-color: #ff7632 !important;
+            border-color: #ff884c !important;
             color: #ffffff !important;
         }
         .btn-danger:hover {
-            background-color: #e04b00 !important;
-            border-color: #e04b00 !important;
+            background-color: #ff5500 !important;
+            border-color: #ff6619 !important;
             color: #ffffff !important;
             transform: translateY(-1px);
         }
         .btn-outline-danger {
-            color: #ff5500 !important;
-            border-color: #ff5500 !important;
+            color: #ff7632 !important;
+            border-color: #ff884c !important;
         }
         .btn-outline-danger:hover {
             background-color: #ff5500 !important;
-            border-color: #ff5500 !important;
+            border-color: #ff6619 !important;
             color: #ffffff !important;
         }
         .btn-outline-dark {
@@ -202,15 +239,22 @@
             border-color: var(--gh-accent) !important;
             color: #07101f !important;
         }
+        /* Màu Footer */
         footer .text-muted {
-            color: #94a3b8 !important;
+            color: #b9c7f8 !important;
+        }
+        footer .gh-footer-brand {
+            color: #ffffff !important;
+        }
+        footer .gh-footer-brand .text-danger {
+            color: #ff5500 !important;
         }
         footer a.text-muted:hover,
         footer a.text-reset:hover {
             color: #00e5ff !important;
         }
 
-        /* Form Controls */
+        /* Form */
         .form-control, .form-select {
             border: 1px solid var(--gh-border);
             border-radius: var(--gh-radius-sm);
@@ -265,7 +309,9 @@
             color: #07101f;
         }
 
-        /* Modern Navbar */
+        /* MÀU THANH ĐIỀU HƯỚNG */
+        /* --gh-navbar-bg ở phần biến màu để đổi nền navbar */
+
         .gh-navbar {
             background: color-mix(in srgb, var(--gh-navbar-bg) 94%, transparent) !important;
             backdrop-filter: blur(14px);
@@ -284,9 +330,10 @@
             text-decoration: none;
             color: var(--gh-primary) !important;
         }
+        /* Badge STORE */
         .gh-brand-badge {
-            background: #ff5500;
-            color: #ffffff;
+            background: #fff919;
+            color: #ff00ee;
             font-size: 0.6rem;
             font-weight: 700;
             padding: 2px 6px;
@@ -323,11 +370,11 @@
             font-size: 1.55rem;
         }
         .gh-navbar.is-admin .gh-nav-link {
-            font-size: 0.78rem;
+            font-size: 0.88rem;
             padding: 0.42rem 0.58rem !important;
         }
         .gh-navbar.is-admin .gh-account-tools {
-            width: 135px;
+            width: 150px;
         }
         .gh-navbar.is-admin .gh-tools-shell {
             gap: 0.25rem !important;
@@ -335,20 +382,33 @@
         .gh-tools-shell {
             color: var(--bs-body-color);
         }
+        /* Tìm kiếm Light Mode */
         .gh-search-input {
-            background: #f1f5f9 !important;
-            border-color: #cbd5e1 !important;
+            background: #b9c7f8 !important;
             color: #0f172a !important;
         }
         .gh-search-input::placeholder {
-            color: #64748b !important;
+            color: #303b4a !important;
         }
         .gh-search-button {
-            color: #334155 !important;
+            color: #1846ea !important;
         }
         .gh-tools-circle {
             border: 1px solid #94a3b8 !important;
             color: #334155 !important;
+        }
+        .theme-toggle {
+            background: #ffffff !important;
+            border-color: #0f30a7 !important;
+            color: #0f30a7 !important;
+        }
+        .theme-toggle.theme-dark {
+            background: #ff5500 !important;
+            border-color: #ff5500 !important;
+            color: #ffffff !important;
+        }
+        .gh-tools-shell > div:first-of-type {
+            min-width: 38px;
         }
         .gh-tools-circle:hover,
         .gh-tools-circle:focus {
@@ -360,32 +420,39 @@
             color: var(--gh-primary) !important;
             border: 1px solid var(--gh-primary) !important;
         }
+        /* Tài khoản Light Mode */
         .gh-account-button {
-            border: 1px solid #94a3b8 !important;
+            /* border: 1px solid #94a3b8 !important; */
             color: #0f172a !important;
-            background: #ffffff !important;
+            background: #b1ff99 !important;
         }
         .gh-account-label,
         .gh-account-chevron {
-            color: #64748b !important;
+            color: #000000 !important;
         }
         .gh-account-name {
-            color: #0f172a !important;
+            color: #1846ea !important;
         }
+        /* Tìm kiếm và tài khoản Dark Mode */
         [data-bs-theme="dark"] .gh-search-input {
             background: #161f33 !important;
-            border-color: #243352 !important;
+            /*border-color: #243352 !important;*/
             color: #f1f5f9 !important;
         }
         [data-bs-theme="dark"] .gh-search-input::placeholder,
         [data-bs-theme="dark"] .gh-search-button,
         [data-bs-theme="dark"] .gh-account-label,
         [data-bs-theme="dark"] .gh-account-chevron {
-            color: #94a3b8 !important;
+            color: #b3c1d6 !important;
         }
         [data-bs-theme="dark"] .gh-tools-circle {
             border-color: #64748b !important;
             color: #cbd5e1 !important;
+        }
+        [data-bs-theme="dark"] .theme-toggle {
+            background: #ff5500 !important;
+            border-color: #ff5500 !important;
+            color: #ffffff !important;
         }
         [data-bs-theme="dark"] .gh-login-button {
             color: #00e5ff !important;
@@ -397,6 +464,9 @@
             background: #161f33 !important;
         }
         [data-bs-theme="dark"] .gh-account-name {
+            color: #f1f5f9 !important;
+        }
+        [data-bs-theme="dark"] footer .gh-footer-brand {
             color: #f1f5f9 !important;
         }
         .gh-commitments {
@@ -472,7 +542,7 @@
             filter: none;
         }
 
-        /* Card Product Hover Actions (Popup Thêm vào giỏ hàng & Xem nhanh) */
+        /* Popup Thêm vào giỏ hàng & Xem nhanh */
         .product-media-wrapper {
             position: relative;
         }
@@ -505,29 +575,70 @@
             transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, filter 0.2s ease;
         }
         .btn-hover-action:hover {
-            transform: translateY(-2px) scale(1.06);
+            transform: none;
+            background-color: #ff5500 !important;
+            border-color: #ffffff !important;
+            color: #ffffff !important;
+        }
+        /* Hai nút popup chỉ hiển thị icon màu cam */
+        .btn-hover-yellow,
+        .btn-hover-pink {
+            background-color: #ff5500 !important;
+            border-color: #ffffff !important;
+            color: #ffffff !important;
+            width: 60px;
+            height: 60px;
+            padding: 0;
+            justify-content: center;
+        }
+        .product-price {
+            color: #ff2a2a !important;
+        }
+        .product-card-link {
+            cursor: pointer;
+        }
+        .product-sku {
+            color: #8aff66 !important;
         }
         /* Ô màu vàng: Thêm vào giỏ hàng */
         .btn-hover-yellow {
-            background-color: var(--gh-soft) !important;
-            color: #07101f !important;
+            background-color: #ff5500 !important;
+            color: #ffffff !important;
         }
         .btn-hover-yellow:hover {
-            background-color: var(--gh-accent) !important;
-            color: #07101f !important;
+            background-color: #ff5500 !important;
+            color: #ffffff !important;
         }
         /* Ô màu hồng: Xem nhanh trang chi tiết */
         .btn-hover-pink {
-            background-color: var(--gh-alert) !important;
+            background-color: #ff5500 !important;
             color: #ffffff !important;
         }
         .btn-hover-pink:hover {
-            background-color: var(--gh-soft) !important;
-            color: #07101f !important;
+            background-color: #ff5500 !important;
+            color: #ffffff !important;
         }
         a.text-muted:hover,
         a.text-reset:hover {
             color: var(--gh-primary-hover) !important;
+        }
+        .shop-sort-toolbar {
+            background-color: #1031a3 !important;
+            border-color: #1031a3 !important;
+            color: #ffffff !important;
+        }
+        .shop-sort-toolbar .text-muted,
+        .shop-sort-toolbar .text-muted strong,
+        .shop-sort-toolbar .btn-outline-secondary {
+            color: #ffffff !important;
+        }
+        .shop-sort-toolbar .sort-hover-accent:hover {
+            background-color: #2f58ec !important;
+            border-color: #2f58ec !important;
+            color: #ffffff !important;
+        }
+        [data-bs-theme="dark"] .gh-package-note {
+            color: #ffffff !important;
         }
 
         /* Khi in / lưu PDF */
@@ -712,8 +823,8 @@
     <div class="container">
         <div class="row g-4 mb-4">
             <div class="col-lg-4 col-md-6">
-                <a class="gh-brand mb-3 d-inline-flex" href="{{ route('home') }}">
-                    <span class="text-body">GUNPLA</span><span class="text-danger">HUB</span>
+                <a class="gh-brand gh-footer-brand mb-3 d-inline-flex" href="{{ route('home') }}">
+                    <span>GUNPLA</span><span class="text-danger">HUB</span>
                     <span class="gh-brand-badge">STORE</span>
                 </a>
                 <p class="text-muted small mb-3 lh-base text-justify" style="text-align: justify;">
@@ -731,7 +842,7 @@
             </div>
 
             <div class="col-lg-2 col-md-6">
-                <h6 class="fw-bold text-uppercase small mb-3" style="letter-spacing: 0.05em;">Dòng mô hình</h6>
+                <h6 class="fw-bold text-uppercase small mb-3 text-danger" style="letter-spacing: 0.05em;">Dòng mô hình</h6>
                 <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
                     <li><a href="{{ route('products.index', ['grade' => 'HG']) }}" class="text-decoration-none text-muted">High Grade (HG 1/144)</a></li>
                     <li><a href="{{ route('products.index', ['grade' => 'RG']) }}" class="text-decoration-none text-muted">Real Grade (RG 1/144)</a></li>
@@ -741,7 +852,7 @@
             </div>
 
             <div class="col-lg-3 col-md-6">
-                <h6 class="fw-bold text-uppercase small mb-3" style="letter-spacing: 0.05em;">Hỗ trợ khách hàng</h6>
+                <h6 class="fw-bold text-uppercase small mb-3 text-danger" style="letter-spacing: 0.05em;">Hỗ trợ khách hàng</h6>
                 <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
                     <li><a href="{{ route('products.index') }}" class="text-decoration-none text-muted">Tất cả sản phẩm</a></li>
                     <li><a href="{{ route('contact') }}" class="text-decoration-none text-muted">Gửi yêu cầu hỗ trợ</a></li>
@@ -751,14 +862,14 @@
             </div>
 
             <div class="col-lg-3 col-md-6">
-                <h6 class="fw-bold text-uppercase small mb-3" style="letter-spacing: 0.05em;">Phương thức thanh toán</h6>
+                <h6 class="fw-bold text-uppercase small mb-3 text-danger" style="letter-spacing: 0.05em;">Phương thức thanh toán</h6>
                 <p class="text-muted small mb-3">Hỗ trợ đa dạng phương thức thanh toán an toàn, tiện lợi.</p>
                 <div class="d-flex flex-wrap gap-2 mb-3">
                     <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="wallet" class="me-1" />Tiền mặt (COD)</span>
                     <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="qr-code" class="me-1" />VietQR Pay</span>
                     <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="credit-card" class="me-1" />VNPay</span>
                 </div>
-                <div class="p-2 border rounded-3 bg-body-tertiary small text-muted">
+                <div class="gh-package-note p-2 border rounded-3 bg-body-tertiary small text-dark">
                     <x-icon name="package-open" class="text-danger me-1" />Đóng gói 3 lớp chống móp hộp khi vận chuyển xa.
                 </div>
             </div>
@@ -776,7 +887,7 @@
         <x-icon name="chevron-up" />
     </button>
     @unless($isAdmin)
-    <a href="tel:{{ $phoneDigits }}" class="float-btn" style="background: var(--gh-primary);" title="Gọi {{ $shopPhone }}" aria-label="Gọi điện thoại">
+    <a href="tel:{{ $phoneDigits }}" class="float-btn" style="background: var(--bs-danger);" title="Gọi {{ $shopPhone }}" aria-label="Gọi điện thoại">
         <x-icon name="phone" />
     </a>
     <a href="https://zalo.me/{{ $phoneDigits }}" target="_blank" rel="noopener" class="float-btn"
@@ -806,12 +917,12 @@
                             <span class="badge bg-secondary-subtle text-secondary" id="qvSeries"></span>
                         </div>
                         <h4 class="fw-bold mb-2" id="qvName" style="font-size: 1.25rem; line-height: 1.35;"></h4>
-                        <div class="small text-muted mb-3">Mã sản phẩm: <code class="fw-bold text-danger" id="qvSku"></code></div>
+                        <div class="small text-muted mb-3">Mã sản phẩm: <code class="product-sku fw-bold" id="qvSku"></code></div>
                         
                         <div class="p-3 rounded-3 bg-body-tertiary mb-3 border d-flex align-items-center justify-content-between" style="border-color: var(--gh-border) !important;">
                             <div>
                                 <div class="small text-muted text-uppercase fw-semibold" style="font-size: 0.72rem;">Giá bán chính hãng</div>
-                                <div class="text-danger fw-bold fs-3" id="qvPrice"></div>
+                                <div class="product-price fw-bold fs-3" id="qvPrice"></div>
                             </div>
                             <div id="qvStockBadge"></div>
                         </div>
@@ -855,9 +966,10 @@
         function render() {
             if (!btn) { return; }
             var dark = root.getAttribute('data-bs-theme') === 'dark';
+            btn.classList.toggle('theme-dark', dark);
             btn.innerHTML = dark
-                ? '<span class="gh-icon text-warning" style="--gh-icon-size: 1em; --gh-icon-url: url(\'/icons/sun.svg\');"></span>'
-                : '<span class="gh-icon text-white" style="--gh-icon-size: 1em; --gh-icon-url: url(\'/icons/moon.svg\');"></span>';
+                ? '<span class="gh-icon" style="--gh-icon-size: 1.15em; --gh-icon-url: url(\'/icons/sun.svg\');"></span>'
+                : '<span class="gh-icon" style="--gh-icon-size: 1.15em; --gh-icon-url: url(\'/icons/moon.svg\');"></span>';
         }
 
         if (btn) btn.addEventListener('click', function () {
@@ -878,6 +990,15 @@
         });
 
         // 1. Xem nhanh chi tiết sản phẩm (Quick View Modal)
+        document.addEventListener('click', function (e) {
+            var card = e.target.closest('.product-card-link');
+            if (!card || e.target.closest('a, button, form, input, select, textarea')) {
+                return;
+            }
+
+            window.location.href = card.dataset.productUrl;
+        });
+
         document.addEventListener('click', function (e) {
             var qvBtn = e.target.closest('.btn-quick-view');
             if (!qvBtn) return;
@@ -1166,6 +1287,9 @@
             if (mode === 'login') {
                 return;
             }
+            if (mode === 'checkout' && field.name !== 'receiver_phone') {
+                return;
+            }
             if (field.name === 'password' && mode !== 'login') {
                 renderPasswordChecklist(field);
                 if (field.value.length >= 3) {
@@ -1188,7 +1312,8 @@
             var field = e.target;
             var form = field.closest('.needs-constraint-validation');
             if (field.matches('.needs-constraint-validation input, .needs-constraint-validation textarea')
-                && (!form || form.dataset.validationMode !== 'login')) {
+                && (!form || (form.dataset.validationMode !== 'login'
+                    && (form.dataset.validationMode !== 'checkout' || field.name === 'receiver_phone')))) {
                 field.dataset.touched = 'true';
                 validateField(field);
             }

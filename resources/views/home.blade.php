@@ -60,6 +60,26 @@
         font-size: clamp(2rem, 3.2vw, 2.7rem);
         white-space: nowrap;
     }
+    .brand-showcase {
+        max-width: 310px;
+    }
+    .brand-logo {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 0.35rem 0.6rem;
+        border-radius: 0.45rem;
+        background: rgba(255, 255, 255, 0.14);
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+    }
+    .brand-logo-bandai { color: #8bd3ff; border: 1px solid #1687d9; }
+    .brand-logo-motor { color: #ff9a76; border: 1px solid #ff5500; }
+    .brand-logo-inera { color: #a7ffcf; border: 1px solid #00c853; }
+    .brand-logo-koto { color: #d7c2ff; border: 1px solid #a78bfa; }
     
     .grade-chip {
         display: inline-flex; align-items: center; gap: 0.4rem;
@@ -95,26 +115,18 @@
                 Thế giới Gunpla & Mô hình Mecha
             </h1>
             <p class="lead text-white-50 mb-4" style="max-width: 640px; font-size: 1.05rem; line-height: 1.6;">
-                Khám phá bộ sưu tập đầy đủ các dòng High Grade (HG), Real Grade (RG), Master Grade (MG), Perfect Grade (PG) cùng dụng cụ và phụ kiện dành riêng cho Gunpla Builders.
+                Khám phá bộ sưu tập đến từ các thương hiệu lớn, đa dạng dòng mô hình cùng dụng cụ và phụ kiện dành riêng cho Gunpla Builders.
             </p>
         </div>
 
         <div class="col-lg-4 d-none d-lg-block text-end">
-            <div class="d-inline-block text-start p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-15 backdrop-blur" style="max-width: 290px;">
-                <div class="small text-white-50 text-uppercase fw-bold mb-2" style="letter-spacing: 0.08em; font-size: 0.7rem;">Cấp độ phổ biến</div>
-                <div class="d-flex flex-column gap-2">
-                    <a href="{{ route('products.index', ['grade' => 'RG']) }}" class="text-decoration-none text-white d-flex align-items-center justify-content-between p-2 rounded-3 bg-white bg-opacity-10">
-                        <span><strong class="text-danger">HG</strong> 1/144 Hight Grade</span>
-                        <i class="bi bi-chevron-right text-white-50 small"></i>
-                    </a>
-                    <a href="{{ route('products.index', ['grade' => 'MG']) }}" class="text-decoration-none text-white d-flex align-items-center justify-content-between p-2 rounded-3 bg-white bg-opacity-10">
-                        <span><strong class="text-danger">RG</strong> 1/144 Real Grade</span>
-                        <i class="bi bi-chevron-right text-white-50 small"></i>
-                    </a>
-                    <a href="{{ route('products.index', ['grade' => 'PG']) }}" class="text-decoration-none text-white d-flex align-items-center justify-content-between p-2 rounded-3 bg-white bg-opacity-10">
-                        <span><strong class="text-danger">MG</strong> 1/100 Master Grade</span>
-                        <i class="bi bi-chevron-right text-white-50 small"></i>
-                    </a>
+            <div class="brand-showcase d-inline-block text-start p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-15 backdrop-blur">
+                <div class="small text-white-50 text-uppercase fw-bold mb-2" style="letter-spacing: 0.08em; font-size: 0.7rem;">Thương hiệu nổi bật</div>
+                <div class="d-flex flex-wrap gap-2 justify-content-end">
+                    <span class="brand-logo brand-logo-bandai">BANDAI</span>
+                    <span class="brand-logo brand-logo-motor">MOTOR NUCLEAR</span>
+                    <span class="brand-logo brand-logo-inera">INERA+</span>
+                    <span class="brand-logo brand-logo-koto">KOTOBUKIYA</span>
                 </div>
             </div>
         </div>
@@ -190,9 +202,6 @@
 
 {{-- Danh sách sản phẩm kèm bộ lọc --}}
 <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2" style="border-color: var(--gh-border) !important;">
-    <h4 class="mb-0 fw-bold d-flex align-items-center gap-2" style="letter-spacing: -0.01em;">
-        <i class="bi bi-stars text-danger"></i> Bộ sưu tập mô hình
-    </h4>
     <a href="{{ route('products.index') }}" class="small text-decoration-none text-muted fw-semibold">
         Xem tất cả <i class="bi bi-arrow-right ms-1"></i>
     </a>

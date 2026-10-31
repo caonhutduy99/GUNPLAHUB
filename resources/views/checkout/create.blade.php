@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<form method="POST" action="{{ route('checkout.store') }}" class="needs-constraint-validation" novalidate>
+<form method="POST" action="{{ route('checkout.store') }}" class="needs-constraint-validation" data-validation-mode="checkout" novalidate>
     @csrf
 
     <div class="row g-4">

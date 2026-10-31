@@ -228,7 +228,7 @@
                         <tbody>
                             <tr>
                                 <th>Mã sản phẩm</th>
-                                <td><code class="fw-bold text-danger">{{ $product->sku }}</code></td>
+                                <td><code class="product-sku fw-bold">{{ $product->sku }}</code></td>
                             </tr>
                             @if($product->brand)
                                 <tr>
