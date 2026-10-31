@@ -32,28 +32,32 @@
     <style>
         :root {
             --gh-font: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --gh-primary: #10152b;
-            --gh-primary-hover: #be14ce;
-            --gh-accent: #0051ff;
-            --gh-alert: #be14ce;
-            --gh-secondary: #743cff;
-            --gh-soft: #b7ff00;
-            --gh-primary-subtle: #e8faff;
-            --gh-primary-subtle-text: #07506b;
-            --gh-dark: #10152b;
-            --gh-slate: #41506b;
-            --gh-muted: #68758c;
-            --gh-border: #cbd6e6;
+            --gh-primary: #0f30a7;
+            --gh-primary-hover: #2d55ff;
+            --gh-accent: #2d55ff;
+            --gh-alert: #ff2a2a;
+            --gh-secondary: #7c3aed;
+            --gh-soft: #0f30a7;
+            --gh-primary-subtle: #eff6ff;
+            --gh-primary-subtle-text: #1e3a8a;
+            --gh-dark: #0f172a;
+            --gh-slate: #334155;
+            --gh-muted: #64748b;
+            --gh-border: #e2e8f0;
             --gh-card-bg: #ffffff;
-            --gh-body-bg: #f4f8fc;
-            --bs-primary: #10152b;
-            --bs-primary-rgb: 16, 21, 43;
-            --bs-danger: #e70b0b;
-            --bs-danger-rgb: 201, 0, 131;
-            --bs-warning: #9ab800;
-            --bs-warning-rgb: 154, 184, 0;
-            --bs-body-color: #10152b;
-            --bs-body-bg: #f4f8fc;
+            --gh-body-bg: #f8fafc;
+            --gh-navbar-bg: #ffffff;
+            --gh-footer-bg: #070a12;
+            --bs-primary: #0f30a7;
+            --bs-primary-rgb: 15, 48, 167;
+            --bs-danger: #ff5500;
+            --bs-danger-rgb: 255, 85, 0;
+            --bs-success: #00c853;
+            --bs-success-rgb: 0, 200, 83;
+            --bs-warning: #f59e0b;
+            --bs-warning-rgb: 245, 158, 11;
+            --bs-body-color: #0f172a;
+            --bs-body-bg: #f8fafc;
             --gh-radius-sm: 8px;
             --gh-radius: 14px;
             --gh-radius-lg: 20px;
@@ -63,26 +67,32 @@
         }
 
         [data-bs-theme="dark"] {
-            --gh-primary: #009dff;
-            --gh-primary-hover: #be14ce;
-            --gh-accent: #b7ff00;
-            --gh-alert: #be14ce;
-            --gh-primary-subtle: rgba(0, 200, 255, 0.16);
-            --gh-primary-subtle-text: #7be5ff;
-            --gh-dark: #f4f8fc;
-            --gh-slate: #a9b8ce;
-            --gh-muted: #8d9bb2;
-            --gh-border: #263b58;
-            --gh-card-bg: #0f172a;
-            --gh-body-bg: #070b16;
-            --bs-primary: #00c8ff;
-            --bs-primary-rgb: 0, 200, 255;
-            --bs-danger: #e70b0b;
-            --bs-danger-rgb: 255, 43, 214;
-            --bs-warning: #b7ff00;
-            --bs-warning-rgb: 183, 255, 0;
-            --bs-body-color: #f4f8fc;
-            --bs-body-bg: #070b16;
+            --gh-primary: #1e3a8a;
+            --gh-primary-hover: #00e5ff;
+            --gh-accent: #00e5ff;
+            --gh-alert: #ff5252;
+            --gh-secondary: #a78bfa;
+            --gh-soft: #00e5ff;
+            --gh-primary-subtle: rgba(0, 229, 255, 0.12);
+            --gh-primary-subtle-text: #00e5ff;
+            --gh-dark: #f1f5f9;
+            --gh-slate: #cbd5e1;
+            --gh-muted: #64748b;
+            --gh-border: #243352;
+            --gh-card-bg: #161f33;
+            --gh-body-bg: #0b0f19;
+            --gh-navbar-bg: #0b0f19;
+            --gh-footer-bg: #070a12;
+            --bs-primary: #1e3a8a;
+            --bs-primary-rgb: 30, 58, 138;
+            --bs-danger: #ff5500;
+            --bs-danger-rgb: 255, 85, 0;
+            --bs-success: #00c853;
+            --bs-success-rgb: 0, 200, 83;
+            --bs-warning: #f59e0b;
+            --bs-warning-rgb: 245, 158, 11;
+            --bs-body-color: #f1f5f9;
+            --bs-body-bg: #0b0f19;
             --gh-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
             --gh-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
             --gh-shadow-hover: 0 16px 34px rgba(0, 200, 255, 0.2);
@@ -142,49 +152,35 @@
             border-radius: var(--gh-radius-sm);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .btn-danger, .btn-primary {
+        .btn-primary, .btn-dark {
             background-color: var(--gh-primary) !important;
             border-color: var(--gh-primary) !important;
             color: #ffffff !important;
         }
-        .btn-danger:hover, .btn-primary:hover {
+        .btn-primary:hover, .btn-dark:hover {
             background-color: var(--gh-primary-hover) !important;
             border-color: var(--gh-primary-hover) !important;
             color: #ffffff !important;
             transform: translateY(-1px);
         }
-        [data-bs-theme="dark"] .btn-danger,
-        [data-bs-theme="dark"] .btn-primary {
-            color: #07101f !important;
+        .btn-danger {
+            background-color: #ff5500 !important;
+            border-color: #ff5500 !important;
+            color: #ffffff !important;
+        }
+        .btn-danger:hover {
+            background-color: #e04b00 !important;
+            border-color: #e04b00 !important;
+            color: #ffffff !important;
+            transform: translateY(-1px);
         }
         .btn-outline-danger {
-            color: var(--gh-primary) !important;
-            border-color: var(--gh-primary) !important;
+            color: #ff5500 !important;
+            border-color: #ff5500 !important;
         }
         .btn-outline-danger:hover {
-            background-color: var(--gh-primary-hover) !important;
-            border-color: var(--gh-primary-hover) !important;
-            color: #ffffff !important;
-        }
-        .btn-dark {
-            background-color: var(--gh-primary) !important;
-            border-color: var(--gh-primary) !important;
-            color: #ffffff !important;
-        }
-        .btn-dark:hover {
-            background-color: var(--gh-primary-hover) !important;
-            border-color: var(--gh-primary-hover) !important;
-            color: #ffffff !important;
-            transform: translateY(-1px);
-        }
-        [data-bs-theme="dark"] .btn-dark {
-            background-color: var(--gh-primary) !important;
-            border-color: var(--gh-primary) !important;
-            color: #ffffff !important;
-        }
-        [data-bs-theme="dark"] .btn-dark:hover {
-            background-color: var(--gh-primary-hover) !important;
-            border-color: var(--gh-primary-hover) !important;
+            background-color: #ff5500 !important;
+            border-color: #ff5500 !important;
             color: #ffffff !important;
         }
         .btn-outline-dark {
@@ -205,6 +201,13 @@
             background-color: var(--gh-accent) !important;
             border-color: var(--gh-accent) !important;
             color: #07101f !important;
+        }
+        footer .text-muted {
+            color: #94a3b8 !important;
+        }
+        footer a.text-muted:hover,
+        footer a.text-reset:hover {
+            color: #00e5ff !important;
         }
 
         /* Form Controls */
@@ -264,10 +267,10 @@
 
         /* Modern Navbar */
         .gh-navbar {
-            background: rgba(7, 11, 22, 0.96) !important;
+            background: color-mix(in srgb, var(--gh-navbar-bg) 94%, transparent) !important;
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--gh-border);
             transition: all 0.3s ease;
             z-index: 1030;
         }
@@ -279,11 +282,11 @@
             align-items: center;
             gap: 0.35rem;
             text-decoration: none;
-            color: #ffffff !important;
+            color: var(--gh-primary) !important;
         }
         .gh-brand-badge {
-            background: var(--gh-accent);
-            color: #07101f;
+            background: #ff5500;
+            color: #ffffff;
             font-size: 0.6rem;
             font-weight: 700;
             padding: 2px 6px;
@@ -291,7 +294,7 @@
             letter-spacing: 0.08em;
         }
         .gh-nav-link {
-            color: rgba(255, 255, 255, 0.8) !important;
+            color: var(--gh-slate) !important;
             font-weight: 500;
             font-size: 0.9rem;
             padding: 0.5rem 0.85rem !important;
@@ -302,11 +305,11 @@
             white-space: nowrap;
         }
         .gh-nav-link:hover {
-            color: #07101f !important;
-            background: var(--gh-accent);
+            color: #ffffff !important;
+            background: var(--gh-primary-hover);
         }
         .gh-nav-link.active {
-            color: #07101f !important;
+            color: #ffffff !important;
             background: var(--gh-soft);
         }
         .gh-account-tools {
@@ -316,9 +319,89 @@
         .gh-account-tools > button {
             width: 100%;
         }
+        .gh-navbar.is-admin .gh-brand {
+            font-size: 1.55rem;
+        }
+        .gh-navbar.is-admin .gh-nav-link {
+            font-size: 0.78rem;
+            padding: 0.42rem 0.58rem !important;
+        }
+        .gh-navbar.is-admin .gh-account-tools {
+            width: 135px;
+        }
+        .gh-navbar.is-admin .gh-tools-shell {
+            gap: 0.25rem !important;
+        }
+        .gh-tools-shell {
+            color: var(--bs-body-color);
+        }
+        .gh-search-input {
+            background: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        .gh-search-input::placeholder {
+            color: #64748b !important;
+        }
+        .gh-search-button {
+            color: #334155 !important;
+        }
+        .gh-tools-circle {
+            border: 1px solid #94a3b8 !important;
+            color: #334155 !important;
+        }
+        .gh-tools-circle:hover,
+        .gh-tools-circle:focus {
+            border-color: var(--gh-primary) !important;
+            background: var(--gh-primary-subtle) !important;
+            color: var(--gh-primary) !important;
+        }
+        .gh-login-button {
+            color: var(--gh-primary) !important;
+            border: 1px solid var(--gh-primary) !important;
+        }
+        .gh-account-button {
+            border: 1px solid #94a3b8 !important;
+            color: #0f172a !important;
+            background: #ffffff !important;
+        }
+        .gh-account-label,
+        .gh-account-chevron {
+            color: #64748b !important;
+        }
+        .gh-account-name {
+            color: #0f172a !important;
+        }
+        [data-bs-theme="dark"] .gh-search-input {
+            background: #161f33 !important;
+            border-color: #243352 !important;
+            color: #f1f5f9 !important;
+        }
+        [data-bs-theme="dark"] .gh-search-input::placeholder,
+        [data-bs-theme="dark"] .gh-search-button,
+        [data-bs-theme="dark"] .gh-account-label,
+        [data-bs-theme="dark"] .gh-account-chevron {
+            color: #94a3b8 !important;
+        }
+        [data-bs-theme="dark"] .gh-tools-circle {
+            border-color: #64748b !important;
+            color: #cbd5e1 !important;
+        }
+        [data-bs-theme="dark"] .gh-login-button {
+            color: #00e5ff !important;
+            border-color: #00e5ff !important;
+        }
+        [data-bs-theme="dark"] .gh-account-button {
+            border-color: #243352 !important;
+            color: #f1f5f9 !important;
+            background: #161f33 !important;
+        }
+        [data-bs-theme="dark"] .gh-account-name {
+            color: #f1f5f9 !important;
+        }
         .gh-commitments {
-            background: rgba(7, 11, 22, 0.98);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--gh-navbar-bg);
+            border-bottom: 1px solid var(--gh-border);
             padding: 0.5rem 1rem;
         }
         .commit-badge {
@@ -347,17 +430,17 @@
             box-shadow: var(--gh-shadow-sm);
         }
         .alert-success {
-            background-color: #e8fff5;
-            color: #075c42;
-            border-left-color: #00c98b;
+            background-color: #ecfdf5;
+            color: #047857;
+            border-left-color: #00c853;
         }
         [data-bs-theme="dark"] .alert-success {
             background-color: rgba(0, 201, 139, 0.16);
             color: #59ffc6;
         }
         .alert-danger {
-            background-color: rgba(201, 0, 131, 0.12);
-            color: #8d005c;
+            background-color: #fef2f2;
+            color: #b91c1c;
             border-left-color: var(--gh-alert);
         }
         [data-bs-theme="dark"] .alert-danger {
@@ -365,9 +448,9 @@
             color: #ff8be9;
         }
         .alert-warning {
-            background-color: rgba(154, 184, 0, 0.14);
-            color: #536400;
-            border-left-color: var(--gh-primary-hover);
+            background-color: #fffbeb;
+            color: #b45309;
+            border-left-color: #f59e0b;
         }
         [data-bs-theme="dark"] .alert-warning {
             background-color: rgba(183, 255, 0, 0.14);
@@ -459,7 +542,7 @@
 <body class="d-flex flex-column min-vh-100">
 
 {{-- Thanh điều hướng --}}
-<nav class="navbar navbar-expand-lg gh-navbar sticky-top">
+<nav class="navbar navbar-expand-lg gh-navbar sticky-top {{ $isAdmin ? 'is-admin' : '' }}">
     <div class="container">
         <a class="navbar-brand gh-brand" href="{{ route('home') }}">
             <span>GUNPLA</span><span class="text-danger">HUB</span>
@@ -469,7 +552,7 @@
             <x-icon name="menu" size="1.5rem" />
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+            <ul class="navbar-nav gh-main-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
                 @if($isAdmin)
                     <li class="nav-item">
                         <a class="nav-link gh-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
@@ -625,7 +708,7 @@
 </main>
 
 {{-- Footer --}}
-<footer class="mt-auto pt-5 pb-4 border-top" style="background-color: var(--gh-card-bg); border-color: var(--gh-border) !important;">
+<footer class="mt-auto pt-5 pb-4 border-top" style="background-color: var(--gh-footer-bg); border-color: #1e293b !important;">
     <div class="container">
         <div class="row g-4 mb-4">
             <div class="col-lg-4 col-md-6">

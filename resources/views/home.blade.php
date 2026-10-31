@@ -38,7 +38,7 @@
     .mega-sub a:hover { color: var(--gh-primary); transform: translateX(3px); }
     
     .hero-banner {
-        background: linear-gradient(135deg, #120458 0%, #7a04eb 52%, #ff00a0 100%);
+        background: linear-gradient(135deg, #0b1f72 0%, #0f30a7 42%, #7c3aed 76%, #ff5500 100%);
         border-radius: var(--gh-radius-lg);
         position: relative;
         overflow: hidden;
@@ -53,7 +53,7 @@
     }
     .hero-glow {
         position: absolute; right: -50px; top: -50px; width: 350px; height: 350px;
-        background: radial-gradient(circle, rgba(254, 117, 254, 0.3) 0%, rgba(254, 117, 254, 0) 70%);
+        background: radial-gradient(circle, rgba(0, 229, 255, 0.32) 0%, rgba(0, 229, 255, 0) 70%);
         border-radius: 50%; pointer-events: none;
     }
     .hero-title {

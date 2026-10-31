@@ -10,14 +10,14 @@
         cursor: pointer; transition: all 0.2s ease;
     }
     .product-thumb-btn.active, .product-thumb-btn:hover {
-        border-color: var(--gh-primary);
+        border-color: var(--gh-primary-hover);
         box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.2);
     }
     .product-gallery-control {
         width: 36px;
         height: 36px;
         border: 0;
-        background: rgba(7, 16, 31, 0.72);
+        background: rgba(15, 48, 167, 0.7);
         color: #fff;
         opacity: 0.85;
     }
