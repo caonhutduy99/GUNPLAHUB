@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,27 @@ use Illuminate\Validation\Rules\Password as PasswordRule;
 
 class AuthController extends Controller
 {
+    public function checkAvailability(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'field' => ['required', 'in:email,phone'],
+            'value' => ['required', 'string', 'max:100'],
+        ]);
+
+        $exists = User::query()
+            ->where($validated['field'], $validated['value'])
+            ->exists();
+
+        return response()->json([
+            'available' => ! $exists,
+            'message' => $exists
+                ? ($validated['field'] === 'email'
+                    ? 'Email này đã được đăng ký.'
+                    : 'Số điện thoại này đã được đăng ký.')
+                : 'Có thể sử dụng.',
+        ]);
+    }
+
     public function showLogin(): View
     {
         return view('auth.login');
@@ -59,13 +81,16 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'token' => ['required', 'string'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', PasswordRule::min(8)],
+            'password' => ['required', 'confirmed', PasswordRule::min(8)->mixedCase()->numbers()->symbols()],
         ], [
             'email.required' => 'Vui lòng nhập email.',
             'email.email' => 'Email không đúng định dạng.',
             'password.required' => 'Vui lòng nhập mật khẩu mới.',
             'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.mixed' => 'Mật khẩu phải có cả chữ hoa và chữ thường.',
+            'password.numbers' => 'Mật khẩu phải có ít nhất một chữ số.',
+            'password.symbols' => 'Mật khẩu phải có ít nhất một ký tự đặc biệt.',
         ]);
 
         $status = Password::reset($credentials, function (User $user, string $password): void {
@@ -121,7 +146,7 @@ class AuthController extends Controller
             'full_name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:100', 'unique:users,email'],
             'phone' => ['required', 'regex:/^(0|\+84)[0-9]{9}$/', 'unique:users,phone'],
-            'password' => ['required', 'confirmed', PasswordRule::min(8)],
+            'password' => ['required', 'confirmed', PasswordRule::min(8)->mixedCase()->numbers()->symbols()],
         ], [
             'full_name.required' => 'Vui lòng nhập họ và tên.',
             'email.required' => 'Vui lòng nhập email.',
@@ -133,6 +158,9 @@ class AuthController extends Controller
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.mixed' => 'Mật khẩu phải có cả chữ hoa và chữ thường.',
+            'password.numbers' => 'Mật khẩu phải có ít nhất một chữ số.',
+            'password.symbols' => 'Mật khẩu phải có ít nhất một ký tự đặc biệt.',
         ]);
 
         // Vai trò luôn do server quyết định, không lấy từ dữ liệu người dùng gửi lên.

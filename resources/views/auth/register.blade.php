@@ -15,7 +15,7 @@
                     <p class="text-muted small mb-0">Nhận ưu đãi độc quyền, tích điểm và theo dõi đơn hàng tiện lợi</p>
                 </div>
 
-                <form method="POST" action="{{ route('register') }}" class="needs-constraint-validation" novalidate>
+                <form method="POST" action="{{ route('register') }}" class="needs-constraint-validation" data-validation-mode="register" data-availability-url="{{ route('register.availability') }}" novalidate>
                     @csrf
 
                     <div class="mb-3">
@@ -55,6 +55,7 @@
                                     <x-icon name="eye" />
                                 </button>
                             </div>
+                            <div class="password-checklist small mt-2" data-password-checklist></div>
                             @error('password')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror

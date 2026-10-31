@@ -54,10 +54,13 @@ class ProfileController extends Controller
     {
         $data = $request->validate([
             'current_password' => ['required', 'current_password'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
         ], array_merge(ValidationMessages::common(), [
             'current_password.current_password' => 'Mật khẩu hiện tại không chính xác.',
-            'password.min' => 'Mật khẩu mới phải có ít nhất 6 ký tự.',
+            'password.min' => 'Mật khẩu mới phải có ít nhất 8 ký tự.',
+            'password.mixed' => 'Mật khẩu mới phải có cả chữ hoa và chữ thường.',
+            'password.numbers' => 'Mật khẩu mới phải có ít nhất một chữ số.',
+            'password.symbols' => 'Mật khẩu mới phải có ít nhất một ký tự đặc biệt.',
             'password.confirmed' => 'Xác nhận mật khẩu mới không khớp.',
         ]), [
             'current_password' => 'Mật khẩu hiện tại',

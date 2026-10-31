@@ -21,7 +21,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('login') }}" class="needs-constraint-validation" novalidate>
+                <form method="POST" action="{{ route('login') }}" class="needs-constraint-validation" data-validation-mode="login" novalidate>
                     @csrf
 
                     <div class="mb-3">

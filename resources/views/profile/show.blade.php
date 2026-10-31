@@ -158,7 +158,7 @@
                 <h5 class="mb-0 fw-bold"><x-icon name="lock" class="text-danger me-2" />Đổi mật khẩu</h5>
             </div>
             <div class="card-body p-4">
-                <form method="POST" action="{{ route('profile.password') }}" class="needs-constraint-validation" novalidate>
+                <form method="POST" action="{{ route('profile.password') }}" class="needs-constraint-validation" data-validation-mode="password-change" novalidate>
                     @csrf
                     @method('PUT')
 
@@ -187,6 +187,7 @@
                                     <x-icon name="eye" />
                                 </button>
                             </div>
+                            <div class="password-checklist small mt-2" data-password-checklist></div>
                             @error('password')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror

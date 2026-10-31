@@ -13,7 +13,7 @@
                type="search" name="q"
                value="{{ request()->routeIs('products.index') ? request('q') : '' }}"
                placeholder="Tìm kiếm Gunpla, phụ kiện..."
-               style="width: 240px; min-height: 46px; font-size: 0.82rem; padding-left: 0.9rem;">
+               style="width: 240px; min-height: 46px; font-size: 0.75rem; padding-left: 0.9rem;">
         <button class="btn btn-link btn-sm text-white-50 position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0" 
                 type="submit" aria-label="Tìm kiếm">
             <x-icon name="search" size="1rem" />

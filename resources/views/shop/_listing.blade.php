@@ -138,9 +138,6 @@
         {{-- Toolbar phía trên --}}
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 p-3 bg-body rounded-3 border" style="border-color: var(--gh-border) !important;">
             <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-secondary-subtle text-secondary fw-semibold px-2 py-1" style="font-size: 0.8rem;">
-                    {{ $products->total() }} sản phẩm
-                </span>
                 @if(request('q'))
                     <span class="small text-muted">Kết quả cho: <strong>"{{ request('q') }}"</strong></span>
                 @endif

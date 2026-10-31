@@ -43,6 +43,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/dat-lai-mat-khau/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
     Route::post('/dat-lai-mat-khau', [AuthController::class, 'resetPassword'])->name('password.update');
     Route::get('/dang-ky', [AuthController::class, 'showRegister'])->name('register');
+    Route::get('/dang-ky/kiem-tra', [AuthController::class, 'checkAvailability'])->name('register.availability');
     Route::post('/dang-ky', [AuthController::class, 'register']);
 });
 

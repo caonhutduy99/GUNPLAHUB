@@ -107,6 +107,21 @@
             mask: var(--gh-icon-url) center / contain no-repeat;
         }
 
+        .quick-view-close {
+            position: relative;
+            z-index: 2;
+            width: 3rem;
+            height: 3rem;
+            padding: 0.85rem;
+            margin: -0.5rem -0.5rem 0 0;
+            opacity: 0.75;
+        }
+
+        .quick-view-close:hover,
+        .quick-view-close:focus {
+            opacity: 1;
+        }
+
         /* Card Styling */
         .card {
             background-color: var(--gh-card-bg) !important;
@@ -677,7 +692,7 @@
         <div class="modal-content border-0 shadow-lg" style="border-radius: var(--gh-radius); overflow: hidden;">
             <div class="modal-header border-0 pb-0 d-flex justify-content-between align-items-center">
                 <span class="badge bg-danger text-white fw-bold px-2 py-1 small" id="qvBrand">BANDAI</span>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                <button type="button" class="btn-close quick-view-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
             <div class="modal-body p-4 pt-2">
                 <div class="row g-4 align-items-center">
@@ -786,6 +801,7 @@
             document.getElementById('qvSku').textContent = sku;
             document.getElementById('qvPrice').textContent = price;
             document.getElementById('qvInputSku').value = sku;
+            document.getElementById('qvQuantity').value = '1';
             document.getElementById('qvDetailLink').href = detailUrl;
 
             var imgEl = document.getElementById('qvImage');
@@ -859,8 +875,84 @@
             }
         });
 
-        // 3. Kiểm tra ràng buộc thời gian thực các trường nhập (Real-time Constraint Validation)
-        function validateField(field) {
+        function setFieldFeedback(field, isValid, message) {
+            var container = field.closest('.input-group') || field;
+            var feedback = container.parentElement.querySelector('.dynamic-feedback');
+            if (!feedback) {
+                feedback = document.createElement('div');
+                feedback.className = 'dynamic-feedback small mt-1';
+                container.parentElement.appendChild(feedback);
+            }
+
+            field.classList.toggle('is-invalid', !isValid);
+            field.classList.toggle('is-valid', isValid);
+            feedback.className = 'dynamic-feedback small mt-1 ' + (isValid ? 'text-success' : 'text-danger');
+            feedback.textContent = message;
+        }
+
+        function renderPasswordChecklist(field) {
+            var form = field.closest('.needs-constraint-validation');
+            var checklist = form && form.querySelector('[data-password-checklist]');
+            if (!checklist || field.value.length < 3) {
+                if (checklist) {
+                    checklist.replaceChildren();
+                }
+                return;
+            }
+
+            var rules = [
+                ['Tối thiểu 8 ký tự', field.value.length >= 8],
+                ['Có chữ hoa', /[A-ZÀ-Ỹ]/.test(field.value)],
+                ['Có chữ thường', /[a-zà-ỹ]/.test(field.value)],
+                ['Có chữ số', /\d/.test(field.value)],
+                ['Có ký tự đặc biệt', /[^A-Za-zÀ-ỹ0-9]/.test(field.value)],
+            ];
+
+            checklist.replaceChildren(...rules.map(function (rule) {
+                var item = document.createElement('div');
+                item.className = rule[1] ? 'text-success' : 'text-danger';
+                item.textContent = (rule[1] ? '✓ ' : '× ') + rule[0];
+                return item;
+            }));
+        }
+
+        function checkAvailability(field) {
+            var form = field.closest('.needs-constraint-validation');
+            if (!form || form.dataset.validationMode !== 'register' || !form.dataset.availabilityUrl) {
+                return;
+            }
+
+            var value = field.value.trim();
+            var fieldName = field.name;
+            if (!['email', 'phone'].includes(fieldName) || value === '') {
+                return;
+            }
+
+            clearTimeout(field.availabilityTimer);
+            field.availabilityTimer = setTimeout(function () {
+                var params = new URLSearchParams({ field: fieldName, value: value });
+                fetch(form.dataset.availabilityUrl + '?' + params.toString(), {
+                    headers: { Accept: 'application/json' },
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error('Không thể kiểm tra dữ liệu lúc này.');
+                        }
+                        return response.json();
+                    })
+                    .then(function (result) {
+                        if (field.value.trim() === value) {
+                            setFieldFeedback(field, result.available, result.message);
+                        }
+                    })
+                    .catch(function () {
+                        // Server-side validation remains authoritative if availability check is unavailable.
+                    });
+            }, 400);
+        }
+
+        // Kiểm tra định dạng sau khi người dùng đã nhập đủ dữ liệu tối thiểu.
+        function validateField(field, force = false) {
             var form = field.closest('.needs-constraint-validation');
             if (!form) return;
 
@@ -871,7 +963,7 @@
 
             var isValid = true;
             var errorMsg = '';
-            var successMsg = 'Hợp lệ';
+            var mode = form.dataset.validationMode || '';
 
             // Không kiểm tra các trường ẩn hoặc checkbox
             if (type === 'hidden' || type === 'checkbox' || type === 'radio') return;
@@ -890,26 +982,35 @@
                 }
                 // Kiểm tra Email
                 else if (type === 'email' || name === 'email') {
-                    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(val.trim())) {
-                        isValid = false;
-                        errorMsg = 'Email không đúng định dạng (VD: builder@example.com).';
+                    if (val.trim().length >= 5 || force) {
+                        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(val.trim())) {
+                            isValid = false;
+                            errorMsg = 'Email không đúng định dạng (VD: builder@example.com).';
+                        }
                     }
                 }
                 // Kiểm tra Số điện thoại
                 else if (type === 'tel' || name === 'phone' || name === 'receiver_phone') {
                     var cleanPhone = val.replace(/[\s.-]/g, '');
-                    var phoneRegex = /^(0|\+84)[0-9]{9,10}$/;
-                    if (!phoneRegex.test(cleanPhone)) {
-                        isValid = false;
-                        errorMsg = 'Số điện thoại phải từ 10 số (VD: 0912345678).';
+                    if (cleanPhone.length >= 10 || force) {
+                        var phoneRegex = /^(0|\+84)[0-9]{9,10}$/;
+                        if (!phoneRegex.test(cleanPhone)) {
+                            isValid = false;
+                            errorMsg = 'Số điện thoại phải từ 10 số (VD: 0912345678).';
+                        }
                     }
                 }
                 // Kiểm tra Mật khẩu
-                else if (type === 'password' && (name === 'password' || name === 'new_password')) {
-                    if (val.length < 8) {
+                else if (type === 'password' && (name === 'password' || name === 'new_password') && mode !== 'login') {
+                    var passwordIsComplex = val.length >= 8
+                        && /[A-ZÀ-Ỹ]/.test(val)
+                        && /[a-zà-ỹ]/.test(val)
+                        && /\d/.test(val)
+                        && /[^A-Za-zÀ-ỹ0-9]/.test(val);
+                    if (!passwordIsComplex) {
                         isValid = false;
-                        errorMsg = 'Mật khẩu phải tối thiểu 8 ký tự.';
+                        errorMsg = 'Mật khẩu cần đủ 8 ký tự, chữ hoa, chữ thường, số và ký tự đặc biệt.';
                     }
                 }
                 // Kiểm tra Xác nhận mật khẩu
@@ -936,40 +1037,62 @@
                 }
             }
 
-            // Cập nhật trạng thái hiển thị
-            var container = field.closest('.input-group') || field;
-            var feedback = container.parentElement.querySelector('.dynamic-feedback');
-            if (!feedback) {
-                feedback = document.createElement('div');
-                feedback.className = 'dynamic-feedback small mt-1';
-                container.parentElement.appendChild(feedback);
+            if (mode === 'login') {
+                if (!isValid) {
+                    setFieldFeedback(field, false, errorMsg);
+                }
+
+                return isValid;
             }
 
-            if (isValid) {
-                field.classList.remove('is-invalid');
-                field.classList.add('is-valid');
-                feedback.className = 'dynamic-feedback small mt-1 text-success';
-                feedback.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>' + successMsg;
-            } else {
-                field.classList.remove('is-valid');
-                field.classList.add('is-invalid');
-                feedback.className = 'dynamic-feedback small mt-1 text-danger';
-                feedback.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>' + errorMsg;
+            if (isValid && val.trim() !== '') {
+                setFieldFeedback(field, true, 'Hợp lệ');
+            } else if (!isValid) {
+                setFieldFeedback(field, false, errorMsg);
             }
 
+            if (isValid && ['email', 'phone'].includes(name)) {
+                checkAvailability(field);
+            }
             return isValid;
         }
 
-        // Lắng nghe sự kiện gõ phím và rời ô nhập
         document.addEventListener('input', function (e) {
-            if (e.target.matches('.needs-constraint-validation input, .needs-constraint-validation textarea')) {
-                validateField(e.target);
+            var field = e.target;
+            if (!field.matches('.needs-constraint-validation input, .needs-constraint-validation textarea')) {
+                return;
+            }
+
+            var form = field.closest('.needs-constraint-validation');
+            var mode = form.dataset.validationMode || '';
+            if (mode === 'login') {
+                return;
+            }
+            if (field.name === 'password' && mode !== 'login') {
+                renderPasswordChecklist(field);
+                if (field.value.length >= 3) {
+                    validateField(field);
+                }
+                var confirmation = form.querySelector('input[name="password_confirmation"]');
+                if (confirmation && confirmation.value.length >= 3) {
+                    validateField(confirmation);
+                }
+            } else if (field.name === 'password_confirmation' && field.value.length >= 3) {
+                validateField(field);
+            } else if (['email', 'phone'].includes(field.name) && field.value.trim().length >= 5) {
+                validateField(field);
+            } else if (field.dataset.touched === 'true') {
+                validateField(field);
             }
         });
 
         document.addEventListener('blur', function (e) {
-            if (e.target.matches('.needs-constraint-validation input, .needs-constraint-validation textarea')) {
-                validateField(e.target);
+            var field = e.target;
+            var form = field.closest('.needs-constraint-validation');
+            if (field.matches('.needs-constraint-validation input, .needs-constraint-validation textarea')
+                && (!form || form.dataset.validationMode !== 'login')) {
+                field.dataset.touched = 'true';
+                validateField(field);
             }
         }, true);
 
@@ -982,7 +1105,7 @@
             var formValid = true;
 
             fields.forEach(function (field) {
-                var valid = validateField(field);
+                var valid = validateField(field, true);
                 if (valid === false) {
                     formValid = false;
                 }
