@@ -1,58 +1,163 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# GunplaHub
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+GunplaHub là website bán mô hình Gundam và phụ kiện lắp ráp, được xây dựng bằng Laravel. Dự án hỗ trợ khách hàng duyệt sản phẩm, tìm kiếm/lọc, xem nhanh, giỏ hàng, đặt hàng và theo dõi đơn hàng; quản trị viên có thể quản lý sản phẩm, hình ảnh, danh mục, thương hiệu và đơn hàng.
 
-## About Laravel
+## Tính năng chính
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Giao diện tiếng Việt với Light Mode và Dark Mode.
+- Danh sách sản phẩm với tìm kiếm, lọc theo thương hiệu/cấp độ/khoảng giá và sắp xếp.
+- Trang chi tiết sản phẩm với gallery nhiều ảnh.
+- Quick view, thêm vào giỏ hàng và danh sách yêu thích.
+- Đăng ký, đăng nhập, đặt hàng và kiểm tra thông tin giao hàng.
+- Thanh toán COD, VietQR và VNPay ở môi trường sandbox.
+- Quản lý đơn hàng, sản phẩm, thương hiệu, danh mục và ảnh sản phẩm trong trang quản trị.
+- Icon SVG và logo thương hiệu được lưu trong `public/icons` và `public/logos`.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Công nghệ
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3
+- Laravel 13
+- SQLite mặc định cho môi trường phát triển
+- Bootstrap 5.3 và Tailwind CSS 4
+- Vite
+- PHPUnit
 
-## Learning Laravel
+## Yêu cầu
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP >= 8.3
+- Composer
+- Node.js và npm
+- SQLite hoặc MySQL
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Cài đặt trên Windows/Laragon
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Mở PowerShell tại thư mục dự án:
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```powershell
+git clone https://github.com/caonhutduy99/GUNPLAHUB.git
+cd GUNPLAHUB
+composer run setup
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Lệnh `composer run setup` sẽ cài dependency, tạo `.env`, tạo application key, chạy migration, cài package frontend và build assets.
 
-## Contributing
+Nếu muốn thực hiện từng bước:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```powershell
+composer install
+Copy-Item .env.example .env
+php artisan key:generate
+php artisan migrate
+npm install
+npm run build
+```
 
-## Code of Conduct
+## Cấu hình môi trường
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+File `.env.example` sử dụng SQLite:
 
-## Security Vulnerabilities
+```env
+DB_CONNECTION=sqlite
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Đảm bảo file database tồn tại trước khi migrate:
+
+```powershell
+New-Item -ItemType File database\database.sqlite -Force
+php artisan migrate
+```
+
+Khi dùng MySQL, cập nhật các biến `DB_*` trong `.env`. Không đưa `.env`, khóa API, thông tin thanh toán hoặc thông tin đăng nhập thật lên GitHub.
+
+## Chạy dự án
+
+### Chạy Laravel và Vite cùng lúc
+
+```powershell
+composer run dev
+```
+
+### Hoặc chạy riêng
+
+Terminal 1:
+
+```powershell
+php artisan serve
+```
+
+Terminal 2:
+
+```powershell
+npm run dev
+```
+
+Với Laragon, có thể đặt repository trong thư mục `C:\laragon\www` và truy cập domain tương ứng, ví dụ `http://gunplahub.test`.
+
+## Kiểm tra và định dạng mã nguồn
+
+Chạy test:
+
+```powershell
+php artisan test
+```
+
+Định dạng PHP bằng Laravel Pint:
+
+```powershell
+vendor\bin\pint --dirty --format agent
+```
+
+Xóa cache ứng dụng khi cần:
+
+```powershell
+php artisan optimize:clear
+```
+
+## Cấu trúc thư mục quan trọng
+
+```text
+app/
+  Http/Controllers/       Controller cho khách hàng và quản trị
+  Models/                 Model Eloquent
+  Support/                Logic hỗ trợ dùng chung
+database/
+  migrations/             Cấu trúc cơ sở dữ liệu
+  seeders/                Dữ liệu mẫu
+public/
+  icons/                  Icon SVG
+  logos/                  Logo thương hiệu
+resources/views/
+  layouts/                Layout và footer dùng chung
+  shop/                   Danh sách và chi tiết sản phẩm
+  admin/                  Giao diện quản trị
+routes/web.php            Định nghĩa route website
+```
+
+## Triển khai
+
+Trước khi triển khai production:
+
+1. Tạo `.env` riêng cho môi trường production.
+2. Đặt `APP_ENV=production` và `APP_DEBUG=false`.
+3. Cấu hình database, mail, filesystem và dịch vụ thanh toán thật.
+4. Dùng object storage persistent cho ảnh sản phẩm.
+5. Chạy:
+
+```powershell
+composer install --no-dev --optimize-autoloader
+npm ci
+npm run build
+php artisan migrate --force
+php artisan optimize
+```
+
+Không commit file `.env` hoặc thông tin bí mật vào repository.
+
+## Đóng góp
+
+1. Tạo fork hoặc branch mới.
+2. Thực hiện thay đổi và bổ sung test phù hợp.
+3. Chạy test, Pint và kiểm tra `git diff --check`.
+4. Tạo Pull Request với mô tả rõ ràng.
 
 ## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
