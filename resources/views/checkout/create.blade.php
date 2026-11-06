@@ -8,7 +8,7 @@
 <form method="POST" action="{{ route('checkout.store') }}">
     @csrf
 
-    <div class="row g-4">
+    <div class="row g-4 gh-checkout-layout">
         <div class="col-lg-7">
             {{-- Thông tin giao hàng --}}
             <div class="card shadow-sm mb-3">

@@ -2,7 +2,7 @@
 @php
     $typeLabel = $product->grade ?: \Illuminate\Support\Str::before($product->category->name, ' – ');
 @endphp
-<div class="card h-100 shadow-sm">
+<div class="card h-100 shadow-sm gh-product-card">
     <a href="{{ route('products.show', $product) }}" class="text-decoration-none position-relative">
         @if($product->image_url)
             <img src="{{ $product->image_url }}" class="card-img-top" alt="{{ $product->name }}"

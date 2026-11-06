@@ -14,7 +14,7 @@
     </ol>
 </nav>
 
-<div class="card shadow-sm mb-4">
+<div class="card shadow-sm mb-4 gh-product-detail">
     <div class="card-body p-4">
         <div class="row g-4">
             <div class="col-md-5">

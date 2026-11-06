@@ -60,13 +60,15 @@
             .card { box-shadow: none !important; border-color: #ccc !important; }
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/gunplahub-ui.css') }}">
+
     @stack('styles')
 </head>
-<body class="bg-body-tertiary">
+<body class="bg-body-tertiary gunplahub-site">
 
 {{-- Trang chủ có bảng "Danh sách sản phẩm" thay cho thanh menu nên ẩn thanh menu ở đó --}}
 @sectionMissing('no_navbar')
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark gh-main-nav">
     <div class="container">
         <a class="navbar-brand fw-bold" href="{{ route('home') }}">{{ config('shop.name') }}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
@@ -128,7 +130,7 @@
     @yield('content')
 </main>
 
-<footer class="text-center text-muted py-4 small">
+<footer class="text-center text-muted py-4 small gh-footer">
     @unless($isAdmin)
     <div class="mb-1">
         <i class="bi bi-telephone-fill me-1"></i>Hotline: <a href="tel:{{ $phoneDigits }}" class="text-reset">{{ $shopPhone }}</a>

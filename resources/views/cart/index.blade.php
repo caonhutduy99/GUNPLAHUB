@@ -23,7 +23,7 @@
         </div>
     </div>
 @else
-    <div class="row g-4">
+<div class="row g-4 gh-cart-layout">
         <div class="col-lg-8">
             <div class="card shadow-sm">
                 <div class="table-responsive">

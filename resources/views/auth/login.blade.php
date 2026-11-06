@@ -3,7 +3,7 @@
 @section('title', 'Đăng nhập - GunplaHub')
 
 @section('content')
-<div class="row justify-content-center">
+<div class="row justify-content-center gh-auth-page">
     <div class="col-md-5">
         <div class="card shadow-sm">
             <div class="card-body p-4">

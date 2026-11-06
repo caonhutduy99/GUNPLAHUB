@@ -5,7 +5,7 @@
         ? (int) auth()->user()->cartItems()->sum('quantity')
         : 0;
 @endphp
-<div class="d-flex flex-wrap align-items-center gap-3 text-white">
+<div class="d-flex flex-wrap align-items-center gap-3 text-white gh-tools">
     <form class="d-flex" method="GET" action="{{ route('products.index') }}">
         <input class="form-control form-control-sm me-1" type="search" name="q"
                value="{{ request()->routeIs('products.index') ? request('q') : '' }}"

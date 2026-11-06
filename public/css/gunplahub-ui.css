@@ -1,0 +1,660 @@
+/* ===== BANNER TRANG CHỦ GUNPLAHUB ===== */
+
+.gunplahub-site .gh-hero {
+    position: relative;
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 16px;
+    background-color: #151a23;
+}
+
+.gunplahub-site .gh-hero__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    z-index: 0;
+}
+
+.gunplahub-site .gh-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(15, 20, 30, 0.92) 0%,
+        rgba(15, 20, 30, 0.65) 55%,
+        rgba(15, 20, 30, 0.15) 100%
+    );
+    z-index: 1;
+}
+
+.gunplahub-site .gh-hero__content {
+    position: relative;
+    z-index: 2;
+    max-width: 650px;
+    padding: 48px;
+    color: #ffffff;
+}
+
+.gunplahub-site .gh-hero__eyebrow {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: #ffc107;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.gunplahub-site .gh-hero__content h1 {
+    color: #ffffff;
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+.gunplahub-site .gh-hero__content p {
+    color: #eeeeee;
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+.gunplahub-site .gh-hero__content .btn {
+    padding: 12px 26px;
+    border-radius: 8px;
+}
+
+/* Hiển thị trên điện thoại */
+@media (max-width: 576px) {
+    .gunplahub-site .gh-hero {
+        min-height: 320px;
+    }
+
+    .gunplahub-site .gh-hero__content {
+        padding: 28px 22px;
+    }
+
+    .gunplahub-site .gh-hero__content p {
+        font-size: 14px;
+    }
+}
+
+/* ===== THẺ SẢN PHẨM GUNPLAHUB ===== */
+
+.gunplahub-site .gh-product-card {
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+}
+
+/* Hiệu ứng khi rê chuột */
+.gunplahub-site .gh-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2) !important;
+    border-color: rgba(255, 193, 7, 0.7);
+}
+
+/* Khu vực hình ảnh */
+.gunplahub-site .gh-product-card > a:first-child {
+    display: block;
+    background: #ffffff;
+}
+
+.gunplahub-site .gh-product-card .card-img-top {
+    display: block;
+    width: 100%;
+    height: 190px !important;
+    padding: 10px;
+    object-fit: contain;
+    background: #ffffff;
+}
+
+/* Khung thay thế khi sản phẩm chưa có ảnh */
+.gunplahub-site .gh-product-card > a:first-child .bg-secondary-subtle {
+    height: 190px !important;
+}
+
+/* Nội dung thẻ sản phẩm */
+.gunplahub-site .gh-product-card .card-body {
+    padding: 1rem;
+}
+
+/* Tên sản phẩm */
+.gunplahub-site .gh-product-card .card-title {
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* Giá sản phẩm */
+.gunplahub-site .gh-product-card .text-danger.fw-bold {
+    font-size: 1.1rem;
+}
+
+/* Nút xem chi tiết */
+.gunplahub-site .gh-product-card .btn {
+    border-radius: 7px;
+    font-weight: 600;
+}
+
+/* Trên điện thoại */
+@media (max-width: 576px) {
+    .gunplahub-site .gh-product-card .card-img-top {
+        height: 155px !important;
+    }
+
+    .gunplahub-site .gh-product-card > a:first-child .bg-secondary-subtle {
+        height: 155px !important;
+    }
+}
+
+/* ===== TRANG CHI TIẾT SẢN PHẨM ===== */
+
+.gunplahub-site .gh-product-detail {
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.gunplahub-site .gh-product-detail > .card-body {
+    padding: clamp(16px, 3vw, 32px) !important;
+}
+
+/* Ảnh sản phẩm */
+.gunplahub-site .gh-product-detail .col-md-5 > img {
+    display: block;
+    width: 100%;
+    height: 420px;
+    max-height: none !important;
+    object-fit: contain;
+    padding: 16px;
+    background: #ffffff;
+    border-radius: 12px;
+}
+
+/* Khung thay thế khi chưa có ảnh */
+.gunplahub-site .gh-product-detail .col-md-5 > div.bg-secondary-subtle {
+    width: 100%;
+    min-height: 320px;
+    border-radius: 12px;
+}
+
+/* Tên sản phẩm */
+.gunplahub-site .gh-product-detail h3 {
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+/* Giá sản phẩm */
+.gunplahub-site .gh-product-detail h2.text-danger {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+/* Bảng thông tin */
+.gunplahub-site .gh-product-detail table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.gunplahub-site .gh-product-detail table th {
+    font-weight: 700;
+}
+
+.gunplahub-site .gh-product-detail table td,
+.gunplahub-site .gh-product-detail table th {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Nút thêm vào giỏ hàng */
+.gunplahub-site .gh-product-detail form .btn-danger {
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+/* Hiển thị trên điện thoại */
+@media (max-width: 576px) {
+    .gunplahub-site .gh-product-detail .col-md-5 > img {
+        height: 300px;
+    }
+
+    .gunplahub-site .gh-product-detail h2.text-danger {
+        font-size: 24px;
+    }
+
+    .gunplahub-site .gh-product-detail form {
+        flex-wrap: wrap;
+    }
+}
+
+/* ===== GIAO DIỆN GIỎ HÀNG GUNPLAHUB ===== */
+
+/* Khung giỏ hàng */
+.gunplahub-site .gh-cart-layout > .col-lg-8 > .card,
+.gunplahub-site .gh-cart-layout > .col-lg-4 > .card {
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+/* Khoảng cách trong bảng */
+.gunplahub-site .gh-cart-layout .table th,
+.gunplahub-site .gh-cart-layout .table td {
+    padding: 14px 12px;
+    vertical-align: middle;
+}
+
+/* Tiêu đề bảng */
+.gunplahub-site .gh-cart-layout .table thead th {
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Hiệu ứng từng dòng sản phẩm */
+.gunplahub-site .gh-cart-layout .table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.gunplahub-site .gh-cart-layout .table tbody tr:hover {
+    background-color: var(--bs-tertiary-bg);
+}
+
+/* Ảnh sản phẩm */
+.gunplahub-site .gh-cart-layout .table img {
+    flex-shrink: 0;
+    border-radius: 8px !important;
+    background: #ffffff;
+}
+
+/* Tên sản phẩm */
+.gunplahub-site .gh-cart-layout .table td a.fw-semibold {
+    line-height: 1.5;
+}
+
+/* Ô nhập số lượng */
+.gunplahub-site .gh-cart-layout input[name="quantity"] {
+    min-width: 60px;
+    text-align: center;
+    border-radius: 7px;
+}
+
+/* Các nút trong giỏ hàng */
+.gunplahub-site .gh-cart-layout .btn {
+    border-radius: 7px;
+    font-weight: 600;
+}
+
+/* Khung tóm tắt đơn hàng */
+.gunplahub-site .gh-cart-layout > .col-lg-4 > .card .card-body {
+    padding: 22px;
+}
+
+.gunplahub-site .gh-cart-layout > .col-lg-4 h5 {
+    font-weight: 800;
+}
+
+/* Tổng tiền */
+.gunplahub-site .gh-cart-layout .fs-5 {
+    font-size: 1.3rem !important;
+}
+
+/* Nút tiến hành đặt hàng */
+.gunplahub-site .gh-cart-layout > .col-lg-4 .btn-dark {
+    padding: 12px;
+    border-radius: 9px;
+    font-weight: 700;
+}
+
+/* Hiển thị trên điện thoại */
+@media (max-width: 576px) {
+    .gunplahub-site .gh-cart-layout .table th,
+    .gunplahub-site .gh-cart-layout .table td {
+        padding: 10px 8px;
+    }
+
+    .gunplahub-site .gh-cart-layout > .col-lg-4 > .card .card-body {
+        padding: 16px;
+    }
+}
+
+/* ===== TRANG THANH TOÁN GUNPLAHUB ===== */
+
+.gunplahub-site .gh-checkout-layout > div > .card {
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.gunplahub-site .gh-checkout-layout .card-body {
+    padding: 24px;
+}
+
+.gunplahub-site .gh-checkout-layout .card h5 {
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+/* Nhãn thông tin */
+.gunplahub-site .gh-checkout-layout .form-label {
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+/* Ô nhập liệu */
+.gunplahub-site .gh-checkout-layout .form-control,
+.gunplahub-site .gh-checkout-layout .form-select {
+    min-height: 44px;
+    border-radius: 8px;
+}
+
+/* Hiệu ứng khi chọn ô nhập */
+.gunplahub-site .gh-checkout-layout .form-control:focus,
+.gunplahub-site .gh-checkout-layout .form-select:focus {
+    border-color: #e0a800;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.15);
+}
+
+/* Khu vực phương thức thanh toán */
+.gunplahub-site .gh-checkout-layout .form-check {
+    padding: 12px 12px 12px 36px;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.gunplahub-site .gh-checkout-layout .form-check-input {
+    cursor: pointer;
+}
+
+.gunplahub-site .gh-checkout-layout .form-check-label {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Khung thông báo */
+.gunplahub-site .gh-checkout-layout .alert {
+    border-radius: 9px;
+}
+
+/* Nút trong trang thanh toán */
+.gunplahub-site .gh-checkout-layout .btn {
+    border-radius: 8px;
+    font-weight: 700;
+    padding: 10px 18px;
+}
+
+/* Hiển thị trên điện thoại */
+@media (max-width: 576px) {
+    .gunplahub-site .gh-checkout-layout .card-body {
+        padding: 17px;
+    }
+
+    .gunplahub-site .gh-checkout-layout .btn {
+        width: 100%;
+        margin-bottom: 6px;
+    }
+}
+
+/* ===== THANH ĐIỀU HƯỚNG GUNPLAHUB ===== */
+
+.gunplahub-site .gh-main-nav {
+    background: linear-gradient(135deg, #151a23, #252e3d) !important;
+    border-bottom: 3px solid #ffc107;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+}
+
+/* Logo GunplaHub */
+.gunplahub-site .gh-main-nav .navbar-brand {
+    color: #ffc107;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+/* Các mục menu */
+.gunplahub-site .gh-main-nav .navbar-nav .nav-link {
+    color: #e9edf3;
+    font-weight: 600;
+    padding: 9px 12px;
+    border-radius: 7px;
+    transition: color 0.2s ease,
+                background-color 0.2s ease;
+}
+
+/* Khi rê chuột */
+.gunplahub-site .gh-main-nav .navbar-nav .nav-link:hover {
+    color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.1);
+}
+
+/* Trang đang được chọn */
+.gunplahub-site .gh-main-nav .navbar-nav .nav-link.active {
+    color: #ffc107;
+}
+
+/* Nút mở menu trên điện thoại */
+.gunplahub-site .gh-main-nav .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.35);
+    border-radius: 8px;
+    padding: 7px 10px;
+}
+
+/* Menu thả xuống */
+.gunplahub-site .gh-main-nav .dropdown-menu {
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.gunplahub-site .gh-main-nav .dropdown-item {
+    padding: 9px 12px;
+    border-radius: 6px;
+}
+
+.gunplahub-site .gh-main-nav .dropdown-item:hover {
+    background-color: rgba(255, 193, 7, 0.15);
+}
+
+/* Trên điện thoại */
+@media (max-width: 991px) {
+    .gunplahub-site .gh-main-nav .navbar-collapse {
+        padding-top: 12px;
+    }
+
+    .gunplahub-site .gh-main-nav .navbar-nav .nav-link {
+        padding: 10px 12px;
+    }
+}
+
+/* ===== THANH CÔNG CỤ GUNPLAHUB ===== */
+
+.gunplahub-site .gh-tools {
+    row-gap: 10px;
+    column-gap: 14px !important;
+}
+
+/* Ô tìm kiếm */
+.gunplahub-site .gh-tools input[type="search"] {
+    min-width: 170px;
+    border-radius: 7px;
+    border: 1px solid #ced4da;
+}
+
+/* Nút tìm kiếm */
+.gunplahub-site .gh-tools form .btn {
+    border-radius: 7px;
+    font-weight: 600;
+}
+
+/* Nút sáng tối */
+.gunplahub-site .gh-tools #themeToggle {
+    min-width: 38px;
+    border-radius: 7px;
+}
+
+/* Liên kết tài khoản, đơn hàng, giỏ hàng */
+.gunplahub-site .gh-tools > a {
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.gunplahub-site .gh-tools > a:hover {
+    color: #ffc107 !important;
+}
+
+/* Nút hồ sơ và đăng xuất */
+.gunplahub-site .gh-tools .btn-outline-light {
+    border-radius: 6px;
+}
+
+/* Số lượng sản phẩm trong giỏ */
+.gunplahub-site .gh-tools .badge {
+    vertical-align: middle;
+}
+
+/* Trên điện thoại */
+@media (max-width: 991px) {
+    .gunplahub-site .gh-tools {
+        padding-top: 12px;
+        align-items: flex-start !important;
+    }
+
+    .gunplahub-site .gh-tools form {
+        width: 100%;
+    }
+
+    .gunplahub-site .gh-tools input[type="search"] {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+/* ===== FOOTER GUNPLAHUB ===== */
+
+.gunplahub-site .gh-footer {
+    margin-top: 40px;
+    padding: 28px 16px !important;
+    background: linear-gradient(135deg, #151a23, #252e3d);
+    color: #ced4da !important;
+    border-top: 3px solid #ffc107;
+    line-height: 1.8;
+}
+
+/* Đường dẫn hotline */
+.gunplahub-site .gh-footer a {
+    color: #ffc107 !important;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.gunplahub-site .gh-footer a:hover {
+    color: #ffffff !important;
+}
+
+/* ===== TRANG ĐĂNG NHẬP / ĐĂNG KÝ ===== */
+
+.gunplahub-site .gh-auth-page {
+    padding-top: 24px;
+    padding-bottom: 40px;
+}
+
+/* Khung đăng nhập */
+.gunplahub-site .gh-auth-page > .col-md-5 > .card,
+.gunplahub-site .gh-auth-page > .col-md-6 > .card {
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Nội dung bên trong */
+.gunplahub-site .gh-auth-page .card-body {
+    padding: 32px !important;
+}
+
+/* Tiêu đề */
+.gunplahub-site .gh-auth-page h4 {
+    font-size: 26px;
+    font-weight: 800;
+}
+
+/* Nhãn nhập liệu */
+.gunplahub-site .gh-auth-page .form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* Ô email và mật khẩu */
+.gunplahub-site .gh-auth-page .form-control {
+    min-height: 46px;
+    border-radius: 8px;
+}
+
+/* Hiệu ứng khi chọn ô nhập */
+.gunplahub-site .gh-auth-page .form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.15);
+}
+
+/* Nút đăng nhập */
+.gunplahub-site .gh-auth-page button[type="submit"] {
+    min-height: 46px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+/* Liên kết đăng ký */
+.gunplahub-site .gh-auth-page p a {
+    color: #c58b00;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.gunplahub-site .gh-auth-page p a:hover {
+    text-decoration: underline;
+}
+
+/* Điện thoại */
+@media (max-width: 576px) {
+    .gunplahub-site .gh-auth-page .card-body {
+        padding: 22px !important;
+    }
+}
+
+/* Đẩy footer xuống cuối màn hình khi nội dung ngắn */
+html,
+body {
+    min-height: 100%;
+}
+
+body.gunplahub-site {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+body.gunplahub-site main {
+    flex: 1 0 auto;
+}
+
+body.gunplahub-site .gh-footer {
+    margin-top: auto;
+}

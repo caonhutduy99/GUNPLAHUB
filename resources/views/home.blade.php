@@ -101,6 +101,29 @@
     </a>
 </div>
 
+{{-- Banner trang chủ GunplaHub --}}
+<section class="gh-hero mb-4">
+    <img
+        src="{{ asset('images/gunplahub-ui/banner.jpg') }}"
+        alt="Khám phá thế giới Gundam"
+        class="gh-hero__image"
+    >
+
+    <div class="gh-hero__content">
+        <span class="gh-hero__eyebrow">GUNPLAHUB - GUNDAM MODEL STORE</span>
+
+        <h1>Khám phá thế giới Gundam</h1>
+
+        <p>
+            Tìm kiếm và sở hữu những mô hình Gundam yêu thích của bạn.
+        </p>
+
+        <a href="{{ route('products.index') }}" class="btn btn-warning fw-bold">
+            Khám phá ngay
+        </a>
+    </div>
+</section>
+
 <h4 class="mb-3">Sản phẩm</h4>
 
 @include('shop._listing', ['action' => route('home')])
