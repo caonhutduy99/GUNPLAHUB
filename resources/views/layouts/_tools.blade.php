@@ -6,6 +6,7 @@
         ? (int) $toolsUser->cartItems()->sum('quantity')
         : 0;
 @endphp
+
 <div class="gh-tools-shell d-flex align-items-center gap-1 ms-auto">
     {{-- 1. Ô tìm kiếm --}}
     @unless($toolsIsAdmin)
@@ -21,6 +22,8 @@
             </button>
         </form>
     @endunless
+
+
 
     {{-- 2. Biểu tượng Theme (trên) & Đơn hàng (dưới) --}}
     <div class="d-flex flex-column gap-1 align-items-center justify-content-center" style="height: 50px;">

@@ -58,7 +58,7 @@
 <form method="POST" action="{{ route('checkout.store') }}" class="needs-constraint-validation" data-validation-mode="checkout" novalidate>
     @csrf
 
-    <div class="row g-4">
+    <div class="row g-4 gh-checkout-layout">
         <div class="col-lg-7">
             {{-- Thông tin giao hàng --}}
             <div class="card shadow-sm border mb-4" style="border-radius: var(--gh-radius);">

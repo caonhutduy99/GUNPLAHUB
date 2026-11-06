@@ -64,8 +64,9 @@
     </ol>
 </nav>
 
+
 {{-- Chi tiết sản phẩm kiểu Clean & Premium --}}
-<div class="card shadow-sm border mb-5" style="border-radius: var(--gh-radius);">
+<div class="card shadow-sm border mb-5 gh-product-detail" style="border-radius: var(--gh-radius);">
     <div class="card-body p-4 p-md-5">
         <div class="row g-5">
             {{-- Cột hình ảnh sản phẩm --}}
@@ -105,6 +106,8 @@
                                 <img src="{{ $image->url }}" alt="" class="w-100 h-100 object-fit-contain">
                             </button>
                         @endforeach
+
+
                     </div>
                 @endif
             </div>
