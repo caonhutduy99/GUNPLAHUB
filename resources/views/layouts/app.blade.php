@@ -648,11 +648,14 @@
             .card { box-shadow: none !important; border-color: var(--gh-border) !important; }
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/gunplahub-ui.css') }}">
+
     @stack('styles')
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 bg-body-tertiary gunplahub-site">
 
-{{-- Thanh điều hướng --}}
+{{-- Trang chủ có bảng "Danh sách sản phẩm" thay cho thanh menu nên ẩn thanh menu ở đó --}}
+@sectionMissing('no_navbar')
 <nav class="navbar navbar-expand-lg gh-navbar sticky-top {{ $isAdmin ? 'is-admin' : '' }}">
     <div class="container">
         <a class="navbar-brand gh-brand" href="{{ route('home') }}">
@@ -819,7 +822,7 @@
 </main>
 
 {{-- Footer --}}
-<footer class="mt-auto pt-5 pb-4 border-top" style="background-color: var(--gh-footer-bg); border-color: #1e293b !important;">
+<footer class="mt-auto pt-5 pb-4 border-top gh-footer" style="background-color: var(--gh-footer-bg); border-color: #1e293b !important;">
     <div class="container">
         <div class="row g-4 mb-4">
             <div class="col-lg-4 col-md-6">
@@ -842,7 +845,7 @@
             </div>
 
             <div class="col-lg-2 col-md-6">
-                <h6 class="fw-bold text-uppercase small mb-3 text-danger" style="letter-spacing: 0.05em;">Dòng mô hình</h6>
+                <h6 class="fw-bold text-uppercase small mb-3 text-danger">Dòng mô hình</h6>
                 <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
                     <li><a href="{{ route('products.index', ['grade' => 'HG']) }}" class="text-decoration-none text-muted">High Grade (HG 1/144)</a></li>
                     <li><a href="{{ route('products.index', ['grade' => 'RG']) }}" class="text-decoration-none text-muted">Real Grade (RG 1/144)</a></li>
@@ -852,20 +855,24 @@
             </div>
 
             <div class="col-lg-3 col-md-6">
-                <h6 class="fw-bold text-uppercase small mb-3 text-danger" style="letter-spacing: 0.05em;">Hỗ trợ khách hàng</h6>
+                <h6 class="fw-bold text-uppercase small mb-3 text-danger">Hỗ trợ khách hàng</h6>
                 <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
                     <li><a href="{{ route('products.index') }}" class="text-decoration-none text-muted">Tất cả sản phẩm</a></li>
                     <li><a href="{{ route('contact') }}" class="text-decoration-none text-muted">Gửi yêu cầu hỗ trợ</a></li>
-                    <li><a href="{{ route('orders.index') }}" class="text-decoration-none text-muted">Tra cứu hành trình đơn hàng</a></li>
+                    @if($isAdmin)
+                        <li><a href="{{ route('admin.orders.index') }}" class="text-decoration-none text-muted">Quản lý đơn hàng</a></li>
+                    @else
+                        <li><a href="{{ route('orders.index') }}" class="text-decoration-none text-muted">Tra cứu hành trình đơn hàng</a></li>
+                    @endif
                     <li><a href="{{ route('contact') }}" class="text-decoration-none text-muted">Chính sách bảo hành & hoàn tiền</a></li>
                 </ul>
             </div>
 
             <div class="col-lg-3 col-md-6">
-                <h6 class="fw-bold text-uppercase small mb-3 text-danger" style="letter-spacing: 0.05em;">Phương thức thanh toán</h6>
+                <h6 class="fw-bold text-uppercase small mb-3 text-danger">Phương thức thanh toán</h6>
                 <p class="text-muted small mb-3">Hỗ trợ đa dạng phương thức thanh toán an toàn, tiện lợi.</p>
                 <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="wallet" class="me-1" />Tiền mặt (COD)</span>
+                    <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="wallet" class="me-1" />COD</span>
                     <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="qr-code" class="me-1" />VietQR Pay</span>
                     <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="credit-card" class="me-1" />VNPay</span>
                 </div>

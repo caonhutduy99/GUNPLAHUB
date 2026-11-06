@@ -3,7 +3,7 @@
 @section('title', 'Đăng nhập tài khoản - GunplaHub')
 
 @section('content')
-<div class="row justify-content-center py-4">
+<div class="row justify-content-center py-4 gh-auth-page">
     <div class="col-md-5 col-lg-4">
         <div class="card shadow-sm border" style="border-radius: var(--gh-radius);">
             <div class="card-body p-4 p-md-5">

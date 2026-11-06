@@ -54,8 +54,8 @@
         </div>
     </div>
 @else
-    <div class="row g-4">
-        {{-- Danh sách các mặt hàng trong giỏ --}}
+<div class="row g-4 gh-cart-layout">
+{{-- Danh sách các mặt hàng trong giỏ --}}
         <div class="col-lg-8">
             <div class="card shadow-sm border mb-3" style="border-radius: var(--gh-radius); overflow: hidden;">
                 <div class="table-responsive">

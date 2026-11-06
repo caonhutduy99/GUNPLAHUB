@@ -4,7 +4,8 @@
     $isCustomer = auth()->check() && ! auth()->user()->isAdmin();
     $inWishlist = $isCustomer && auth()->user()->wishlistItems()->where('product_sku', $product->sku)->exists();
 @endphp
-<div class="card h-100 card-product border position-relative d-flex flex-column overflow-hidden product-card-link"
+
+<div class="card h-100 card-product border position-relative d-flex flex-column overflow-hidden product-card-link gh-product-card"
      data-product-url="{{ route('products.show', $product) }}"
      style="border-radius: 14px; transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;">
     
@@ -21,6 +22,8 @@
                 <span class="badge bg-light text-secondary border fw-normal shadow-sm" style="font-size: 0.65rem; border-radius: 6px;">
                     {{ $product->scale }}
                 </span>
+
+
             @endif
         </div>
 
