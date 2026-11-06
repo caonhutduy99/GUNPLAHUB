@@ -788,6 +788,7 @@
         </div>
     </div>
 </nav>
+@endif
 
 {{-- Cam kết của cửa hàng --}}
     <div class="gh-commitments d-flex flex-wrap justify-content-center align-items-center gap-2">
