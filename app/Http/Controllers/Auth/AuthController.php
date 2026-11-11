@@ -57,15 +57,14 @@ class AuthController extends Controller
 
         $status = Password::sendResetLink($credentials);
 
-        if ($status !== Password::RESET_LINK_SENT) {
+        // Email không tồn tại cũng trả lời giống hệt để không lộ email nào đã đăng ký
+        if (! in_array($status, [Password::RESET_LINK_SENT, Password::INVALID_USER], true)) {
             return back()->withInput()->withErrors([
-                'email' => $status === Password::INVALID_USER
-                    ? 'Không tìm thấy tài khoản với email này.'
-                    : 'Không thể gửi email lúc này. Vui lòng thử lại sau.',
+                'email' => 'Không thể gửi email lúc này. Vui lòng thử lại sau.',
             ]);
         }
 
-        return back()->with('success', 'Đã gửi liên kết đặt lại mật khẩu đến email của bạn.');
+        return back()->with('success', 'Nếu email đã được đăng ký, liên kết đặt lại mật khẩu sẽ được gửi đến hộp thư của bạn.');
     }
 
     public function showResetPassword(string $token): View
@@ -164,13 +163,13 @@ class AuthController extends Controller
         ]);
 
         // Vai trò luôn do server quyết định, không lấy từ dữ liệu người dùng gửi lên.
-        $user = User::create([
+        $user = new User([
             'full_name' => $data['full_name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => $data['password'],
-            'role' => 'customer',
         ]);
+        $user->forceFill(['role' => 'customer'])->save();
 
         Auth::login($user);
         $request->session()->regenerate();

@@ -8,8 +8,10 @@ use App\Services\OrderService;
 use App\Support\ValidationMessages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 class CheckoutController extends Controller
 {
@@ -109,7 +111,12 @@ class CheckoutController extends Controller
 
         session()->forget('checkout_voucher');
         $order->load(['user', 'details.product']);
-        Mail::to($order->user->email)->send(new OrderConfirmation($order));
+        // Đơn đã được tạo xong; nếu gửi email lỗi (SMTP...) thì chỉ ghi log, không báo lỗi cho khách
+        try {
+            Mail::to($order->user->email)->send(new OrderConfirmation($order));
+        } catch (Throwable $e) {
+            Log::warning("Không gửi được email xác nhận đơn #{$order->id}: {$e->getMessage()}");
+        }
 
         return redirect()->route(
             in_array($data['payment_method'], ['VNPAY', 'VIETQR'], true) ? 'payments.show' : 'orders.show',

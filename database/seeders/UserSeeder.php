@@ -11,38 +11,23 @@ class UserSeeder extends Seeder
     {
         // Mật khẩu được tự động băm nhờ cast 'hashed' trong Model User.
         // CHỈ DÙNG ĐỂ PHÁT TRIỂN/DEMO, đổi mật khẩu khi đưa lên mạng.
-        User::create([
-            'full_name' => 'Quản trị viên',
-            'email' => 'admin@gunplahub.test',
-            'phone' => '0900000001',
-            'password' => 'admin123',
-            'role' => 'admin',
-        ]);
+        // 'role' và 'is_blacklisted' không nằm trong $fillable nên gán bằng forceFill.
+        $accounts = [
+            ['Quản trị viên', 'admin@gunplahub.test', '0900000001', 'admin123', 'admin', false],
+            ['Nguyễn Văn A', 'khach1@gunplahub.test', '0900000002', 'khach123', 'customer', false],
+            ['Trần Thị B', 'khach2@gunplahub.test', '0900000003', 'khach123', 'customer', false],
+            // Tài khoản bị Blacklist để thử nghiệm quy tắc chặn đặt hàng
+            ['Lê Văn C (Blacklist)', 'blacklist@gunplahub.test', '0900000004', 'khach123', 'customer', true],
+        ];
 
-        User::create([
-            'full_name' => 'Nguyễn Văn A',
-            'email' => 'khach1@gunplahub.test',
-            'phone' => '0900000002',
-            'password' => 'khach123',
-            'role' => 'customer',
-        ]);
-
-        User::create([
-            'full_name' => 'Trần Thị B',
-            'email' => 'khach2@gunplahub.test',
-            'phone' => '0900000003',
-            'password' => 'khach123',
-            'role' => 'customer',
-        ]);
-
-        // Tài khoản bị Blacklist để thử nghiệm quy tắc chặn đặt hàng
-        User::create([
-            'full_name' => 'Lê Văn C (Blacklist)',
-            'email' => 'blacklist@gunplahub.test',
-            'phone' => '0900000004',
-            'password' => 'khach123',
-            'role' => 'customer',
-            'is_blacklisted' => true,
-        ]);
+        foreach ($accounts as [$fullName, $email, $phone, $password, $role, $blacklisted]) {
+            User::firstOrNew(['email' => $email])->forceFill([
+                'full_name' => $fullName,
+                'phone' => $phone,
+                'password' => $password,
+                'role' => $role,
+                'is_blacklisted' => $blacklisted,
+            ])->save();
+        }
     }
 }

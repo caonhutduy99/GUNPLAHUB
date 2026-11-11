@@ -80,7 +80,7 @@
                 <h5 class="mb-2">Thanh toán</h5>
                 <p class="mb-0">
                     @php
-                        $methods = ['COD' => 'Thanh toán khi nhận hàng (COD)', 'VNPAY' => 'VNPay', 'MOMO' => 'MoMo'];
+                        $methods = ['COD' => 'Thanh toán khi nhận hàng (COD)', 'VNPAY' => 'VNPay', 'VIETQR' => 'Chuyển khoản VietQR'];
                     @endphp
                     {{ $methods[$order->payment?->payment_method] ?? '—' }}
                     @if($order->payment)

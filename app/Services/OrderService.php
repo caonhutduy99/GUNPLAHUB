@@ -365,8 +365,12 @@ class OrderService
 
                 case 'refund':
                     // UC-12: Admin đã kiểm tra hàng trả còn nguyên vẹn nên cộng lại tồn kho
-                    // (lượt dùng mã giảm giá không trả lại). Hoàn tiền online sẽ làm khi tích hợp VNPay.
+                    // (lượt dùng mã giảm giá không trả lại). Khoản thanh toán được ghi nhận là đã hoàn tiền;
+                    // việc chuyển tiền thực tế do cửa hàng thực hiện ngoài hệ thống.
                     $this->restock($order, false);
+                    Payment::where('order_id', $order->id)
+                        ->whereIn('status', [Payment::SUCCESS, Payment::REFUND_PENDING])
+                        ->update(['status' => Payment::REFUNDED]);
                     break;
 
                     // approve_return: chỉ đổi trạng thái.
@@ -384,12 +388,21 @@ class OrderService
         });
     }
 
-    /** Đơn không thành công thì khoản thanh toán đang chờ được ghi nhận là thất bại. */
+    /**
+     * Đơn không thành công: khoản thanh toán đang chờ được ghi nhận là thất bại;
+     * khoản đã thanh toán online chuyển sang "Chờ hoàn tiền" để cửa hàng hoàn tiền cho khách
+     * (hệ thống chưa tích hợp API hoàn tiền của cổng thanh toán).
+     */
     private function failPayment(Order $order): void
     {
         Payment::where('order_id', $order->id)
-            ->where('status', 'Chờ xử lý')
-            ->update(['status' => 'Thất bại']);
+            ->where('status', Payment::PENDING)
+            ->update(['status' => Payment::FAILED]);
+
+        Payment::where('order_id', $order->id)
+            ->where('status', Payment::SUCCESS)
+            ->where('payment_method', '!=', 'COD')
+            ->update(['status' => Payment::REFUND_PENDING]);
     }
 
     /** Mỗi đơn giao thành công có đúng một hóa đơn với mã số duy nhất, ví dụ HD202610-000001. */

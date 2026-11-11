@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\OrderService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -33,6 +34,38 @@ class PaymentSandboxTest extends TestCase
         $this->assertDatabaseHas('payments', [
             'order_id' => $order->id,
             'status' => 'Thành công',
+        ]);
+    }
+
+    public function test_cancelled_order_cannot_be_marked_as_paid(): void
+    {
+        $user = User::factory()->create();
+        $order = $this->createOrder($user, 'VIETQR');
+
+        app(OrderService::class)->cancelByCustomer($order);
+
+        $this->actingAs($user)
+            ->post(route('payments.simulate', $order))
+            ->assertRedirect()
+            ->assertSessionHas('error');
+
+        $this->assertDatabaseHas('payments', [
+            'order_id' => $order->id,
+            'status' => Payment::FAILED,
+        ]);
+    }
+
+    public function test_cancelling_a_paid_online_order_marks_the_payment_as_waiting_for_refund(): void
+    {
+        $user = User::factory()->create();
+        $order = $this->createOrder($user, 'VNPAY');
+        $order->payment->update(['status' => Payment::SUCCESS]);
+
+        app(OrderService::class)->cancelByCustomer($order);
+
+        $this->assertDatabaseHas('payments', [
+            'order_id' => $order->id,
+            'status' => Payment::REFUND_PENDING,
         ]);
     }
 

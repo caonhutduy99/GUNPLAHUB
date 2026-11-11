@@ -37,13 +37,13 @@ Route::post('/lien-he', [ContactController::class, 'store'])->middleware('thrott
 // ---- Khách (chưa đăng nhập) ----
 Route::middleware('guest')->group(function () {
     Route::get('/dang-nhap', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/dang-nhap', [AuthController::class, 'login']);
+    Route::post('/dang-nhap', [AuthController::class, 'login'])->middleware('throttle:5,1');
     Route::get('/quen-mat-khau', [AuthController::class, 'showForgotPassword'])->name('password.request');
-    Route::post('/quen-mat-khau', [AuthController::class, 'sendResetLink'])->name('password.email');
+    Route::post('/quen-mat-khau', [AuthController::class, 'sendResetLink'])->middleware('throttle:5,1')->name('password.email');
     Route::get('/dat-lai-mat-khau/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
     Route::post('/dat-lai-mat-khau', [AuthController::class, 'resetPassword'])->name('password.update');
     Route::get('/dang-ky', [AuthController::class, 'showRegister'])->name('register');
-    Route::get('/dang-ky/kiem-tra', [AuthController::class, 'checkAvailability'])->name('register.availability');
+    Route::get('/dang-ky/kiem-tra', [AuthController::class, 'checkAvailability'])->middleware('throttle:30,1')->name('register.availability');
     Route::post('/dang-ky', [AuthController::class, 'register']);
 });
 

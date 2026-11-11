@@ -20,7 +20,9 @@ return new class extends Migration
             $table->primary(['order_id', 'product_sku']);
         });
 
-        DB::statement('ALTER TABLE order_details ADD CONSTRAINT chk_order_details_qty CHECK (quantity > 0)');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE order_details ADD CONSTRAINT chk_order_details_qty CHECK (quantity > 0)');
+        }
     }
 
     public function down(): void

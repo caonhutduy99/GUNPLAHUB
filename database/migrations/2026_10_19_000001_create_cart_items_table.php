@@ -22,7 +22,9 @@ return new class extends Migration
             $table->unique(['user_id', 'product_sku']);
         });
 
-        DB::statement('ALTER TABLE cart_items ADD CONSTRAINT chk_cart_items_qty CHECK (quantity > 0)');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE cart_items ADD CONSTRAINT chk_cart_items_qty CHECK (quantity > 0)');
+        }
     }
 
     public function down(): void

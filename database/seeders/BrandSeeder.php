@@ -15,8 +15,9 @@ class BrandSeeder extends Seeder
             ['SNAA Model', 'SNA'], ['SMP Model', 'SMP'], ['Eastern Model', 'EAS'], ['SUYATA Model', 'SUY'],
         ];
 
+        // Migration tạo bảng brands đã chèn sẵn các hãng này, nên dùng updateOrCreate để chạy lại không bị trùng.
         foreach ($brands as $index => [$name, $code]) {
-            Brand::create(['name' => $name, 'code' => $code, 'sort_order' => $index + 1]);
+            Brand::updateOrCreate(['code' => $code], ['name' => $name, 'sort_order' => $index + 1]);
         }
     }
 }

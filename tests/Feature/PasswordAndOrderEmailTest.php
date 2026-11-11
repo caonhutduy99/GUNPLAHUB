@@ -23,6 +23,28 @@ class PasswordAndOrderEmailTest extends TestCase
         Notification::assertSentTo($user, ResetPasswordNotification::class);
     }
 
+    public function test_unknown_email_gets_the_same_reset_response_as_a_known_one(): void
+    {
+        $this->post(route('password.email'), ['email' => 'khong-ton-tai@example.com'])
+            ->assertRedirect()
+            ->assertSessionHas('success')
+            ->assertSessionHasNoErrors();
+    }
+
+    public function test_registration_cannot_assign_the_admin_role(): void
+    {
+        $this->post(route('register'), [
+            'full_name' => 'Khách hàng mới',
+            'email' => 'sneaky@example.com',
+            'phone' => '0912345679',
+            'password' => 'Matkhau@123',
+            'password_confirmation' => 'Matkhau@123',
+            'role' => 'admin',
+        ]);
+
+        $this->assertDatabaseHas('users', ['email' => 'sneaky@example.com', 'role' => 'customer']);
+    }
+
     public function test_password_reset_page_is_available_from_a_reset_link(): void
     {
         $response = $this->get(route('password.reset', ['token' => 'test-token', 'email' => 'customer@example.com']));
@@ -36,8 +58,8 @@ class PasswordAndOrderEmailTest extends TestCase
             'full_name' => 'Khách hàng mới',
             'email' => 'new-customer@example.com',
             'phone' => '0912345678',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+            'password' => 'Matkhau@123',
+            'password_confirmation' => 'Matkhau@123',
         ])->assertRedirect(route('home'));
 
         $this->assertDatabaseHas('users', [

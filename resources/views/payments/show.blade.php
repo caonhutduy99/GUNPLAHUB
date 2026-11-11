@@ -29,8 +29,12 @@
                         </button>
                     </form>
                     <p class="small text-muted mt-2">Chỉ dùng được trong môi trường sandbox/demo.</p>
-                @else
+                @elseif($order->payment->status === 'Thành công')
                     <div class="alert alert-success mt-3 mb-0">Đơn hàng đã được thanh toán.</div>
+                @elseif($order->payment->status === 'Thất bại')
+                    <div class="alert alert-secondary mt-3 mb-0">Khoản thanh toán này đã bị hủy do đơn hàng không thành công.</div>
+                @else
+                    <div class="alert alert-info mt-3 mb-0">Trạng thái thanh toán: {{ $order->payment->status }}.</div>
                 @endif
 
                 <a href="{{ route('orders.show', $order) }}" class="btn btn-outline-secondary mt-3">Xem đơn hàng</a>

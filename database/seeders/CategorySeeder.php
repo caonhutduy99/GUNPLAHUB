@@ -21,7 +21,8 @@ class CategorySeeder extends Seeder
         ];
 
         foreach ($names as $index => $name) {
-            Category::create(['name' => $name, 'sort_order' => $index + 1]);
+            // Migration tách danh mục phụ kiện đã chèn sẵn 3 danh mục cuối, nên không dùng create() để tránh trùng.
+            Category::updateOrCreate(['name' => $name], ['sort_order' => $index + 1]);
         }
     }
 }

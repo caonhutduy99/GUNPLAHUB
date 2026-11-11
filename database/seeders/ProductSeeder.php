@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\PriceHistory;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -47,18 +49,35 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($items as [$sku, $categoryName, $brandName, $name, $price, $stock, $grade, $scale, $series, $status]) {
-            Product::create([
-                'sku' => $sku,
+            // Giá nhập mẫu bằng 70% giá bán để thỏa quy tắc giá bán >= giá nhập
+            $costPrice = round($price * 0.7);
+
+            $product = Product::updateOrCreate(['sku' => $sku], [
                 'category_id' => $categories[$categoryName],
                 'brand_id' => $brands[$brandName],
                 'name' => $name,
+                'cost_price' => $costPrice,
                 'price' => $price,
+                'price_type' => 'Giá bán lẻ',
                 'stock_quantity' => $stock,
                 'grade' => $grade,
                 'scale' => $scale,
                 'series' => $series,
                 'status' => $status,
             ]);
+
+            if ($product->wasRecentlyCreated) {
+                PriceHistory::create([
+                    'product_sku' => $sku,
+                    'user_id' => User::where('role', 'admin')->value('id'),
+                    'old_cost_price' => null,
+                    'cost_price' => $costPrice,
+                    'old_price' => null,
+                    'price' => $price,
+                    'price_type' => 'Giá bán lẻ',
+                    'note' => 'Thiết lập giá ban đầu (dữ liệu mẫu)',
+                ]);
+            }
         }
     }
 }

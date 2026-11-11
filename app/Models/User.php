@@ -24,8 +24,6 @@ class User extends Authenticatable implements CanResetPassword
         'phone',
         'address',
         'password',
-        'role',
-        'is_blacklisted',
     ];
 
     protected $hidden = [

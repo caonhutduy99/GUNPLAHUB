@@ -35,7 +35,7 @@
             </div>
             <div class="col-md-6 mt-3 mt-md-0">
                 <div class="fw-semibold mb-1">Thanh toán</div>
-                @php($methods = ['COD' => 'Thanh toán khi nhận hàng (COD)', 'VNPAY' => 'VNPay', 'MOMO' => 'MoMo'])
+                @php($methods = ['COD' => 'Thanh toán khi nhận hàng (COD)', 'VNPAY' => 'VNPay', 'VIETQR' => 'Chuyển khoản VietQR'])
                 <div>{{ $methods[$order->payment?->payment_method] ?? '—' }}</div>
                 <div class="small">Trạng thái: {{ $order->payment?->status ?? '—' }}</div>
             </div>

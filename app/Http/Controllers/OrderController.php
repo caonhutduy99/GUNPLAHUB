@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\OrderException;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Services\OrderService;
 use App\Support\ValidationMessages;
 use Illuminate\Http\RedirectResponse;
@@ -66,8 +67,13 @@ class OrderController extends Controller
         $payment = $order->payment;
         abort_unless($payment && in_array($payment->payment_method, ['VNPAY', 'VIETQR'], true), 404);
 
+        // Chỉ khoản đang chờ của đơn chưa bị hủy mới được ghi nhận thanh toán
+        if ($payment->status !== Payment::PENDING || in_array($order->status, [Order::CANCELLED, Order::CANCEL_PENDING], true)) {
+            return back()->with('error', 'Đơn hàng này không còn ở trạng thái chờ thanh toán.');
+        }
+
         $payment->update([
-            'status' => 'Thành công',
+            'status' => Payment::SUCCESS,
             'transaction_code' => 'DEMO-'.str()->upper(str()->random(12)),
         ]);
 

@@ -23,8 +23,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Ràng buộc: giá phải là số dương
-        DB::statement('ALTER TABLE products ADD CONSTRAINT chk_products_price CHECK (price > 0)');
+        // Ràng buộc: giá phải là số dương (SQLite không hỗ trợ ADD CONSTRAINT nên bỏ qua khi chạy test)
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE products ADD CONSTRAINT chk_products_price CHECK (price > 0)');
+        }
     }
 
     public function down(): void

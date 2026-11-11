@@ -15,9 +15,12 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        DB::statement("UPDATE products SET sku = CONCAT('BAN-', sku) WHERE sku NOT LIKE 'BAN-%'");
-        DB::statement("UPDATE cart_items SET product_sku = CONCAT('BAN-', product_sku) WHERE product_sku NOT LIKE 'BAN-%'");
-        DB::statement("UPDATE order_details SET product_sku = CONCAT('BAN-', product_sku) WHERE product_sku NOT LIKE 'BAN-%'");
+        // MySQL dùng CONCAT(), SQLite dùng toán tử || để nối chuỗi
+        $concat = fn (string $column) => DB::getDriverName() === 'sqlite' ? "'BAN-' || {$column}" : "CONCAT('BAN-', {$column})";
+
+        DB::statement("UPDATE products SET sku = {$concat('sku')} WHERE sku NOT LIKE 'BAN-%'");
+        DB::statement("UPDATE cart_items SET product_sku = {$concat('product_sku')} WHERE product_sku NOT LIKE 'BAN-%'");
+        DB::statement("UPDATE order_details SET product_sku = {$concat('product_sku')} WHERE product_sku NOT LIKE 'BAN-%'");
 
         Schema::enableForeignKeyConstraints();
     }
@@ -26,9 +29,9 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        DB::statement("UPDATE products SET sku = SUBSTRING(sku, 5) WHERE sku LIKE 'BAN-%'");
-        DB::statement("UPDATE cart_items SET product_sku = SUBSTRING(product_sku, 5) WHERE product_sku LIKE 'BAN-%'");
-        DB::statement("UPDATE order_details SET product_sku = SUBSTRING(product_sku, 5) WHERE product_sku LIKE 'BAN-%'");
+        DB::statement("UPDATE products SET sku = SUBSTR(sku, 5) WHERE sku LIKE 'BAN-%'");
+        DB::statement("UPDATE cart_items SET product_sku = SUBSTR(product_sku, 5) WHERE product_sku LIKE 'BAN-%'");
+        DB::statement("UPDATE order_details SET product_sku = SUBSTR(product_sku, 5) WHERE product_sku LIKE 'BAN-%'");
 
         Schema::enableForeignKeyConstraints();
     }

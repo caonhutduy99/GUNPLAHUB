@@ -56,6 +56,14 @@ class ReportController extends Controller
         });
     }
 
+    /** Biểu thức gom nhóm theo kỳ: MySQL dùng DATE_FORMAT, SQLite dùng strftime (cùng định dạng %Y-%m-%d). */
+    private function periodExpression(string $sqlFormat): string
+    {
+        return DB::connection()->getDriverName() === 'sqlite'
+            ? "strftime('{$sqlFormat}', ".self::DELIVERED_AT.')'
+            : "DATE_FORMAT(".self::DELIVERED_AT.", '{$sqlFormat}')";
+    }
+
     private function revenueData(Carbon $from, Carbon $to, string $period): array
     {
         $sqlFormat = ['day' => '%Y-%m-%d', 'month' => '%Y-%m', 'year' => '%Y'][$period];
@@ -63,7 +71,7 @@ class ReportController extends Controller
         $labelFormat = ['day' => 'd/m', 'month' => 'm/Y', 'year' => 'Y'][$period];
 
         $rows = Order::revenue()->deliveredBetween($from, $to)
-            ->selectRaw("DATE_FORMAT(" . self::DELIVERED_AT . ", '{$sqlFormat}') as period_key, COUNT(*) as orders, SUM(orders.total_amount) as revenue")
+            ->selectRaw($this->periodExpression($sqlFormat).' as period_key, COUNT(*) as orders, SUM(orders.total_amount) as revenue')
             ->groupBy('period_key')
             ->orderBy('period_key')
             ->get()
