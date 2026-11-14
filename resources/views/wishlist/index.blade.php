@@ -6,7 +6,7 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
     <div>
         <h4 class="fw-bold mb-1" style="letter-spacing: -0.01em;">
-            <x-icon name="heart" class="text-danger me-2" />Danh sách yêu thích của bạn
+            <x-icon name="heart" class="text-accent me-2" />Danh sách yêu thích của bạn
         </h4>
         <p class="text-muted small mb-0">Các mẫu mô hình bạn đã đánh dấu để theo dõi hoặc mua sau.</p>
     </div>
@@ -21,7 +21,7 @@
             <x-icon name="heart" size="3rem" class="text-muted opacity-50 mb-3" />
             <h5 class="fw-bold mb-2">Chưa có sản phẩm nào trong danh sách yêu thích</h5>
             <p class="text-muted small mb-4">Nhấn vào biểu tượng trái tim ở góc thẻ sản phẩm để lưu lại mô hình bạn yêu thích.</p>
-            <a href="{{ route('products.index') }}" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold">
+            <a href="{{ route('products.index') }}" class="btn btn-primary px-4 py-2 fw-semibold">
                 Xem tất cả mô hình
             </a>
         </div>

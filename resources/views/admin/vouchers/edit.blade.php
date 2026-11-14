@@ -22,7 +22,7 @@
                         <div class="col-md-6">
                             <label for="code" class="form-label">Mã giảm giá (Code)</label>
                             <input type="text" id="code" value="{{ $voucher->code }}"
-                                   class="form-control text-uppercase font-monospace bg-light" readonly>
+                                   class="form-control text-uppercase font-monospace" readonly>
                             <div class="form-text">Mã giảm giá là định danh, không thể thay đổi.</div>
                         </div>
 

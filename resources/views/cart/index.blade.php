@@ -8,8 +8,8 @@
     <div class="col-md-8">
         <div class="d-flex align-items-center justify-content-between position-relative">
             <div class="text-center position-relative z-1">
-                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger text-white fw-bold shadow-sm" style="width: 36px; height: 36px; font-size: 0.9rem;">1</div>
-                <div class="small fw-bold mt-1 text-danger">Giỏ hàng</div>
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-accent fw-bold" style="width: 36px; height: 36px; font-size: 0.9rem;">1</div>
+                <div class="small fw-bold mt-1 text-accent">Giỏ hàng</div>
             </div>
             <div class="flex-grow-1 border-top border-2 mx-2" style="border-color: var(--gh-border) !important;"></div>
             <div class="text-center position-relative z-1 opacity-50">
@@ -27,7 +27,7 @@
 
 <div class="d-flex align-items-center justify-content-between mb-3">
     <h4 class="fw-bold mb-0" style="letter-spacing: -0.01em;">
-        <x-icon name="shopping-cart" class="text-danger me-2" />Giỏ hàng của bạn
+        <x-icon name="shopping-cart" class="text-accent me-2" />Giỏ hàng của bạn
     </h4>
     <span class="text-muted small">({{ $lines->count() }} loại sản phẩm)</span>
 </div>
@@ -48,7 +48,7 @@
             <x-icon name="shopping-cart" size="3.5rem" class="text-muted opacity-50 mb-3" />
             <h5 class="fw-bold mb-2">Giỏ hàng của bạn đang trống</h5>
             <p class="text-muted small mb-4">Hãy khám phá các mẫu Gunpla Bandai chính hãng mới nhất để bổ sung vào bộ sưu tập!</p>
-            <a href="{{ route('products.index') }}" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold">
+            <a href="{{ route('products.index') }}" class="btn btn-primary px-4 py-2 fw-semibold">
                 <x-icon name="layout-grid" class="me-2" />Khám phá cửa hàng ngay
             </a>
         </div>
@@ -110,7 +110,7 @@
                                             </button>
                                         </form>
                                     </td>
-                                    <td class="text-end fw-bold text-danger" style="font-size: 1rem;">
+                                    <td class="text-end fw-bold text-accent" style="font-size: 1rem;">
                                         {{ \App\Support\Money::format($product->price * $line->quantity) }}
                                     </td>
                                     <td class="text-end pe-3">
@@ -150,7 +150,7 @@
                 <div class="card-body p-4">
                     <h5 class="fw-bold mb-3 d-flex align-items-center justify-content-between">
                         <span>Tóm tắt thanh toán</span>
-                        <x-icon name="receipt" class="text-danger" />
+                        <x-icon name="receipt" class="text-accent" />
                     </h5>
 
                     <div class="d-flex justify-content-between mb-2 small text-muted">
@@ -169,7 +169,7 @@
 
                     @if($shippingFee > 0 && isset($freeShippingFrom))
                         <div class="p-2 rounded-2 bg-body-tertiary small text-muted mb-3 border">
-                            <x-icon name="truck" class="text-danger me-1" />Mua thêm <strong>{{ \App\Support\Money::format($freeShippingFrom - $subtotal) }}</strong> để được <strong>FREESHIP</strong> toàn quốc!
+                            <x-icon name="truck" class="text-accent me-1" />Mua thêm <strong>{{ \App\Support\Money::format($freeShippingFrom - $subtotal) }}</strong> để được <strong>FREESHIP</strong> toàn quốc!
                         </div>
                     @endif
 
@@ -177,7 +177,7 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <span class="fw-bold fs-6">Tổng thanh toán:</span>
-                        <span class="fw-bold fs-4 text-danger" style="letter-spacing: -0.02em;">
+                        <span class="fw-bold fs-4 text-accent" style="letter-spacing: -0.02em;">
                             {{ \App\Support\Money::format($total) }}
                         </span>
                     </div>
@@ -187,7 +187,7 @@
                             Tài khoản bị hạn chế đặt hàng
                         </button>
                     @elseif(Route::has('checkout.create'))
-                        <a href="{{ route('checkout.create') }}" class="btn btn-danger w-100 py-2 rounded-pill fw-semibold shadow-sm d-flex align-items-center justify-content-center gap-2" style="font-size: 1rem;">
+                        <a href="{{ route('checkout.create') }}" class="btn btn-primary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2" style="font-size: 1rem;">
                             <span>Tiến hành đặt hàng</span>
                             <x-icon name="arrow-right" />
                         </a>

@@ -9,7 +9,7 @@
             <div class="card-body p-4 p-md-5">
                 <div class="text-center mb-4">
                     <span class="gh-brand mb-2 d-inline-flex" style="font-size: 1.5rem;">
-                        <span class="text-body">GUNPLA</span><span class="text-danger">HUB</span>
+                        <strong>Gunpla</strong>Hub
                     </span>
                     <h5 class="fw-bold mb-1">Tạo tài khoản thành viên</h5>
                     <p class="text-muted small mb-0">Nhận ưu đãi độc quyền, tích điểm và theo dõi đơn hàng tiện lợi</p>
@@ -72,13 +72,13 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-danger w-100 py-2 rounded-pill fw-bold shadow-sm" style="font-size: 0.95rem;">
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold" style="font-size: 0.95rem;">
                         Đăng ký tài khoản
                     </button>
                 </form>
 
                 <div class="text-center mt-4 pt-3 border-top small text-muted" style="border-color: var(--gh-border) !important;">
-                    Đã có tài khoản GunplaHub? <a href="{{ route('login') }}" class="text-danger fw-bold text-decoration-none ms-1">Đăng nhập</a>
+                    Đã có tài khoản GunplaHub? <a href="{{ route('login') }}" class="text-accent fw-bold text-decoration-none ms-1">Đăng nhập</a>
                 </div>
             </div>
         </div>

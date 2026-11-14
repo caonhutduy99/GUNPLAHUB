@@ -8,7 +8,7 @@
         <div class="card shadow-sm">
             <div class="card-body p-4 text-center">
                 <h3 class="mb-2">Thanh toán đơn hàng #{{ $order->id }}</h3>
-                <p class="text-muted">Tổng thanh toán: <strong class="text-danger">{{ \App\Support\Money::format($order->total_amount) }}</strong></p>
+                <p class="text-muted">Tổng thanh toán: <strong class="text-accent">{{ \App\Support\Money::format($order->total_amount) }}</strong></p>
 
                 @if($order->payment->payment_method === 'VIETQR')
                     <h5 class="mt-4">Quét mã VietQR</h5>

@@ -16,7 +16,7 @@
                 <p class="text-muted small mb-2">{{ $user->email }}</p>
                 <div>
                     @if($user->isAdmin())
-                        <span class="badge text-bg-danger"><x-icon name="lock" class="me-1" />Quản trị viên</span>
+                        <span class="badge text-bg-dark"><x-icon name="lock" class="me-1" />Quản trị viên</span>
                     @else
                         <span class="badge text-bg-success"><x-icon name="badge-check" class="me-1" />Khách hàng thành viên</span>
                     @endif
@@ -40,7 +40,7 @@
                     <div class="col-6">
                         <div class="p-2 border rounded bg-body-tertiary">
                             <div class="text-muted small">Đơn hàng</div>
-                            <div class="fs-5 fw-bold text-dark">{{ $ordersCount }}</div>
+                            <div class="fs-5 fw-bold text-body">{{ $ordersCount }}</div>
                         </div>
                     </div>
                     <div class="col-6">
@@ -56,13 +56,13 @@
                         <a href="{{ route('orders.index') }}" class="btn btn-outline-dark btn-sm w-100">
                             <x-icon name="receipt" class="me-1" />Xem tất cả đơn hàng
                         </a>
-                        <a href="{{ route('wishlist.index') }}" class="btn btn-outline-danger btn-sm w-100 mt-2">
+                        <a href="{{ route('wishlist.index') }}" class="btn btn-outline-secondary btn-sm w-100 mt-2">
                             <x-icon name="heart" class="me-1" />Danh sách yêu thích
                         </a>
                     </div>
                 @endunless
             </div>
-            <div class="card-footer bg-white small text-muted">
+            <div class="card-footer small text-muted">
                 <x-icon name="calendar" class="me-1" />Tham gia từ: {{ $user->created_at->format('d/m/Y') }}
             </div>
         </div>
@@ -71,7 +71,7 @@
         @unless($user->isAdmin())
             @if($recentOrders->isNotEmpty())
                 <div class="card shadow-sm">
-                    <div class="card-header bg-white py-3">
+                    <div class="card-header py-3">
                         <h6 class="mb-0 fw-bold"><x-icon name="refresh-cw" class="me-1" />Đơn hàng gần đây</h6>
                     </div>
                     <ul class="list-group list-group-flush small">
@@ -86,7 +86,7 @@
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <span class="badge bg-light text-dark border">{{ $order->status }}</span>
+                                    <span class="badge bg-light border">{{ $order->status }}</span>
                                     <div class="fw-bold text-success" style="font-size: 0.8rem;">
                                         {{ number_format($order->total_amount) }} đ
                                     </div>
@@ -103,7 +103,7 @@
     <div class="col-lg-8">
         {{-- Form cập nhật hồ sơ cá nhân --}}
         <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white py-3">
+            <div class="card-header py-3">
                 <h5 class="mb-0 fw-bold"><x-icon name="user-cog" class="text-primary me-2" />Thông tin tài khoản</h5>
             </div>
             <div class="card-body p-4">
@@ -124,7 +124,7 @@
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label for="email" class="form-label">Địa chỉ Email</label>
-                            <input type="email" id="email" value="{{ $user->email }}" class="form-control bg-light" readonly>
+                            <input type="email" id="email" value="{{ $user->email }}" class="form-control" readonly>
                             <div class="form-text">Email dùng để đăng nhập, không thể thay đổi.</div>
                         </div>
 
@@ -162,8 +162,8 @@
 
         {{-- Form đổi mật khẩu --}}
         <div class="card shadow-sm">
-            <div class="card-header bg-white py-3">
-                <h5 class="mb-0 fw-bold"><x-icon name="lock" class="text-danger me-2" />Đổi mật khẩu</h5>
+            <div class="card-header py-3">
+                <h5 class="mb-0 fw-bold"><x-icon name="lock" class="text-accent me-2" />Đổi mật khẩu</h5>
             </div>
             <div class="card-body p-4">
                 <form method="POST" action="{{ route('profile.password') }}" class="needs-constraint-validation" data-validation-mode="password-change" novalidate>
@@ -214,7 +214,7 @@
                     </div>
 
                     <div class="pt-2">
-                        <button type="submit" class="btn btn-outline-danger">
+                        <button type="submit" class="btn btn-outline-primary">
                             <x-icon name="key-round" class="me-1" />Cập nhật mật khẩu
                         </button>
                     </div>

@@ -2,51 +2,6 @@
 
 @section('title', $product->name . ' - GunplaHub')
 
-@push('styles')
-<style>
-    .product-thumb-btn {
-        width: 68px; height: 68px; padding: 4px; border-radius: 8px;
-        border: 2px solid var(--gh-border); background: #ffffff;
-        cursor: pointer; transition: all 0.2s ease;
-    }
-    .product-thumb-btn.active, .product-thumb-btn:hover {
-        border-color: var(--gh-primary-hover);
-        box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.2);
-    }
-    .product-gallery-control {
-        width: 36px;
-        height: 36px;
-        border: 0;
-        background: rgba(15, 48, 167, 0.7);
-        color: #fff;
-        opacity: 0.85;
-    }
-    .product-gallery-control:hover {
-        opacity: 1;
-        background: var(--gh-primary);
-    }
-    .stock-pulse {
-        display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-        background-color: #10b981; margin-right: 6px;
-        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
-    }
-    .stock-pulse.warning {
-        background-color: #f59e0b;
-        box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
-    }
-    .stock-pulse.danger {
-        background-color: #ef4444;
-        box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
-    }
-    .spec-table th {
-        font-weight: 600; color: var(--gh-muted); font-size: 0.88rem; width: 140px;
-    }
-    .spec-table td {
-        font-size: 0.92rem;
-    }
-</style>
-@endpush
-
 @section('content')
 {{-- Breadcrumb Clean & Sắc nét --}}
 <nav aria-label="breadcrumb" class="mb-3">
@@ -113,7 +68,7 @@
             <div class="col-lg-7">
                 {{-- Badges phân loại --}}
                 <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                    <span class="badge bg-dark text-white fw-bold px-3 py-1" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+                    <span class="badge bg-dark px-3 py-1" style="font-size: 0.75rem; letter-spacing: 0.05em;">
                         {{ $product->grade ?: $product->category->short_name }}
                     </span>
                     @if($product->scale)
@@ -122,7 +77,7 @@
                         </span>
                     @endif
                     @if($product->brand)
-                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-semibold px-2 py-1" style="font-size: 0.75rem;">
+                        <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle fw-semibold px-2 py-1" style="font-size: 0.75rem;">
                             {{ $product->brand->name }}
                         </span>
                     @endif
@@ -143,7 +98,7 @@
                      style="background: var(--gh-body-bg); border: 1px solid var(--gh-border);">
                     <div>
                         <div class="small text-muted mb-1 text-uppercase fw-semibold" style="letter-spacing: 0.05em; font-size: 0.75rem;">Giá bán chính hãng</div>
-                        <div class="text-danger fw-bold" style="font-size: 1.85rem; letter-spacing: -0.02em; line-height: 1;">
+                        <div class="text-accent fw-bold" style="font-size: 1.85rem; letter-spacing: -0.02em; line-height: 1;">
                             {{ \App\Support\Money::format($product->price) }}
                         </div>
                     </div>
@@ -185,7 +140,7 @@
                             </div>
 
                             <button type="submit" name="buy_now" value="0" 
-                                    class="btn btn-outline-danger btn-lg px-4 py-2 rounded-pill fw-bold flex-grow-1 shadow-sm d-flex align-items-center justify-content-center gap-2" 
+                                    class="btn btn-outline-primary btn-lg px-4 py-2 fw-bold flex-grow-1 d-flex align-items-center justify-content-center gap-2" 
                                     style="font-size: 0.95rem;">
                                 <x-icon name="shopping-cart" />
                                 <span>Thêm vào giỏ hàng</span>
@@ -207,7 +162,7 @@
 
                         {{-- Hàng 2: Nút ở dưới là "Tiến hành mua hàng luôn" --}}
                         <button type="submit" name="buy_now" value="1" 
-                                class="btn btn-danger btn-lg w-100 py-2 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2" 
+                                class="btn btn-primary btn-lg w-100 py-2 fw-bold d-flex align-items-center justify-content-center gap-2" 
                                 style="font-size: 1.05rem;">
                             <x-icon name="shopping-cart" />
                             <span>Tiến hành mua hàng luôn</span>
@@ -215,7 +170,7 @@
 
                         @guest
                             <div class="form-text small text-muted mt-2">
-                                <x-icon name="info" class="me-1" />Bạn cần <a href="{{ route('login') }}" class="text-danger fw-semibold">đăng nhập</a> để mua hàng hoặc lưu vào giỏ.
+                                <x-icon name="info" class="me-1" />Bạn cần <a href="{{ route('login') }}" class="text-accent fw-semibold">đăng nhập</a> để mua hàng hoặc lưu vào giỏ.
                             </div>
                         @endguest
                     </form>
@@ -260,7 +215,7 @@
                 <div class="row g-2 pt-3 border-top" style="border-color: var(--gh-border) !important;">
                     <div class="col-sm-4">
                         <div class="p-2 border rounded-3 bg-body-tertiary d-flex align-items-center gap-2 text-start">
-                            <x-icon name="badge-check" size="1.25rem" class="text-danger flex-shrink-0" />
+                            <x-icon name="badge-check" size="1.25rem" class="text-accent flex-shrink-0" />
                             <div><div class="small fw-semibold">100% Chính hãng</div><div class="text-muted" style="font-size: 0.72rem;">Nhập trực tiếp Bandai</div></div>
                         </div>
                     </div>
@@ -287,7 +242,7 @@
     <div class="mb-5">
         <div class="d-flex align-items-center justify-content-between mb-3">
             <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
-                <x-icon name="layout-grid" class="text-danger" /> Sản phẩm cùng danh mục
+                <x-icon name="layout-grid" class="text-accent" /> Sản phẩm cùng danh mục
             </h5>
             <a href="{{ route('products.index', ['category_id' => $product->category_id]) }}" class="small text-decoration-none text-muted fw-semibold">
                 Xem thêm <x-icon name="chevron-right" class="ms-1" />

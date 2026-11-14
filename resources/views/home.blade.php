@@ -2,160 +2,45 @@
 
 @section('title', 'GunplaHub - Cửa hàng mô hình Gunpla chính hãng')
 
-@push('styles')
-<style>
-    .mega-wrap { position: relative; }
-    .mega-panel {
-        display: none; position: absolute; top: calc(100% + 8px); left: 0; z-index: 1040; width: 250px;
-        background: var(--gh-card-bg); border: 1px solid var(--gh-border);
-        border-radius: var(--gh-radius); box-shadow: var(--gh-shadow-hover);
-        overflow: visible;
-    }
-    .mega-wrap:hover .mega-panel, .mega-wrap:focus-within .mega-panel { display: block; }
-    .mega-left { padding: 0.5rem 0; margin: 0; }
-    .mega-left > li > a {
-        display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 1.15rem;
-        color: var(--bs-body-color); text-decoration: none; font-size: 0.92rem; font-weight: 500;
-        transition: all 0.15s ease;
-    }
-    .mega-left > li:hover > a { background: var(--gh-primary-subtle); color: var(--gh-primary); }
-    .mega-sub {
-        display: none; position: absolute; top: 0; left: 250px; width: min(720px, 75vw); min-height: 100%;
-        padding: 1.5rem; background: var(--gh-card-bg); border: 1px solid var(--gh-border);
-        border-radius: 0 var(--gh-radius) var(--gh-radius) 0; box-shadow: var(--gh-shadow-hover);
-        grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-    }
-    .mega-left li.has-sub:hover .mega-sub { display: grid; }
-    .mega-sub h6 {
-        font-weight: 700; margin-bottom: 0.75rem; font-size: 0.85rem;
-        text-transform: uppercase; letter-spacing: 0.05em; color: var(--gh-primary);
-        border-bottom: 1px solid var(--gh-border); padding-bottom: 0.35rem;
-    }
-    .mega-sub a {
-        display: block; padding: 0.35rem 0; font-size: 0.88rem; color: var(--bs-body-color);
-        text-decoration: none; transition: color 0.15s ease, transform 0.15s ease;
-    }
-    .mega-sub a:hover { color: var(--gh-primary); transform: translateX(3px); }
-    
-    .hero-banner {
-        background: linear-gradient(135deg, #0b1f72 0%, #0f30a7 42%, #7c3aed 76%, #ff5500 100%);
-        border-radius: var(--gh-radius-lg);
-        position: relative;
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .hero-grid-pattern {
-        position: absolute; inset: 0;
-        background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-        background-size: 24px 24px;
-        opacity: 0.6;
-        pointer-events: none;
-    }
-    .hero-glow {
-        position: absolute; right: -50px; top: -50px; width: 350px; height: 350px;
-        background: radial-gradient(circle, rgba(0, 229, 255, 0.32) 0%, rgba(0, 229, 255, 0) 70%);
-        border-radius: 50%; pointer-events: none;
-    }
-    .hero-title {
-        font-size: clamp(2rem, 3.2vw, 2.7rem);
-        white-space: nowrap;
-    }
-    .brand-showcase {
-        max-width: 310px;
-    }
-    .brand-logo {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 76px;
-        height: 54px;
-        padding: 0.4rem;
-        border-radius: 0.45rem;
-        background: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.75);
-        box-shadow: 0 4px 12px rgba(7, 21, 70, 0.18);
-    }
-    .brand-logo img {
-        display: block;
-        max-width: 100%;
-        max-height: 100%;
-        width: auto;
-        height: auto;
-        object-fit: contain;
-    }
-    
-    .grade-chip {
-        display: inline-flex; align-items: center; gap: 0.4rem;
-        padding: 0.4rem 0.9rem; border-radius: 8px;
-        background-color: var(--gh-card-bg); border: 1px solid var(--gh-border);
-        font-size: 0.82rem; font-weight: 600; color: var(--bs-body-color);
-        text-decoration: none; transition: all 0.2s ease;
-    }
-    .grade-chip:hover {
-        border-color: var(--gh-primary); color: var(--gh-primary);
-        transform: translateY(-2px); box-shadow: var(--gh-shadow);
-    }
-
-    @media (max-width: 767.98px) {
-        .mega-sub { position: static; width: auto; border: 0; box-shadow: none; grid-template-columns: 1fr; }
-        .hero-title { white-space: normal; }
-    }
-</style>
-@endpush
-
 @section('content')
 {{--  --}}
-<div class="hero-banner p-4 p-md-5 mb-4 text-white shadow-lg">
-    <div class="hero-grid-pattern"></div>
-    <div class="hero-glow"></div>
-    <div class="position-relative z-1 row align-items-center g-4">
-        <div class="col-lg-8">
-            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 border border-white border-opacity-10 mb-3 small">
-                <span class="badge bg-danger text-uppercase px-2" style="font-size: 0.7rem; letter-spacing: 0.05em;">Original</span>
-                <span class="text-white-50 small">プレミアム ガンプラ · BANDAI NAMCO</span>
+<section class="card bar-accent mb-4">
+    <div class="card-body p-4 p-md-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <h1 class="gh-hero-title mb-3">Thế giới Gunpla &amp; Mô hình Mecha</h1>
+                <p class="gh-hero-text mb-4">
+                    Khám phá bộ sưu tập đến từ các thương hiệu lớn, đa dạng dòng mô hình cùng dụng cụ và phụ kiện dành riêng cho Gunpla Builders.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ route('products.index') }}" class="btn btn-primary px-4">Xem cửa hàng</a>
+                    <a href="{{ route('contact') }}" class="btn btn-outline-secondary px-4">Liên hệ tư vấn</a>
+                </div>
             </div>
-            <h1 class="hero-title fw-bold mb-3 text-white" style="letter-spacing: -0.02em;">
-                Thế giới Gunpla & Mô hình Mecha
-            </h1>
-            <p class="lead text-white-50 mb-4" style="max-width: 640px; font-size: 1.05rem; line-height: 1.6;">
-                Khám phá bộ sưu tập đến từ các thương hiệu lớn, đa dạng dòng mô hình cùng dụng cụ và phụ kiện dành riêng cho Gunpla Builders.
-            </p>
-        </div>
-
-        <div class="col-lg-4 d-none d-lg-block text-end">
-            <div class="brand-showcase d-inline-block text-start p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-15 backdrop-blur">
-                <div class="small text-white-50 text-uppercase fw-bold mb-2" style="letter-spacing: 0.08em; font-size: 0.7rem;">Thương hiệu nổi bật</div>
-                <div class="d-flex flex-wrap gap-2 justify-content-end">
-                    <span class="brand-logo" title="Bandai Spirits">
-                        <img src="{{ asset('logos/bandaispirits.svg') }}" alt="Bandai Spirits">
-                    </span>
-                    <span class="brand-logo" title="Motor Nuclear">
-                        <img src="{{ asset('logos/motornuclear.svg') }}" alt="Motor Nuclear">
-                    </span>
-                    <span class="brand-logo" title="Blokees">
-                        <img src="{{ asset('logos/Blokees.svg') }}" alt="Blokees">
-                    </span>
-                    <span class="brand-logo" title="Daban Model">
-                        <img src="{{ asset('logos/dabanmodel.svg') }}" alt="Daban Model">
-                    </span>
-                    <span class="brand-logo" title="Moshow Toy">
-                        <img src="{{ asset('logos/moshowtoy.svg') }}" alt="Moshow Toy">
-                    </span>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="brand-showcase ms-auto">
+                    <div class="gh-foot-title">Thương hiệu phân phối</div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="brand-logo" title="Bandai Spirits"><img src="{{ asset('logos/bandaispirits.svg') }}" alt="Bandai Spirits"></span>
+                        <span class="brand-logo" title="Motor Nuclear"><img src="{{ asset('logos/motornuclear.svg') }}" alt="Motor Nuclear"></span>
+                        <span class="brand-logo" title="Blokees"><img src="{{ asset('logos/Blokees.svg') }}" alt="Blokees"></span>
+                        <span class="brand-logo" title="Daban Model"><img src="{{ asset('logos/dabanmodel.svg') }}" alt="Daban Model"></span>
+                        <span class="brand-logo" title="Moshow Toy"><img src="{{ asset('logos/moshowtoy.svg') }}" alt="Moshow Toy"></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
+</section>
 {{-- Thanh thanh điều hướng nhanh --}}
 
     <div class="d-flex flex-wrap align-items-center gap-2">
         {{-- Nút Danh mục sản phẩm (Mega Menu) --}}
         <div class="mega-wrap">
-            <button class="btn btn-dark rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2" type="button">
-                <i class="bi bi-grid-fill text-danger"></i>
+            <button class="btn btn-dark px-3 py-2 d-inline-flex align-items-center gap-2" type="button">
+                <i class="bi bi-grid-fill"></i>
                 <span>Danh mục sản phẩm</span>
-                <i class="bi bi-chevron-down small text-white-50"></i>
+                <i class="bi bi-chevron-down small"></i>
             </button>
 
             <div class="mega-panel">
@@ -212,10 +97,8 @@
         <a href="{{ route('products.index', ['grade' => 'PG']) }}" class="grade-chip">PG 1/60</a>
     </div>
 
-</div>
-
 {{-- Danh sách sản phẩm kèm bộ lọc --}}
-<div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2" style="border-color: var(--gh-border) !important;">
+<div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
     <a href="{{ route('products.index') }}" class="small text-decoration-none text-muted fw-semibold">
         Xem tất cả <i class="bi bi-arrow-right ms-1"></i>
     </a>

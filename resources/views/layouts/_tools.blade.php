@@ -1,4 +1,4 @@
-{{-- Thanh công cụ Header: Ô tìm kiếm to, Theme & Đơn hàng, Giỏ hàng, Tài khoản 2 khối --}}
+{{-- Thanh công cụ đầu trang: tìm kiếm, giao diện sáng/tối, đơn hàng, tài khoản, giỏ hàng --}}
 @php
     $toolsUser = auth()->user();
     $toolsIsAdmin = $toolsUser && $toolsUser->isAdmin();
@@ -6,97 +6,51 @@
         ? (int) $toolsUser->cartItems()->sum('quantity')
         : 0;
 @endphp
-<div class="gh-tools-shell d-flex align-items-center gap-1 ms-auto">
-    {{-- 1. Ô tìm kiếm --}}
+<div class="gh-tools d-flex align-items-center flex-wrap ms-lg-auto">
     @unless($toolsIsAdmin)
-        <form class="gh-search-form position-relative d-flex align-items-center" method="GET" action="{{ route('products.index') }}">
-            <input class="gh-search-input form-control rounded-pill pe-5"
+        <form class="gh-search" method="GET" action="{{ route('products.index') }}" role="search">
+            <x-icon name="search" size="1rem" />
+            <input class="form-control"
                    type="search" name="q"
                    value="{{ request()->routeIs('products.index') ? request('q') : '' }}"
-                   placeholder="Tìm kiếm Gunpla, phụ kiện..."
-                   style="width: 270px; min-height: 46px; font-size: 0.85rem; padding-left: 0.9rem;">
-            <button class="gh-search-button btn btn-link btn-sm position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0"
-                    type="submit" aria-label="Tìm kiếm">
-                <x-icon name="search" size="1rem" />
-            </button>
+                   placeholder="Tìm Gunpla, phụ kiện..."
+                   aria-label="Tìm kiếm sản phẩm">
         </form>
     @endunless
 
-    {{-- 2. Biểu tượng Theme (trên) & Đơn hàng (dưới) --}}
-    <div class="d-flex flex-column gap-1 align-items-center justify-content-center" style="height: 50px;">
-        {{-- Biểu tượng Theme tròn nhỏ --}}
-        <button type="button" id="themeToggle"
-                class="gh-tools-circle theme-toggle btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center"
-                title="Đổi giao diện sáng/tối"
-                style="width:34px;height:34px;font-size:0.9rem;"
-                aria-label="Đổi giao diện sáng/tối">
-        </button>
+    {{-- Đổi giao diện sáng/tối: script ở layout chèn icon vào nút này --}}
+    <button type="button" id="themeToggle" class="gh-iconbtn theme-toggle"
+            title="Đổi giao diện sáng/tối" aria-label="Đổi giao diện sáng/tối"></button>
 
-        {{-- Biểu tượng Đơn hàng tròn nhỏ --}}
-        @auth
-            @unless($toolsIsAdmin)
-                <a href="{{ route('orders.index') }}"
-                   class="gh-tools-circle btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center"
-                   title="Đơn hàng của tôi"
-                   style="width:34px;height:34px;font-size:0.9rem;"
-                   aria-label="Đơn hàng của tôi">
-                    <x-icon name="package-open" />
-                </a>
-            @else
-                <a href="{{ route('admin.orders.index') }}"
-                   class="gh-tools-circle btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center"
-                   title="Quản lý đơn hàng"
-                   style="width: 34px; height: 34px; font-size: 0.9rem;"
-                   aria-label="Quản lý đơn hàng">
-                    <x-icon name="receipt" />
-                </a>
-            @endunless
-        @else
-            <a href="{{ route('orders.index') }}"
-               class="gh-tools-circle btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center"
-               title="Đơn hàng"
-               style="width: 34px; height: 34px; font-size: 0.9rem;"
-               aria-label="Đơn hàng">
-                <x-icon name="package-open" />
-            </a>
-        @endauth
-    </div>
+    @unless($toolsIsAdmin)
+        <a href="{{ route('orders.index') }}" class="gh-iconbtn" title="Đơn hàng của tôi" aria-label="Đơn hàng của tôi">
+            <x-icon name="package-open" size="1.1rem" />
+        </a>
+    @endunless
 
-
-    {{-- 3. Tài khoản --}}
     @guest
-        <div class="gh-account-tools d-flex flex-column gap-1 justify-content-center flex-shrink-0" style="height: 50px;">
-            <a href="{{ route('login') }}" class="gh-login-button btn btn-sm rounded-pill px-2 py-1 text-center" style="font-size: 0.8rem; line-height: 1.1;">
-                Đăng nhập
-            </a>
-            <a href="{{ route('register') }}" class="btn btn-danger btn-sm rounded-pill px-2 py-1 text-center" style="font-size: 0.8rem; line-height: 1.1;">
-                Đăng ký
-            </a>
-        </div>
+        <a href="{{ route('login') }}" class="btn btn-outline-secondary gh-cart">Đăng nhập</a>
+        <a href="{{ route('register') }}" class="btn btn-outline-primary gh-cart">Đăng ký</a>
     @else
-        <div class="gh-account-tools dropdown flex-shrink-0">
-            <button class="gh-account-button btn rounded-3 px-3 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm text-start"
-                    type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                    style="height: 50px; width: 150px;">
-                <div class="lh-sm me-1">
-                    <div class="gh-account-label text-uppercase fw-semibold" style="font-size: 0.6rem; letter-spacing: 0.03em;">Tài khoản</div>
-                    <div class="gh-account-name fw-bold text-truncate" style="max-width: 100px; font-size: 0.78rem;">{{ $toolsUser->full_name }}</div>
-                </div>
-                <x-icon name="chevron-down" class="gh-account-chevron small ms-auto" />
+        <div class="dropdown">
+            <button class="gh-account" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="gh-avatar">{{ mb_strtoupper(mb_substr($toolsUser->full_name, 0, 1)) }}</span>
+                <span class="gh-account-name">{{ $toolsUser->full_name }}</span>
+                <x-icon name="chevron-down" size="0.8rem" class="text-muted" />
             </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="border-radius: 12px; font-size: 0.9rem; z-index: 1060;">
+            <ul class="dropdown-menu dropdown-menu-end" style="z-index: 1060; min-width: 200px;">
                 @if($toolsIsAdmin)
-                    <li><span class="dropdown-header text-uppercase small fw-bold">Quản trị viên</span></li>
-                    <li><a class="dropdown-item py-2" href="{{ route('profile.show') }}">Tài khoản</a></li>
-                @else
-                    <li><a class="dropdown-item py-2" href="{{ route('profile.show') }}">Tài khoản</a></li>
-                    <li><a class="dropdown-item py-2" href="{{ route('orders.index') }}"><x-icon name="package-open" class="me-2" />Đơn hàng của tôi</a></li>
+                    <li><span class="dropdown-header">Quản trị viên</span></li>
                 @endif
+                <li><a class="dropdown-item" href="{{ route('profile.show') }}"><x-icon name="user" class="me-2" />Tài khoản</a></li>
+                @unless($toolsIsAdmin)
+                    <li><a class="dropdown-item" href="{{ route('orders.index') }}"><x-icon name="package-open" class="me-2" />Đơn hàng của tôi</a></li>
+                @endunless
                 <li><hr class="dropdown-divider"></li>
                 <li>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="dropdown-item py-2 text-danger">
+                        <button type="submit" class="dropdown-item text-danger">
                             <x-icon name="log-out" class="me-2" />Đăng xuất
                         </button>
                     </form>
@@ -105,23 +59,13 @@
         </div>
     @endguest
 
-        {{-- 4. Giỏ hàng --}}
     @unless($toolsIsAdmin)
-        <a href="{{ route('cart.index') }}"
-           class="btn btn-danger rounded-3 px-3 d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none shadow-sm flex-shrink-0"
-           style="height: 50px; font-weight: 600;"
-           title="Giỏ hàng">
-            <x-icon name="shopping-cart" size="1.5rem" />
-            <div class="text-start lh-sm">
-                <div style="font-size: 0.78rem; font-weight: 700;">Giỏ hàng</div>
-                @if($toolsUser)
-                    @if($toolsCartCount > 0)
-                        <span class="badge bg-white text-danger fw-bold rounded-pill" style="font-size: 0.72rem; padding: 2px 7px;">
-                            {{ $toolsCartCount }}
-                        </span>
-                    @endif
-                @endif
-            </div>
+        <a href="{{ route('cart.index') }}" class="btn btn-primary gh-cart text-decoration-none" title="Giỏ hàng">
+            <x-icon name="shopping-cart" size="1.1rem" />
+            <span>Giỏ hàng</span>
+            @if($toolsCartCount > 0)
+                <span class="gh-cart-count">{{ $toolsCartCount }}</span>
+            @endif
         </a>
     @endunless
 </div>

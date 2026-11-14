@@ -107,7 +107,7 @@
                 <hr>
                 <div class="d-flex justify-content-between fw-bold fs-5 mb-2">
                     <span>Tổng cộng</span>
-                    <span class="text-danger">{{ \App\Support\Money::format($order->total_amount) }}</span>
+                    <span class="text-accent">{{ \App\Support\Money::format($order->total_amount) }}</span>
                 </div>
                 <div class="small text-muted">
                     Thanh toán: {{ $order->payment?->payment_method ?? '—' }} · {{ $order->payment?->status ?? '—' }}

@@ -12,10 +12,10 @@
         <form method="GET" action="{{ $action }}" class="card shadow-sm border" style="border-radius: var(--gh-radius); position: sticky; top: 84px;">
             <div class="card-header bg-transparent py-3 border-bottom d-flex align-items-center justify-content-between" style="border-color: var(--gh-border) !important;">
                 <span class="fw-bold d-flex align-items-center gap-2" style="font-size: 0.95rem;">
-                    <x-icon name="funnel" class="text-danger" /> Bộ lọc tìm kiếm
+                    <x-icon name="funnel" class="text-accent" /> Bộ lọc tìm kiếm
                 </span>
                 @if(request()->hasAny(['q', 'brand_id', 'category_id', 'price_range', 'price_min', 'price_max', 'series', 'in_stock']))
-                    <a href="{{ $action }}" class="badge bg-danger-subtle text-danger text-decoration-none border border-danger-subtle px-2 py-1">
+                    <a href="{{ $action }}" class="badge bg-body-secondary text-body text-decoration-none border px-2 py-1">
                         Xóa lọc
                     </a>
                 @endif
@@ -53,7 +53,7 @@
                                 </div>
                             @endforeach
                         </div>
-                        <a href="#moreBrands" id="brandToggle" class="small text-danger text-decoration-none d-inline-block mt-1 fw-semibold" role="button"
+                        <a href="#moreBrands" id="brandToggle" class="small text-accent text-decoration-none d-inline-block mt-1 fw-semibold" role="button"
                            data-bs-toggle="collapse" aria-controls="moreBrands"
                            aria-expanded="{{ $expandBrands ? 'true' : 'false' }}">{{ $expandBrands ? 'Thu gọn' : '+ Xem thêm ' . $hiddenBrands->count() . ' hãng' }}</a>
                         <script>
@@ -168,7 +168,7 @@
                         <h5 class="fw-bold mb-2">Không tìm thấy sản phẩm phù hợp</h5>
                         <p class="text-muted small mb-3">Vui lòng thử tìm với từ khóa khác hoặc bỏ bớt các tiêu chí lọc đang chọn.</p>
                         <div>
-                            <a href="{{ $action }}" class="btn btn-danger btn-sm rounded-pill px-4">
+                            <a href="{{ $action }}" class="btn btn-primary btn-sm px-4">
                                 Xem tất cả sản phẩm
                             </a>
                         </div>

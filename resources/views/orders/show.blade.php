@@ -117,7 +117,7 @@
                 <hr>
                 <div class="d-flex justify-content-between fw-bold fs-5">
                     <span>Tổng cộng</span>
-                    <span class="text-danger">{{ \App\Support\Money::format($order->total_amount) }}</span>
+                    <span class="text-accent">{{ \App\Support\Money::format($order->total_amount) }}</span>
                 </div>
                 <div class="small text-muted mt-2">Đặt lúc {{ $order->order_date->format('d/m/Y H:i') }}</div>
             </div>

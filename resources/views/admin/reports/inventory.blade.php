@@ -39,7 +39,7 @@
         </div></div>
     </div>
     <div class="col-6 col-md-3">
-        <div class="card text-center shadow-sm {{ $lowStockCount > 0 ? 'border-danger' : '' }}"><div class="card-body">
+        <div class="card text-center shadow-sm {{ $lowStockCount > 0 ? 'bar-warning' : '' }}"><div class="card-body">
             <div class="fs-3 fw-semibold {{ $lowStockCount > 0 ? 'text-danger' : '' }}">{{ $lowStockCount }}</div>
             <div class="text-muted">Sắp hết (≤ {{ $lowStock }})</div>
         </div></div>

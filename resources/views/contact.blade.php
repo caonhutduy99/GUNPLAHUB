@@ -5,7 +5,7 @@
 @section('content')
 <div class="mb-4">
     <h3 class="fw-bold mb-1" style="letter-spacing: -0.02em;">
-        <x-icon name="send" class="text-danger me-2" />Liên hệ & Hỗ trợ khách hàng
+        <x-icon name="send" class="text-accent me-2" />Liên hệ & Hỗ trợ khách hàng
     </h3>
     <p class="text-muted small mb-0">Chúng tôi sẵn sàng tư vấn và giải đáp mọi thắc mắc của Gunpla Builders.</p>
 </div>
@@ -16,7 +16,7 @@
         <div class="card shadow-sm border h-100" style="border-radius: var(--gh-radius);">
             <div class="card-body p-4 p-md-5">
                 <div class="d-inline-flex align-items-center gap-2 mb-3">
-                    <span class="badge bg-danger text-uppercase px-2" style="font-size: 0.65rem;">Hotline</span>
+                    <span class="badge bg-accent px-2" style="font-size: 0.65rem;">Hotline</span>
                     <span class="text-muted small fw-bold">HỖ TRỢ TRỰC TUYẾN 24/7</span>
                 </div>
                 <h4 class="fw-bold mb-3">{{ config('shop.name') }} Store</h4>
@@ -26,7 +26,7 @@
 
                 <div class="d-flex flex-column gap-3">
                     <div class="d-flex align-items-start gap-3 p-3 rounded-3 bg-body-tertiary border" style="border-color: var(--gh-border) !important;">
-                        <x-icon name="map-pin" class="text-danger fs-5 mt-1" />
+                        <x-icon name="map-pin" class="text-accent fs-5 mt-1" />
                         <div>
                             <div class="small fw-bold text-uppercase text-muted" style="letter-spacing: 0.05em; font-size: 0.75rem;">Địa chỉ cửa hàng</div>
                             <div class="small fw-medium">{{ config('shop.address') ?: 'Hệ thống phân phối Gunpla chính hãng toàn quốc' }}</div>
@@ -34,17 +34,17 @@
                     </div>
 
                     <div class="d-flex align-items-start gap-3 p-3 rounded-3 bg-body-tertiary border" style="border-color: var(--gh-border) !important;">
-                        <x-icon name="phone" class="text-danger fs-5 mt-1" />
+                        <x-icon name="phone" class="text-accent fs-5 mt-1" />
                         <div>
                             <div class="small fw-bold text-uppercase text-muted" style="letter-spacing: 0.05em; font-size: 0.75rem;">Số điện thoại tư vấn</div>
-                            <a href="tel:{{ preg_replace('/\D/', '', config('shop.phone')) }}" class="small fw-bold text-danger text-decoration-none fs-6">
+                            <a href="tel:{{ preg_replace('/\D/', '', config('shop.phone')) }}" class="small fw-bold text-accent text-decoration-none fs-6">
                                 {{ config('shop.phone') }}
                             </a>
                         </div>
                     </div>
 
                     <div class="d-flex align-items-start gap-3 p-3 rounded-3 bg-body-tertiary border" style="border-color: var(--gh-border) !important;">
-                        <x-icon name="mail" class="text-danger fs-5 mt-1" />
+                        <x-icon name="mail" class="text-accent fs-5 mt-1" />
                         <div>
                             <div class="small fw-bold text-uppercase text-muted" style="letter-spacing: 0.05em; font-size: 0.75rem;">Email tiếp nhận</div>
                             <div class="small fw-medium">{{ config('shop.email') ?: 'contact@gunplahub.vn' }}</div>
@@ -104,7 +104,7 @@
                         </div>
 
                         <div class="col-12 pt-2">
-                            <button type="submit" class="btn btn-danger btn-lg rounded-pill px-4 fw-semibold shadow-sm d-inline-flex align-items-center gap-2" style="font-size: 0.95rem;">
+                            <button type="submit" class="btn btn-primary btn-lg px-4 fw-semibold d-inline-flex align-items-center gap-2" style="font-size: 0.95rem;">
                                 <x-icon name="send" />
                                 <span>Gửi tin nhắn liên hệ</span>
                             </button>

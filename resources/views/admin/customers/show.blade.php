@@ -55,7 +55,7 @@
         </div>
 
         {{-- Blacklist --}}
-        <div class="card shadow-sm {{ $customer->is_blacklisted ? 'border-danger' : '' }}">
+        <div class="card shadow-sm {{ $customer->is_blacklisted ? 'bar-danger' : '' }}">
             <div class="card-body">
                 <h6 class="mb-3">Danh sách đen (Blacklist)</h6>
 

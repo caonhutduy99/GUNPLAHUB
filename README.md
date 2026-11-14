@@ -25,6 +25,14 @@ GunplaHub là website bán mô hình Gundam (Gunpla) và phụ kiện lắp ráp
 - Bootstrap 5.3, Bootstrap Icons, Chart.js và Google Fonts nạp qua CDN, nên **cần có Internet** khi chạy
 - PHPUnit
 
+## Giao diện
+
+Toàn bộ giao diện dùng một stylesheet duy nhất: `public/css/gunplahub.css` (nạp sau Bootstrap 5.3).
+
+- Phong cách tối giản, phẳng, viền mảnh, một màu nhấn; dấu hiệu nhận diện là **thanh nhấn dọc 3px bên trái** (card, thông báo, mục menu đang chọn, tiêu đề trang). Màu của thanh mang ý nghĩa: xanh dương là mặc định, cam là sắp hết hàng, đỏ là cần xử lý, xám là không khả dụng.
+- Hai bộ màu **sáng/tối** khai báo bằng biến CSS ở đầu file (`--gh-bg`, `--gh-surface`, `--gh-ink`, `--gh-accent`...). Muốn đổi màu chủ đạo chỉ cần sửa `--gh-accent` ở hai khối `:root` và `[data-bs-theme="dark"]`.
+- Trang quản trị dùng thanh bên trái; trang khách hàng dùng thanh điều hướng phía trên.
+
 ## Yêu cầu
 
 - PHP >= 8.3, Composer

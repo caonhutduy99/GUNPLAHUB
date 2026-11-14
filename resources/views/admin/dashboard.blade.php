@@ -6,7 +6,7 @@
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
         <h3 class="fw-bold mb-1" style="letter-spacing: -0.02em;">
-            <x-icon name="layout-grid" class="text-danger me-2" />Quản trị cửa hàng 
+            <x-icon name="layout-grid" class="text-accent me-2" />Quản trị cửa hàng 
         </h3>
         <p class="text-muted small mb-0">Tổng quan tình hình kinh doanh và các tác vụ vận hành cửa hàng.</p>
     </div>
@@ -35,7 +35,7 @@
                 <span class="small fw-bold text-uppercase text-muted" style="letter-spacing: 0.05em;">Doanh thu hôm nay</span>
                 <span class="badge bg-success-subtle text-success border border-success-subtle"><x-icon name="calendar" class="me-1" />Hôm nay</span>
             </div>
-            <div class="fs-2 fw-bold text-danger mb-1" style="letter-spacing: -0.02em;">
+            <div class="fs-2 fw-bold text-accent mb-1" style="letter-spacing: -0.02em;">
                 {{ \App\Support\Money::format($revenueToday) }}
             </div>
             <div class="text-muted small">Doanh số thu từ các đơn hoàn tất và đang giao trong ngày.</div>
@@ -61,10 +61,10 @@
 {{-- Đơn cần xử lý --}}
     <div class="col-6 col-lg-3">
         <a href="{{ route('admin.orders.index') }}" class="text-decoration-none">
-            <div class="card h-100 shadow-sm border p-3 {{ $pendingCount > 0 ? 'border-danger bg-danger-subtle bg-opacity-10' : '' }}" style="border-radius: var(--gh-radius);">
+            <div class="card h-100 shadow-sm border p-3 {{ $pendingCount > 0 ? 'bar-danger' : '' }}" style="border-radius: var(--gh-radius);">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="small fw-bold text-uppercase {{ $pendingCount > 0 ? 'text-danger' : 'text-muted' }}" style="letter-spacing: 0.05em; font-size: 0.72rem;">Đơn cần duyệt</span>
-                    <div class="rounded-circle d-flex align-items-center justify-content-center {{ $pendingCount > 0 ? 'bg-danger text-white' : 'bg-body-secondary text-muted' }}" style="width: 36px; height: 36px;">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center {{ $pendingCount > 0 ? 'bg-danger' : 'bg-body-secondary text-muted' }}" style="width: 36px; height: 36px;">
                         <x-icon name="triangle-alert" />
                     </div>
                 </div>
@@ -126,7 +126,7 @@
 <div class="card shadow-sm border mb-4" style="border-radius: var(--gh-radius);">
     <div class="card-header bg-transparent py-3 border-bottom d-flex align-items-center justify-content-between" style="border-color: var(--gh-border) !important;">
         <h5 class="fw-bold mb-0" style="font-size: 1.05rem;">
-            <x-icon name="layout-grid" class="text-danger me-2" />Lối tắt thao tác nhanh
+            <x-icon name="layout-grid" class="text-accent me-2" />Lối tắt thao tác nhanh
         </h5>
         <span class="text-muted small">Chọn phân hệ bạn muốn quản lý</span>
     </div>
@@ -135,7 +135,7 @@
         <div class="row g-3">
             <div class="col-md-3 col-sm-6">
                 <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-dark w-100 py-3 d-flex flex-column align-items-center gap-2 rounded-3 text-decoration-none">
-                    <x-icon name="receipt" size="1.875rem" class="text-danger" />
+                    <x-icon name="receipt" size="1.875rem" class="text-accent" />
                     <span class="fw-semibold">Quản lý Đơn hàng</span>
                     <small class="text-muted" style="font-size: 0.75rem;">Xác nhận, giao hàng, đổi trả</small>
                 </a>
@@ -183,7 +183,7 @@
 
             <div class="col-md-3 col-sm-6">
                 <a href="{{ route('admin.reports.revenue') }}" class="btn btn-outline-dark w-100 py-3 d-flex flex-column align-items-center gap-2 rounded-3 text-decoration-none">
-                    <x-icon name="circle-dollar-sign" size="1.875rem" class="text-danger" />
+                    <x-icon name="circle-dollar-sign" size="1.875rem" class="text-accent" />
                     <span class="fw-semibold">Báo cáo Doanh thu</span>
                     <small class="text-muted" style="font-size: 0.75rem;">Thống kê theo ngày & tháng</small>
                 </a>
@@ -191,7 +191,7 @@
 
             <div class="col-md-3 col-sm-6">
                 <a href="{{ route('admin.audit.index') }}" class="btn btn-outline-dark w-100 py-3 d-flex flex-column align-items-center gap-2 rounded-3 text-decoration-none">
-                    <x-icon name="settings" size="1.875rem" class="text-dark" />
+                    <x-icon name="settings" size="1.875rem" class="text-body" />
                     <span class="fw-semibold">Nhật ký Audit Log</span>
                     <small class="text-muted" style="font-size: 0.75rem;">Lịch sử thao tác hệ thống</small>
                 </a>

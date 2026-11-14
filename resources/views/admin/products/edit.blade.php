@@ -29,8 +29,8 @@
 
 {{-- Bảng lịch sử thay đổi giá --}}
 <div class="card shadow-sm">
-    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 text-dark">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 text-body">
             <x-icon name="refresh-cw" class="text-primary me-2" />Lịch sử thay đổi giá
         </h5>
         <span class="badge bg-secondary-subtle text-secondary border">
@@ -82,7 +82,7 @@
                                     {{ number_format($history->old_price) }} đ
                                 </div>
                             @endif
-                            <div class="fw-bold text-dark">
+                            <div class="fw-bold text-body">
                                 {{ number_format($history->price) }} đ
                             </div>
                         </td>

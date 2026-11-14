@@ -2,6 +2,7 @@
     $shopPhone = config('shop.phone');
     $phoneDigits = preg_replace('/\D/', '', $shopPhone);
     $isAdmin = auth()->check() && auth()->user()->isAdmin();
+    $pendingOrders = $isAdmin ? \App\Models\Order::needsAction()->count() : 0;
 @endphp
 <!DOCTYPE html>
 <html lang="vi">
@@ -29,773 +30,119 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --gh-font: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-            /* LIGHT MODE */
-            --gh-primary: #2f58ec;
-            /* Màu hover: trạng thái rê chuột và hiệu ứng tương tác */
-            --gh-primary-hover: #1031a3;
-            /* Màu nhấn: viền focus, icon và điểm nhấn */
-            --gh-accent: #2f58ec;
-            /* Màu cảnh báo/nguy hiểm */
-            --gh-alert: #ff2a2a;
-            /* Màu phụ: nhóm quản trị, badge và thành phần phụ */
-            --gh-secondary: #1031a3;
-            /* Màu nền active của menu */
-            --gh-soft: #2f58ec;
-            /* Màu nền phụ nhẹ */
-            --gh-primary-subtle: #6899d9;
-            /* Màu chữ trên nền phụ */
-            --gh-primary-subtle-text: #1e3a8a;
-            /* Màu chữ đậm phụ */
-            --gh-dark: #12327d;
-            /* Màu chữ menu và chữ phụ */
-            --gh-slate: #334155;
-            /* Màu chữ mờ/ghi chú */
-            --gh-muted: #657fa2;
-            /* Màu viền input, card, navbar */
-            --gh-border: #e2e8f0;
-            /* Màu nền card, dropdown, form */
-            --gh-card-bg: #ffffff;
-            /* Màu nền toàn trang */
-            --gh-body-bg: #f8fafc;
-            /* Màu nền thanh điều hướng */
-            --gh-navbar-bg: #ffffff;
-            /* Màu nền footer */
-            --gh-footer-bg: #112764;
-
-            /* Màu Bootstrap dùng cho nút/trạng thái */
-            --bs-primary: #0f30a7;
-            --bs-primary-rgb: 15, 48, 167;
-            /* Màu nút giỏ hàng, mua ngay, giá sản phẩm */
-            --bs-danger: #ff7632;
-            --bs-danger-rgb: 255, 85, 0;
-            /* Màu thành công */
-            --bs-success: #3cff00;
-            --bs-success-rgb: 0, 200, 83;
-            /* Màu cảnh báo */
-            --bs-warning: #fff919;
-            --bs-warning-rgb: 245, 158, 11;
-            /* Màu chữ và nền mặc định */
-            --bs-body-color: #000000;
-            --bs-body-bg: #ffffff;
-            --gh-radius-sm: 8px;
-            --gh-radius: 14px;
-            --gh-radius-lg: 20px;
-            --gh-shadow-sm: 0 1px 3px rgba(16, 21, 43, 0.08);
-            --gh-shadow: 0 8px 24px rgba(16, 21, 43, 0.08);
-            --gh-shadow-hover: 0 16px 34px rgba(0, 200, 255, 0.18);
-        }
-
-        [data-bs-theme="dark"] {
-            /* DARK MODE*/
-            --gh-primary: #1846ea;
-            /* Cyan neon khi hover */
-            --gh-primary-hover: #1031a3;
-            /* Màu nhấn cyan */
-            --gh-accent: #0b87ac;
-            /* Màu cảnh báo/nguy hiểm */
-            --gh-alert: #ff2a2a;
-            /* Màu tím phụ */
-            --gh-secondary: #a78bfa;
-            /* Màu active menu */
-            --gh-soft: #1846ea;
-            /* Nền phụ và chữ trên nền phụ */
-            --gh-primary-subtle: rgba(0, 229, 255, 0.12);
-            --gh-primary-subtle-text: #00e5ff;
-            /* Màu chữ sáng */
-            --gh-dark: #f1f5f9;
-            --gh-slate: #cbd5e1;
-            /* Màu chữ mờ */
-            --gh-muted: #8595ab;
-            /* Màu viền */
-            --gh-border: #2d5fc4;
-            /* Nền card */
-            --gh-card-bg: #183d8f;
-            /* Nền toàn trang */
-            --gh-body-bg: #0e2a8c;
-            /* Nền navbar và footer */
-            --gh-navbar-bg: #071546;
-            --gh-footer-bg: #071546;
-            --bs-primary: #1e3a8a;
-            --bs-primary-rgb: 30, 58, 138;
-            --bs-danger: #ff7632;
-            --bs-danger-rgb: 255, 85, 0;
-            --bs-success: #3cff00;
-            --bs-success-rgb: 0, 200, 83;
-            --bs-warning: #fff919;
-            --bs-warning-rgb: 245, 158, 11;
-            --bs-body-color: #f1f5f9;
-            --bs-body-bg: #0b0f19;
-            --gh-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
-            --gh-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            --gh-shadow-hover: 0 16px 34px rgba(0, 200, 255, 0.2);
-        }
-
-        body {
-            font-family: var(--gh-font);
-            background-color: var(--gh-body-bg) !important;
-            color: var(--bs-body-color);
-            letter-spacing: -0.01em;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .gh-icon {
-            display: inline-block;
-            width: var(--gh-icon-size, 1em);
-            height: var(--gh-icon-size, 1em);
-            flex: 0 0 auto;
-            vertical-align: -0.125em;
-            background-color: currentColor;
-            -webkit-mask: var(--gh-icon-url) center / contain no-repeat;
-            mask: var(--gh-icon-url) center / contain no-repeat;
-        }
-
-        .quick-view-close {
-            position: relative;
-            z-index: 2;
-            width: 3rem;
-            height: 3rem;
-            padding: 0.85rem;
-            margin: -0.5rem -0.5rem 0 0;
-            opacity: 0.75;
-        }
-
-        .quick-view-close:hover,
-        .quick-view-close:focus {
-            opacity: 1;
-        }
-
-        /* Card Styling */
-        .card {
-            background-color: var(--gh-card-bg) !important;
-            border: 1px solid var(--gh-border) !important;
-            border-radius: var(--gh-radius) !important;
-            box-shadow: var(--gh-shadow-sm) !important;
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
-        }
-        .card:hover {
-            border-color: var(--gh-accent) !important;
-            box-shadow: var(--gh-shadow-hover) !important;
-        }
-
-        /* Buttons */
-        .btn {
-            font-family: var(--gh-font);
-            font-weight: 500;
-            border-radius: var(--gh-radius-sm);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .btn-primary, .btn-dark {
-            background-color: var(--gh-primary) !important;
-            border-color: var(--gh-primary) !important;
-            color: #ffffff !important;
-        }
-        .btn-primary:hover, .btn-dark:hover {
-            background-color: var(--gh-primary-hover) !important;
-            border-color: var(--gh-primary-hover) !important;
-            color: #ffffff !important;
-            transform: translateY(-1px);
-        }
-        /* Màu giỏ hàng */
-        .btn-danger {
-            background-color: #ff7632 !important;
-            border-color: #ff884c !important;
-            color: #ffffff !important;
-        }
-        .btn-danger:hover {
-            background-color: #ff5500 !important;
-            border-color: #ff6619 !important;
-            color: #ffffff !important;
-            transform: translateY(-1px);
-        }
-        .btn-outline-danger {
-            color: #ff7632 !important;
-            border-color: #ff884c !important;
-        }
-        .btn-outline-danger:hover {
-            background-color: #ff5500 !important;
-            border-color: #ff6619 !important;
-            color: #ffffff !important;
-        }
-        .btn-outline-dark {
-            border-color: var(--gh-border) !important;
-            color: var(--bs-body-color) !important;
-        }
-        .btn-outline-dark:hover {
-            background-color: var(--gh-primary-hover) !important;
-            border-color: var(--gh-primary-hover) !important;
-            color: #ffffff !important;
-        }
-        [data-bs-theme="dark"] .btn-outline-dark:hover {
-            background-color: var(--gh-primary-hover) !important;
-            border-color: var(--gh-primary-hover) !important;
-            color: #ffffff !important;
-        }
-        .btn-outline-light:hover {
-            background-color: var(--gh-accent) !important;
-            border-color: var(--gh-accent) !important;
-            color: #07101f !important;
-        }
-        /* Màu Footer */
-        footer .text-muted {
-            color: #b9c7f8 !important;
-        }
-        footer .gh-footer-brand {
-            color: #ffffff !important;
-        }
-        footer .gh-footer-brand .text-danger {
-            color: #ff5500 !important;
-        }
-        footer a.text-muted:hover,
-        footer a.text-reset:hover {
-            color: #00e5ff !important;
-        }
-
-        /* Form */
-        .form-control, .form-select {
-            border: 1px solid var(--gh-border);
-            border-radius: var(--gh-radius-sm);
-            background-color: var(--gh-card-bg);
-            color: var(--bs-body-color);
-            padding: 0.55rem 0.85rem;
-            font-size: 0.95rem;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: var(--gh-accent);
-            box-shadow: 0 0 0 3px rgba(0, 200, 255, 0.2);
-            background-color: var(--gh-card-bg);
-            color: var(--bs-body-color);
-        }
-
-        /* Badges */
-        .badge {
-            font-weight: 600;
-            letter-spacing: 0.02em;
-            padding: 0.35em 0.65em;
-            border-radius: 6px;
-        }
-        .badge-grade {
-            background-color: var(--gh-primary);
-            color: #ffffff;
-            font-size: 0.72rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-        [data-bs-theme="dark"] .badge-grade {
-            background-color: var(--gh-secondary);
-            color: #ffffff;
-        }
-        .dropdown-menu {
-            background-color: var(--gh-card-bg);
-            border: 1px solid var(--gh-border) !important;
-            box-shadow: var(--gh-shadow);
-        }
-        .dropdown-item {
-            color: var(--bs-body-color);
-            transition: background-color 0.18s ease, color 0.18s ease;
-        }
-        .dropdown-item:hover,
-        .dropdown-item:focus {
-            background-color: var(--gh-accent);
-            color: #07101f;
-        }
-        .dropdown-item.active,
-        .dropdown-item:active {
-            background-color: var(--gh-soft);
-            color: #07101f;
-        }
-
-        /* MÀU THANH ĐIỀU HƯỚNG */
-        /* --gh-navbar-bg ở phần biến màu để đổi nền navbar */
-
-        .gh-navbar {
-            background: color-mix(in srgb, var(--gh-navbar-bg) 94%, transparent) !important;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid var(--gh-border);
-            transition: all 0.3s ease;
-            z-index: 1030;
-        }
-        .gh-brand {
-            font-weight: 800;
-            letter-spacing: 0.04em;
-            font-size: 1.75rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            text-decoration: none;
-            color: var(--gh-primary) !important;
-        }
-        /* Badge STORE */
-        .gh-brand-badge {
-            background: #fff919;
-            color: #ff00ee;
-            font-size: 0.6rem;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            letter-spacing: 0.08em;
-        }
-        .gh-nav-link {
-            color: var(--gh-slate) !important;
-            font-weight: 500;
-            font-size: 0.9rem;
-            padding: 0.5rem 0.85rem !important;
-            border-radius: var(--gh-radius-sm);
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            white-space: nowrap;
-        }
-        .gh-nav-link:hover {
-            color: #ffffff !important;
-            background: var(--gh-primary-hover);
-        }
-        .gh-nav-link.active {
-            color: #ffffff !important;
-            background: var(--gh-soft);
-        }
-        .gh-account-tools {
-            width: 150px;
-        }
-        .gh-account-tools > a,
-        .gh-account-tools > button {
-            width: 100%;
-        }
-        .gh-navbar.is-admin .gh-brand {
-            font-size: 1.55rem;
-        }
-        .gh-navbar.is-admin .gh-nav-link {
-            font-size: 0.88rem;
-            padding: 0.42rem 0.58rem !important;
-        }
-        .gh-navbar.is-admin .gh-account-tools {
-            width: 150px;
-        }
-        .gh-navbar.is-admin .gh-tools-shell {
-            gap: 0.25rem !important;
-        }
-        .gh-tools-shell {
-            color: var(--bs-body-color);
-        }
-        /* Tìm kiếm Light Mode */
-        .gh-search-input {
-            background: #b9c7f8 !important;
-            color: #0f172a !important;
-        }
-        .gh-search-input::placeholder {
-            color: #303b4a !important;
-        }
-        .gh-search-button {
-            color: #1846ea !important;
-        }
-        .gh-tools-circle {
-            border: 1px solid #94a3b8 !important;
-            color: #334155 !important;
-        }
-        .theme-toggle {
-            background: #ffffff !important;
-            border-color: #0f30a7 !important;
-            color: #0f30a7 !important;
-        }
-        .theme-toggle.theme-dark {
-            background: #ff5500 !important;
-            border-color: #ff5500 !important;
-            color: #ffffff !important;
-        }
-        .gh-tools-shell > div:first-of-type {
-            min-width: 38px;
-        }
-        .gh-tools-circle:hover,
-        .gh-tools-circle:focus {
-            border-color: var(--gh-primary) !important;
-            background: var(--gh-primary-subtle) !important;
-            color: var(--gh-primary) !important;
-        }
-        .gh-login-button {
-            color: var(--gh-primary) !important;
-            border: 1px solid var(--gh-primary) !important;
-        }
-        /* Tài khoản Light Mode */
-        .gh-account-button {
-            /* border: 1px solid #94a3b8 !important; */
-            color: #0f172a !important;
-            background: #b1ff99 !important;
-        }
-        .gh-account-label,
-        .gh-account-chevron {
-            color: #000000 !important;
-        }
-        .gh-account-name {
-            color: #1846ea !important;
-        }
-        /* Tìm kiếm và tài khoản Dark Mode */
-        [data-bs-theme="dark"] .gh-search-input {
-            background: #161f33 !important;
-            /*border-color: #243352 !important;*/
-            color: #f1f5f9 !important;
-        }
-        [data-bs-theme="dark"] .gh-search-input::placeholder,
-        [data-bs-theme="dark"] .gh-search-button,
-        [data-bs-theme="dark"] .gh-account-label,
-        [data-bs-theme="dark"] .gh-account-chevron {
-            color: #b3c1d6 !important;
-        }
-        [data-bs-theme="dark"] .gh-tools-circle {
-            border-color: #64748b !important;
-            color: #cbd5e1 !important;
-        }
-        [data-bs-theme="dark"] .theme-toggle {
-            background: #ff5500 !important;
-            border-color: #ff5500 !important;
-            color: #ffffff !important;
-        }
-        [data-bs-theme="dark"] .gh-login-button {
-            color: #00e5ff !important;
-            border-color: #00e5ff !important;
-        }
-        [data-bs-theme="dark"] .gh-account-button {
-            border-color: #243352 !important;
-            color: #f1f5f9 !important;
-            background: #161f33 !important;
-        }
-        [data-bs-theme="dark"] .gh-account-name {
-            color: #f1f5f9 !important;
-        }
-        [data-bs-theme="dark"] footer .gh-footer-brand {
-            color: #f1f5f9 !important;
-        }
-        .gh-commitments {
-            background: var(--gh-navbar-bg);
-            border-bottom: 1px solid var(--gh-border);
-            padding: 0.5rem 1rem;
-        }
-        .commit-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 0.85rem;
-            border-radius: 9999px;
-            background-color: var(--gh-card-bg);
-            border: 1px solid var(--gh-border);
-            font-size: 0.83rem;
-            font-weight: 500;
-            color: var(--bs-body-color);
-            box-shadow: var(--gh-shadow-sm);
-        }
-        .commit-badge i {
-            color: var(--gh-accent);
-            font-size: 1rem;
-        }
-
-        /* Alerts */
-        .alert {
-            border-radius: var(--gh-radius-sm);
-            border: 0;
-            border-left: 4px solid transparent;
-            box-shadow: var(--gh-shadow-sm);
-        }
-        .alert-success {
-            background-color: #ecfdf5;
-            color: #047857;
-            border-left-color: #00c853;
-        }
-        [data-bs-theme="dark"] .alert-success {
-            background-color: rgba(0, 201, 139, 0.16);
-            color: #59ffc6;
-        }
-        .alert-danger {
-            background-color: #fef2f2;
-            color: #b91c1c;
-            border-left-color: var(--gh-alert);
-        }
-        [data-bs-theme="dark"] .alert-danger {
-            background-color: rgba(255, 43, 214, 0.16);
-            color: #ff8be9;
-        }
-        .alert-warning {
-            background-color: #fffbeb;
-            color: #b45309;
-            border-left-color: #f59e0b;
-        }
-        [data-bs-theme="dark"] .alert-warning {
-            background-color: rgba(183, 255, 0, 0.14);
-            color: #d7ff70;
-        }
-
-        /* Nút nổi góc phải */
-        .float-btn {
-            width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0;
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 1.15rem; text-decoration: none;
-            box-shadow: 0 4px 14px rgba(0,0,0,.25); cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
-        }
-        .float-btn:hover {
-            color: #07101f;
-            background: var(--gh-accent) !important;
-            transform: translateY(-2px) scale(1.06);
-            filter: none;
-        }
-
-        /* Popup Thêm vào giỏ hàng & Xem nhanh */
-        .product-media-wrapper {
-            position: relative;
-        }
-        .product-hover-overlay {
-            opacity: 0;
-            visibility: hidden;
-            transform: translate(-50%, -40%) scale(0.92);
-            transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
-            pointer-events: none;
-            z-index: 10;
-        }
-        .card-product:hover .product-hover-overlay {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-            pointer-events: auto;
-        }
-        .btn-hover-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            padding: 0.45rem 0.85rem;
-            font-size: 0.78rem;
-            font-weight: 700;
-            border-radius: 9999px;
-            border: 2px solid #ffffff !important;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
-            text-decoration: none;
-            cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, filter 0.2s ease;
-        }
-        .btn-hover-action:hover {
-            transform: none;
-            background-color: #ff5500 !important;
-            border-color: #ffffff !important;
-            color: #ffffff !important;
-        }
-        /* Hai nút popup chỉ hiển thị icon màu cam */
-        .btn-hover-yellow,
-        .btn-hover-pink {
-            background-color: #ff5500 !important;
-            border-color: #ffffff !important;
-            color: #ffffff !important;
-            width: 60px;
-            height: 60px;
-            padding: 0;
-            justify-content: center;
-        }
-        .product-price {
-            color: #ff2a2a !important;
-        }
-        .product-card-link {
-            cursor: pointer;
-        }
-        .product-sku {
-            color: #8aff66 !important;
-        }
-        /* Ô màu vàng: Thêm vào giỏ hàng */
-        .btn-hover-yellow {
-            background-color: #ff5500 !important;
-            color: #ffffff !important;
-        }
-        .btn-hover-yellow:hover {
-            background-color: #ff5500 !important;
-            color: #ffffff !important;
-        }
-        /* Ô màu hồng: Xem nhanh trang chi tiết */
-        .btn-hover-pink {
-            background-color: #ff5500 !important;
-            color: #ffffff !important;
-        }
-        .btn-hover-pink:hover {
-            background-color: #ff5500 !important;
-            color: #ffffff !important;
-        }
-        a.text-muted:hover,
-        a.text-reset:hover {
-            color: var(--gh-primary-hover) !important;
-        }
-        .shop-sort-toolbar {
-            background-color: #1031a3 !important;
-            border-color: #1031a3 !important;
-            color: #ffffff !important;
-        }
-        .shop-sort-toolbar .text-muted,
-        .shop-sort-toolbar .text-muted strong,
-        .shop-sort-toolbar .btn-outline-secondary {
-            color: #ffffff !important;
-        }
-        .shop-sort-toolbar .sort-hover-accent:hover {
-            background-color: #2f58ec !important;
-            border-color: #2f58ec !important;
-            color: #ffffff !important;
-        }
-        [data-bs-theme="dark"] .gh-package-note {
-            color: #ffffff !important;
-        }
-
-        /* Khi in / lưu PDF */
-        @media print {
-            nav.navbar, footer, .no-print, .position-fixed { display: none !important; }
-            body { background: #fff !important; color: #000 !important; }
-            .card { box-shadow: none !important; border-color: var(--gh-border) !important; }
-        }
-    </style>
+    <link href="{{ asset('css/gunplahub.css') }}?v={{ filemtime(public_path('css/gunplahub.css')) }}" rel="stylesheet">
     @stack('styles')
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 {{ $isAdmin ? 'gh-is-admin' : '' }}">
 
 {{-- Thanh điều hướng --}}
-<nav class="navbar navbar-expand-lg gh-navbar sticky-top {{ $isAdmin ? 'is-admin' : '' }}">
-    <div class="container">
-        <a class="navbar-brand gh-brand" href="{{ route('home') }}">
-            <span>GUNPLA</span><span class="text-danger">HUB</span>
-            <span class="gh-brand-badge">STORE</span>
+<nav class="navbar navbar-expand-lg gh-navbar sticky-top">
+    <div class="{{ $isAdmin ? 'container-fluid px-3 px-lg-4' : 'container' }}">
+        @if($isAdmin)
+            <button class="navbar-toggler d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-label="Mở menu quản trị">
+                <x-icon name="menu" size="1.25rem" />
+            </button>
+        @endif
+        <a class="navbar-brand gh-brand me-3" href="{{ route('home') }}">
+            <span><strong>Gunpla</strong>Hub</span>
+            @if($isAdmin)<span class="gh-brand-sub">Quản trị</span>@endif
         </a>
-        <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-            <x-icon name="menu" size="1.5rem" />
-        </button>
-        <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav gh-main-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
-                @if($isAdmin)
-                    <li class="nav-item">
-                        <a class="nav-link gh-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-                            <x-icon name="layout-grid" class="me-1" />Quản trị
-                        </a>
-                    </li>
-                @else
-                    <li class="nav-item">
-                        <a class="nav-link gh-nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
-                            Trang chủ
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link gh-nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                            Cửa hàng
-                        </a>
-                    </li>
-                @endif
-                @unless($isAdmin)
-                    <li class="nav-item">
-                        <a class="nav-link gh-nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
-                            Liên hệ
-                        </a>
-                    </li>
-                @endunless
-                @if($isAdmin)
-                    {{-- 1. Hàng hóa (dropdown: sản phẩm, danh mục, thương hiệu) --}}
-                    @php
-                        $isHangHoaActive = request()->routeIs('admin.products.*', 'admin.categories.*', 'admin.brands.*');
-                    @endphp
-                    <li class="nav-item dropdown">
-                        <a class="nav-link gh-nav-link dropdown-toggle {{ $isHangHoaActive ? 'active fw-bold' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <x-icon name="package-open" class="me-1" />Hàng hóa
-                        </a>
-                        <ul class="dropdown-menu shadow border-0" style="border-radius: 12px; font-size: 0.9rem;">
-                            <li>
-                                <a class="dropdown-item py-2 {{ request()->routeIs('admin.products.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.products.index') }}">
-                                    <x-icon name="package-open" class="me-2" />Sản phẩm
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 {{ request()->routeIs('admin.categories.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.categories.index') }}">
-                                    <x-icon name="layout-grid" class="me-2" />Danh mục
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 {{ request()->routeIs('admin.brands.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.brands.index') }}">
-                                    <x-icon name="badge-check" class="me-2" />Thương hiệu
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
 
-                    {{-- 2. Con người (dropdown: khách hàng, đơn hàng, tin nhắn) --}}
-                    @php
-                        $pendingOrders = \App\Models\Order::needsAction()->count();
-                        $isConNguoiActive = request()->routeIs('admin.customers.*', 'admin.orders.*', 'admin.contacts.*');
-                    @endphp
-                    <li class="nav-item dropdown">
-                        <a class="nav-link gh-nav-link dropdown-toggle {{ $isConNguoiActive ? 'active fw-bold' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <x-icon name="user-cog" class="me-1" />Con người
-                            @if($pendingOrders > 0)
-                                <span class="badge rounded-pill bg-danger ms-1" style="font-size: 0.68rem; padding: 2px 6px;">{{ $pendingOrders }}</span>
-                            @endif
-                        </a>
-                        <ul class="dropdown-menu shadow border-0" style="border-radius: 12px; font-size: 0.9rem;">
-                            <li>
-                                <a class="dropdown-item py-2 {{ request()->routeIs('admin.customers.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.customers.index') }}">
-                                    <x-icon name="user" class="me-2" />Khách hàng
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 d-flex align-items-center justify-content-between {{ request()->routeIs('admin.orders.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.orders.index') }}">
-                                    <span><x-icon name="shopping-cart" class="me-2" />Đơn hàng</span>
-                                    @if($pendingOrders > 0)
-                                        <span class="badge rounded-pill bg-danger" style="font-size: 0.7rem;">{{ $pendingOrders }}</span>
-                                    @endif
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item py-2 {{ request()->routeIs('admin.contacts.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.contacts.index') }}">
-                                    <x-icon name="mail" class="me-2" />Tin nhắn
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    {{-- 3. Mã giảm giá --}}
+        @if($isAdmin)
+            <div class="ms-auto">
+                @include('layouts._tools')
+            </div>
+        @else
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Mở menu">
+                <x-icon name="menu" size="1.25rem" />
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link gh-nav-link {{ request()->routeIs('admin.vouchers.*') ? 'active' : '' }}" href="{{ route('admin.vouchers.index') }}">
-                            <x-icon name="ticket" class="me-1" />Mã giảm giá
-                        </a>
+                        <a class="nav-link gh-nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Trang chủ</a>
                     </li>
-
-                    {{-- 4. Báo cáo (giữ nguyên: Báo cáo doanh thu, Báo cáo tồn kho) --}}
-                    @php
-                        $isBaoCaoActive = request()->routeIs('admin.reports.*');
-                    @endphp
-                    <li class="nav-item dropdown">
-                        <a class="nav-link gh-nav-link dropdown-toggle {{ $isBaoCaoActive ? 'active fw-bold' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <x-icon name="circle-dollar-sign" class="me-1" />Báo cáo
-                        </a>
-                        <ul class="dropdown-menu shadow border-0" style="border-radius: 12px; font-size: 0.9rem;">
-                            <li><a class="dropdown-item py-2 {{ request()->routeIs('admin.reports.revenue') ? 'active fw-bold' : '' }}" href="{{ route('admin.reports.revenue') }}"><x-icon name="circle-dollar-sign" class="me-2" />Báo cáo doanh thu</a></li>
-                            <li><a class="dropdown-item py-2 {{ request()->routeIs('admin.reports.inventory') ? 'active fw-bold' : '' }}" href="{{ route('admin.reports.inventory') }}"><x-icon name="package-open" class="me-2" />Báo cáo tồn kho</a></li>
-                        </ul>
-                    </li>
-
-                    {{-- 5. Nhật ký --}}
                     <li class="nav-item">
-                        <a class="nav-link gh-nav-link {{ request()->routeIs('admin.audit.*') ? 'active' : '' }}" href="{{ route('admin.audit.index') }}">
-                            <x-icon name="settings" class="me-1" />Nhật ký
-                        </a>
+                        <a class="nav-link gh-nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">Cửa hàng</a>
                     </li>
-                @endif
-            </ul>
-
-            @include('layouts._tools')
-        </div>
+                    <li class="nav-item">
+                        <a class="nav-link gh-nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Liên hệ</a>
+                    </li>
+                </ul>
+                @include('layouts._tools')
+            </div>
+        @endif
     </div>
 </nav>
 
-{{-- Cam kết của cửa hàng --}}
-    <div class="gh-commitments d-flex flex-wrap justify-content-center align-items-center gap-2">
+@unless($isAdmin)
+    {{-- Cam kết của cửa hàng --}}
+    <div class="gh-commitments d-flex flex-wrap justify-content-center align-items-center">
         @foreach(config('shop.commitments') as $commitment)
             <span class="commit-badge">
                 <x-icon name="{{ $commitment['icon'] }}" />{{ $commitment['text'] }}
             </span>
         @endforeach
     </div>
-    
-<main class="container py-4 flex-grow-1">
+@endunless
+
+@if($isAdmin)
+<div class="gh-shell">
+    {{-- Thanh bên quản trị: mục đang chọn có thanh nhấn bên trái --}}
+    <aside class="gh-sidebar offcanvas-lg offcanvas-start" tabindex="-1" id="adminSidebar" aria-label="Menu quản trị">
+        <div class="offcanvas-header d-lg-none">
+            <span class="gh-brand"><span><strong>Gunpla</strong>Hub</span><span class="gh-brand-sub">Quản trị</span></span>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#adminSidebar" aria-label="Đóng"></button>
+        </div>
+        <div class="offcanvas-body d-block py-2 px-0">
+            <nav class="d-flex flex-column" aria-label="Quản trị">
+                <a class="gh-side-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                    <x-icon name="layout-grid" />Tổng quan
+                </a>
+
+                <div class="gh-side-group">Hàng hóa</div>
+                <a class="gh-side-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
+                    <x-icon name="package-open" />Sản phẩm
+                </a>
+                <a class="gh-side-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}" href="{{ route('admin.categories.index') }}">
+                    <x-icon name="list" />Danh mục
+                </a>
+                <a class="gh-side-link {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}" href="{{ route('admin.brands.index') }}">
+                    <x-icon name="badge-check" />Thương hiệu
+                </a>
+
+                <div class="gh-side-group">Bán hàng</div>
+                <a class="gh-side-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+                    <x-icon name="receipt" />Đơn hàng
+                    @if($pendingOrders > 0)<span class="badge rounded-pill bg-danger">{{ $pendingOrders }}</span>@endif
+                </a>
+                <a class="gh-side-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}" href="{{ route('admin.customers.index') }}">
+                    <x-icon name="user" />Khách hàng
+                </a>
+                <a class="gh-side-link {{ request()->routeIs('admin.vouchers.*') ? 'active' : '' }}" href="{{ route('admin.vouchers.index') }}">
+                    <x-icon name="ticket" />Mã giảm giá
+                </a>
+                <a class="gh-side-link {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}" href="{{ route('admin.contacts.index') }}">
+                    <x-icon name="mail" />Tin nhắn
+                </a>
+
+                <div class="gh-side-group">Báo cáo</div>
+                <a class="gh-side-link {{ request()->routeIs('admin.reports.revenue') ? 'active' : '' }}" href="{{ route('admin.reports.revenue') }}">
+                    <x-icon name="circle-dollar-sign" />Doanh thu
+                </a>
+                <a class="gh-side-link {{ request()->routeIs('admin.reports.inventory') ? 'active' : '' }}" href="{{ route('admin.reports.inventory') }}">
+                    <x-icon name="box" />Tồn kho
+                </a>
+
+                <div class="gh-side-group">Hệ thống</div>
+                <a class="gh-side-link {{ request()->routeIs('admin.audit.*') ? 'active' : '' }}" href="{{ route('admin.audit.index') }}">
+                    <x-icon name="settings" />Nhật ký hoạt động
+                </a>
+            </nav>
+        </div>
+    </aside>
+@endif
+
+<main class="{{ $isAdmin ? 'gh-admin-main' : 'container py-4' }} flex-grow-1">
     @if(session('success'))
         <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
             <x-icon name="circle-check" class="me-2 fs-5" />
@@ -817,90 +164,91 @@
 
     @yield('content')
 </main>
+@if($isAdmin)
+</div>
+@endif
 
-{{-- Footer --}}
-<footer class="mt-auto pt-5 pb-4 border-top" style="background-color: var(--gh-footer-bg); border-color: #1e293b !important;">
+@unless($isAdmin)
+{{-- Chân trang --}}
+<footer class="gh-footer mt-auto pt-5 pb-4">
     <div class="container">
         <div class="row g-4 mb-4">
             <div class="col-lg-4 col-md-6">
-                <a class="gh-brand gh-footer-brand mb-3 d-inline-flex" href="{{ route('home') }}">
-                    <span>GUNPLA</span><span class="text-danger">HUB</span>
-                    <span class="gh-brand-badge">STORE</span>
-                </a>
-                <p class="text-muted small mb-3 lh-base text-justify" style="text-align: justify;">
+                <a class="gh-brand mb-3" href="{{ route('home') }}"><span><strong>Gunpla</strong>Hub</span></a>
+                <p class="text-muted small mb-3 lh-base">
                     GunplaHub chuyên cung cấp các dòng mô hình Gundam chính hãng Bandai Namco Nhật Bản, phụ kiện nâng cấp và dụng cụ lắp ráp cho Builder tại Việt Nam.
                 </p>
                 <div class="small text-muted mb-2">
-                    <x-icon name="map-pin" class="text-danger me-2" />{{ config('shop.address') ?: 'Hệ thống phân phối Gunpla chính hãng toàn quốc' }}
+                    <x-icon name="map-pin" class="text-accent me-2" />{{ config('shop.address') ?: 'Hệ thống phân phối Gunpla chính hãng toàn quốc' }}
                 </div>
                 <div class="small text-muted mb-2">
-                    <x-icon name="phone" class="text-danger me-2" />Hotline: <a href="tel:{{ $phoneDigits }}" class="text-reset fw-semibold">{{ $shopPhone }}</a>
+                    <x-icon name="phone" class="text-accent me-2" />Hotline: <a href="tel:{{ $phoneDigits }}" class="fw-semibold">{{ $shopPhone }}</a>
                 </div>
                 <div class="small text-muted">
-                    <x-icon name="shield-check" class="text-success me-2" />100% Sản phẩm phân phối chính hãng
+                    <x-icon name="shield-check" class="text-accent me-2" />100% sản phẩm phân phối chính hãng
                 </div>
             </div>
 
             <div class="col-lg-2 col-md-6">
-                <h6 class="fw-bold text-uppercase small mb-3 text-danger" style="letter-spacing: 0.05em;">Dòng mô hình</h6>
+                <h6 class="gh-foot-title">Dòng mô hình</h6>
                 <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
-                    <li><a href="{{ route('products.index', ['grade' => 'HG']) }}" class="text-decoration-none text-muted">High Grade (HG 1/144)</a></li>
-                    <li><a href="{{ route('products.index', ['grade' => 'RG']) }}" class="text-decoration-none text-muted">Real Grade (RG 1/144)</a></li>
-                    <li><a href="{{ route('products.index', ['grade' => 'MG']) }}" class="text-decoration-none text-muted">Master Grade (MG 1/100)</a></li>
-                    <li><a href="{{ route('products.index', ['grade' => 'PG']) }}" class="text-decoration-none text-muted">Perfect Grade (PG 1/60)</a></li>
+                    <li><a href="{{ route('products.index', ['grade' => 'HG']) }}">High Grade (HG 1/144)</a></li>
+                    <li><a href="{{ route('products.index', ['grade' => 'RG']) }}">Real Grade (RG 1/144)</a></li>
+                    <li><a href="{{ route('products.index', ['grade' => 'MG']) }}">Master Grade (MG 1/100)</a></li>
+                    <li><a href="{{ route('products.index', ['grade' => 'PG']) }}">Perfect Grade (PG 1/60)</a></li>
                 </ul>
             </div>
 
             <div class="col-lg-3 col-md-6">
-                <h6 class="fw-bold text-uppercase small mb-3 text-danger" style="letter-spacing: 0.05em;">Hỗ trợ khách hàng</h6>
+                <h6 class="gh-foot-title">Hỗ trợ khách hàng</h6>
                 <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
-                    <li><a href="{{ route('products.index') }}" class="text-decoration-none text-muted">Tất cả sản phẩm</a></li>
-                    <li><a href="{{ route('contact') }}" class="text-decoration-none text-muted">Gửi yêu cầu hỗ trợ</a></li>
-                    <li><a href="{{ route('orders.index') }}" class="text-decoration-none text-muted">Tra cứu hành trình đơn hàng</a></li>
-                    <li><a href="{{ route('contact') }}" class="text-decoration-none text-muted">Chính sách bảo hành & hoàn tiền</a></li>
+                    <li><a href="{{ route('products.index') }}">Tất cả sản phẩm</a></li>
+                    <li><a href="{{ route('contact') }}">Gửi yêu cầu hỗ trợ</a></li>
+                    <li><a href="{{ route('orders.index') }}">Tra cứu hành trình đơn hàng</a></li>
+                    <li><a href="{{ route('contact') }}">Chính sách bảo hành &amp; hoàn tiền</a></li>
                 </ul>
             </div>
 
             <div class="col-lg-3 col-md-6">
-                <h6 class="fw-bold text-uppercase small mb-3 text-danger" style="letter-spacing: 0.05em;">Phương thức thanh toán</h6>
+                <h6 class="gh-foot-title">Phương thức thanh toán</h6>
                 <p class="text-muted small mb-3">Hỗ trợ đa dạng phương thức thanh toán an toàn, tiện lợi.</p>
                 <div class="d-flex flex-wrap gap-2 mb-3">
                     <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="wallet" class="me-1" />Tiền mặt (COD)</span>
-                    <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="qr-code" class="me-1" />VietQR Pay</span>
+                    <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="qr-code" class="me-1" />VietQR</span>
                     <span class="badge border bg-body-tertiary text-body fw-normal px-2 py-1"><x-icon name="credit-card" class="me-1" />VNPay</span>
                 </div>
-                <div class="gh-package-note p-2 border rounded-3 bg-body-tertiary small text-dark">
-                    <x-icon name="package-open" class="text-danger me-1" />Đóng gói 3 lớp chống móp hộp khi vận chuyển xa.
+                <div class="gh-package-note p-2 small">
+                    <x-icon name="package-open" class="text-accent me-1" />Đóng gói 3 lớp chống móp hộp khi vận chuyển xa.
                 </div>
             </div>
         </div>
 
-        <div class="border-top pt-3 d-flex flex-wrap justify-content-between align-items-center small text-muted" style="border-color: var(--gh-border) !important;">
-            <div>&copy; {{ date('Y') }} {{ config('shop.name') }}. All rights reserved.</div>
+        <div class="border-top pt-3 small text-muted">
+            &copy; {{ date('Y') }} {{ config('shop.name') }}. All rights reserved.
         </div>
     </div>
 </footer>
+@endunless
 
 {{-- Nút nổi: về đầu trang, gọi điện, Zalo --}}
 <div class="position-fixed d-flex flex-column gap-2" style="right: 18px; bottom: 18px; z-index: 1040;">
-    <button type="button" id="backToTop" class="float-btn" style="background: var(--gh-primary); display: none;" title="Về đầu trang" aria-label="Về đầu trang">
+    <button type="button" id="backToTop" class="float-btn" style="display: none;" title="Về đầu trang" aria-label="Về đầu trang">
         <x-icon name="chevron-up" />
     </button>
     @unless($isAdmin)
-    <a href="tel:{{ $phoneDigits }}" class="float-btn" style="background: var(--bs-danger);" title="Gọi {{ $shopPhone }}" aria-label="Gọi điện thoại">
+    <a href="tel:{{ $phoneDigits }}" class="float-btn" title="Gọi {{ $shopPhone }}" aria-label="Gọi điện thoại">
         <x-icon name="phone" />
     </a>
-    <a href="https://zalo.me/{{ $phoneDigits }}" target="_blank" rel="noopener" class="float-btn"
-       style="background: #0068ff; font-size: .8rem; font-weight: 700;" title="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    <a href="https://zalo.me/{{ $phoneDigits }}" target="_blank" rel="noopener" class="float-btn zalo" title="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
     @endunless
 </div>
 
 {{-- Modal Xem nhanh sản phẩm (Quick View) --}}
 <div class="modal fade" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: var(--gh-radius); overflow: hidden;">
+        <div class="modal-content">
             <div class="modal-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                <span class="badge bg-danger text-white fw-bold px-2 py-1 small" id="qvBrand">BANDAI</span>
+                <span class="badge bg-body-secondary text-body fw-semibold px-2 py-1" id="qvBrand">BANDAI</span>
                 <button type="button" class="btn-close quick-view-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
             <div class="modal-body p-4 pt-2">
@@ -935,11 +283,11 @@
                                     <span class="input-group-text bg-body-tertiary border-end-0 small text-muted fw-bold">SL</span>
                                     <input type="number" name="quantity" id="qvQuantity" value="1" min="1" max="99" class="form-control text-center fw-bold">
                                 </div>
-                                <button type="submit" name="buy_now" value="0" class="btn btn-outline-danger fw-bold rounded-pill flex-grow-1 py-2">
+                                <button type="submit" name="buy_now" value="0" class="btn btn-outline-primary fw-semibold flex-grow-1 py-2">
                                     <x-icon name="shopping-cart" class="me-1" />Thêm vào giỏ
                                 </button>
                             </div>
-                            <button type="submit" name="buy_now" value="1" class="btn btn-danger w-100 fw-bold rounded-pill shadow-sm py-2" style="font-size: 1rem;">
+                            <button type="submit" name="buy_now" value="1" class="btn btn-primary w-100 fw-semibold py-2" style="font-size: 1rem;">
                                 <x-icon name="shopping-cart" class="me-1" />Tiến hành mua hàng luôn
                             </button>
                         </form>

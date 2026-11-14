@@ -46,7 +46,7 @@
 <div class="row g-3 mb-4">
     <div class="col-md-4">
         <div class="card text-center shadow-sm"><div class="card-body">
-            <div class="fs-3 text-danger fw-semibold">{{ \App\Support\Money::format($totalRevenue) }}</div>
+            <div class="fs-3 text-accent fw-semibold">{{ \App\Support\Money::format($totalRevenue) }}</div>
             <div class="text-muted">Tổng doanh thu</div>
         </div></div>
     </div>
@@ -152,7 +152,28 @@
         var canvas = document.getElementById('revenueChart');
         if (!canvas || typeof Chart === 'undefined') { return; }
 
-        new Chart(canvas, {
+        // Màu biểu đồ lấy từ biến CSS của giao diện nên đổi theo theme sáng/tối
+        function palette() {
+            var css = getComputedStyle(document.documentElement);
+            var get = function (name) { return css.getPropertyValue(name).trim(); };
+            return { accent: get('--gh-accent'), line: get('--gh-ink'), grid: get('--gh-line'), text: get('--gh-muted') };
+        }
+
+        function applyPalette(chart) {
+            var c = palette();
+            chart.data.datasets[0].backgroundColor = c.accent;
+            chart.data.datasets[1].borderColor = c.line;
+            chart.data.datasets[1].backgroundColor = c.line;
+            ['y', 'y1'].forEach(function (id) {
+                chart.options.scales[id].ticks.color = c.text;
+                chart.options.scales[id].title.color = c.text;
+            });
+            chart.options.scales.y.grid = { color: c.grid };
+            chart.options.plugins.legend.labels.color = c.text;
+            chart.update();
+        }
+
+        var chart = new Chart(canvas, {
             data: {
                 labels: series.map(function (r) { return r.label; }),
                 datasets: [
@@ -160,15 +181,14 @@
                         type: 'bar',
                         label: 'Doanh thu (đ)',
                         data: series.map(function (r) { return r.revenue; }),
-                        backgroundColor: 'rgba(232, 80, 30, 0.75)',
                         yAxisID: 'y'
                     },
                     {
                         type: 'line',
                         label: 'Số đơn',
                         data: series.map(function (r) { return r.orders; }),
-                        borderColor: '#0d6efd',
-                        backgroundColor: '#0d6efd',
+                        borderWidth: 2,
+                        pointRadius: 3,
                         tension: 0.25,
                         yAxisID: 'y1'
                     }
@@ -177,12 +197,17 @@
             options: {
                 responsive: true,
                 interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { labels: {} } },
                 scales: {
-                    y: { beginAtZero: true, position: 'left', title: { display: true, text: 'Doanh thu (đ)' } },
+                    y: { beginAtZero: true, position: 'left', ticks: {}, title: { display: true, text: 'Doanh thu (đ)' } },
                     y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { precision: 0 }, title: { display: true, text: 'Số đơn' } }
                 }
             }
         });
+
+        applyPalette(chart);
+        new MutationObserver(function () { applyPalette(chart); })
+            .observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
     })();
 </script>
 @endpush

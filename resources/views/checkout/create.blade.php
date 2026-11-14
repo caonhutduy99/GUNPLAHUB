@@ -2,32 +2,6 @@
 
 @section('title', 'Đặt hàng & Thanh toán - GunplaHub')
 
-@push('styles')
-<style>
-    .payment-option-card {
-        border: 2px solid var(--gh-border);
-        border-radius: 12px;
-        padding: 1rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.85rem;
-    }
-    .payment-option-card:hover {
-        border-color: rgba(225, 29, 72, 0.4);
-        background: var(--gh-body-bg);
-    }
-    .payment-option-card input[type="radio"]:checked + .payment-option-content {
-        color: var(--gh-primary);
-    }
-    .payment-option-card:has(input[type="radio"]:checked) {
-        border-color: var(--gh-primary);
-        background-color: var(--gh-primary-subtle);
-    }
-</style>
-@endpush
-
 @section('content')
 {{-- Thanh tiến trình các bước mua hàng --}}
 <div class="row justify-content-center mb-4">
@@ -35,16 +9,16 @@
         <div class="d-flex align-items-center justify-content-between position-relative">
             <div class="text-center position-relative z-1">
                 <a href="{{ route('cart.index') }}" class="text-decoration-none">
-                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success text-white fw-bold shadow-sm" style="width: 36px; height: 36px; font-size: 0.9rem;">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success fw-bold" style="width: 36px; height: 36px; font-size: 0.9rem;">
                         <x-icon name="check" />
                     </div>
                     <div class="small fw-semibold mt-1 text-muted">Giỏ hàng</div>
                 </a>
             </div>
-            <div class="flex-grow-1 border-top border-2 border-danger mx-2"></div>
+            <div class="flex-grow-1 border-top border-2 border-accent mx-2"></div>
             <div class="text-center position-relative z-1">
-                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger text-white fw-bold shadow-sm" style="width: 36px; height: 36px; font-size: 0.9rem;">2</div>
-                <div class="small fw-bold mt-1 text-danger">Đặt hàng & Thanh toán</div>
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-accent fw-bold" style="width: 36px; height: 36px; font-size: 0.9rem;">2</div>
+                <div class="small fw-bold mt-1 text-accent">Đặt hàng & Thanh toán</div>
             </div>
             <div class="flex-grow-1 border-top border-2 mx-2" style="border-color: var(--gh-border) !important;"></div>
             <div class="text-center position-relative z-1 opacity-50">
@@ -63,7 +37,7 @@
             {{-- Thông tin giao hàng --}}
             <div class="card shadow-sm border mb-4" style="border-radius: var(--gh-radius);">
                 <div class="card-header bg-transparent py-3 border-bottom d-flex align-items-center gap-2" style="border-color: var(--gh-border) !important;">
-                    <x-icon name="map-pin" class="text-danger fs-5" />
+                    <x-icon name="map-pin" class="text-accent fs-5" />
                     <h5 class="fw-bold mb-0" style="font-size: 1.05rem;">1. Thông tin người nhận hàng</h5>
                 </div>
                 <div class="card-body p-4">
@@ -106,7 +80,7 @@
             {{-- Phương thức thanh toán --}}
             <div class="card shadow-sm border mb-4" style="border-radius: var(--gh-radius);">
                 <div class="card-header bg-transparent py-3 border-bottom d-flex align-items-center gap-2" style="border-color: var(--gh-border) !important;">
-                    <x-icon name="credit-card" class="text-danger fs-5" />
+                    <x-icon name="credit-card" class="text-accent fs-5" />
                     <h5 class="fw-bold mb-0" style="font-size: 1.05rem;">2. Phương thức thanh toán</h5>
                 </div>
                 <div class="card-body p-4">
@@ -159,7 +133,7 @@
             {{-- Mã giảm giá Voucher --}}
             <div class="card shadow-sm border mb-4" style="border-radius: var(--gh-radius);">
                 <div class="card-header bg-transparent py-3 border-bottom d-flex align-items-center gap-2" style="border-color: var(--gh-border) !important;">
-                    <x-icon name="ticket" class="text-danger fs-5" />
+                    <x-icon name="ticket" class="text-accent fs-5" />
                     <h5 class="fw-bold mb-0" style="font-size: 1.05rem;">3. Mã ưu đãi / Voucher</h5>
                 </div>
                 <div class="card-body p-4">
@@ -171,7 +145,7 @@
                                 class="btn btn-dark px-3 fw-semibold">Áp dụng</button>
                         @if($voucher)
                             <button type="submit" formaction="{{ route('checkout.voucher.remove') }}" formnovalidate
-                                    class="btn btn-outline-danger px-3">Gỡ mã</button>
+                                    class="btn btn-outline-secondary px-3">Gỡ mã</button>
                         @endif
                     </div>
 
@@ -199,7 +173,7 @@
             <div class="card shadow-sm border" style="border-radius: var(--gh-radius); position: sticky; top: 84px;">
                 <div class="card-header bg-transparent py-3 border-bottom d-flex align-items-center justify-content-between" style="border-color: var(--gh-border) !important;">
                     <h5 class="fw-bold mb-0" style="font-size: 1.05rem;">Đơn hàng của bạn ({{ $lines->count() }})</h5>
-                    <a href="{{ route('cart.index') }}" class="small text-danger text-decoration-none fw-semibold">Sửa giỏ hàng</a>
+                    <a href="{{ route('cart.index') }}" class="small text-accent text-decoration-none fw-semibold">Sửa giỏ hàng</a>
                 </div>
 
                 <div class="card-body p-4">
@@ -255,12 +229,12 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <span class="fw-bold fs-6">Tổng thanh toán:</span>
-                        <span class="fw-bold fs-3 text-danger" style="letter-spacing: -0.02em;">
+                        <span class="fw-bold fs-3 text-accent" style="letter-spacing: -0.02em;">
                             {{ \App\Support\Money::format($total) }}
                         </span>
                     </div>
 
-                    <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2" style="font-size: 1.05rem;">
+                    <button type="submit" class="btn btn-primary w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2" style="font-size: 1.05rem;">
                         <x-icon name="lock" />
                         <span>Xác nhận & Hoàn tất đặt hàng</span>
                     </button>

@@ -114,7 +114,7 @@
     </div>
 
     @if($vouchers->hasPages())
-        <div class="card-footer bg-white py-3">
+        <div class="card-footer py-3">
             {{ $vouchers->links() }}
         </div>
     @endif

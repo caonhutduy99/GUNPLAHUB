@@ -6,7 +6,7 @@
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
     <div>
         <h4 class="fw-bold mb-1" style="letter-spacing: -0.01em;">
-            <x-icon name="package-open" class="text-danger me-2" />Đơn hàng của tôi
+            <x-icon name="package-open" class="text-accent me-2" />Đơn hàng của tôi
         </h4>
         <p class="text-muted small mb-0">Theo dõi trạng thái xử lý, vận chuyển và lịch sử mua sắm.</p>
     </div>
@@ -32,7 +32,7 @@
                 @forelse($orders as $order)
                     <tr>
                         <td class="ps-3 py-3 fw-bold">
-                            <span class="text-danger">#{{ $order->id }}</span>
+                            <span class="text-accent">#{{ $order->id }}</span>
                         </td>
                         <td class="small text-muted">
                             <x-icon name="calendar" class="me-1" />{{ $order->order_date->format('d/m/Y H:i') }}
@@ -40,7 +40,7 @@
                         <td class="text-center">
                             <span class="badge bg-secondary-subtle text-secondary">{{ $order->details_count }} sản phẩm</span>
                         </td>
-                        <td class="text-end fw-bold text-danger" style="font-size: 0.95rem;">
+                        <td class="text-end fw-bold text-accent" style="font-size: 0.95rem;">
                             {{ \App\Support\Money::format($order->total_amount) }}
                         </td>
                         <td>
@@ -60,7 +60,7 @@
                             <x-icon name="package-open" size="3rem" class="text-muted opacity-50 mb-3 d-block" />
                             <h6 class="fw-bold mb-1">Bạn chưa có đơn hàng nào</h6>
                             <p class="small text-muted mb-3">Hãy dạo quanh cửa hàng và chọn cho mình mô hình Gunpla yêu thích!</p>
-                            <a href="{{ route('products.index') }}" class="btn btn-danger btn-sm rounded-pill px-4">Mua sắm ngay</a>
+                            <a href="{{ route('products.index') }}" class="btn btn-primary btn-sm px-4">Mua sắm ngay</a>
                         </td>
                     </tr>
                 @endforelse
